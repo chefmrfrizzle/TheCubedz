@@ -104,7 +104,7 @@ That command performs the canonical baseline verification, Python tests, static 
 
 1. Create a new **empty public GitHub repository**. Do not initialize it with another README, license, or `.gitignore`.
 2. Configure your GitHub-verified author name/email and create one empty ownership commit, as shown in [the launch runbook](docs/LAUNCH.md).
-3. Push the supplied history and release tag to the new repository.
+3. Push the supplied history and its existing release tag to the new repository. Do not recreate or move `v0.1.0-alpha.1`.
 4. In Vercel, create a project and import the GitHub repository.
 5. Vercel reads `vercel.json`, runs `npm run build`, and publishes `dist/`.
 6. Set these optional public build variables:

@@ -151,11 +151,13 @@ git push origin main
 
 ## 8. Release record
 
-After deployment is verified:
+The supplied history archive is already tagged `v0.1.0-alpha.1`. Do **not** recreate or move that tag after the public push. Verify that it resolves to the checked release commit, and push it with the rest of the supplied annotated tags:
 
 ```bash
-git tag -a v0.1.0-alpha.1 -m "Public alpha: baseline laboratory and evidence graph"
-git push origin v0.1.0-alpha.1
+git describe --tags --exact-match HEAD
+git push origin main --follow-tags
 ```
 
-Create a GitHub prerelease from the tag and include the exact scientific digest, checks, known limitations, and deployment URL.
+After deployment is verified, create a GitHub prerelease from the existing tag and include the exact scientific digest, checks, known limitations, and deployment URL.
+
+For a later release, create a new version tag rather than reusing `v0.1.0-alpha.1`.
