@@ -13,6 +13,17 @@ Read:
 
 For agent-assisted work, also read [Agent operating system](docs/AGENT_OPERATING_SYSTEM.md).
 
+The canonical public question, traveler constraint, success gates, current evidence counts, contribution paths, and security boundaries are in [`data/research-program.json`](data/research-program.json). The ordered prompts for future phases are in [`prompts/MARS_RESEARCH_PROGRAM.md`](prompts/MARS_RESEARCH_PROGRAM.md).
+
+## Choose one small starting point
+
+- [Ask a bounded research question](https://github.com/chefmrfrizzle/TheCubedz/issues/new?template=research-question.yml) when one part of the program is still vague.
+- [Draft a candidate](https://github.com/chefmrfrizzle/TheCubedz/issues/new?template=candidate.yml) when you can declare exact inputs, assumptions, claims, and failure conditions.
+- [Challenge a claim](https://github.com/chefmrfrizzle/TheCubedz/issues/new?template=challenge.yml) when you have a counterexample, missing limit, convention error, or hidden assumption.
+- [Report a reproduction](https://github.com/chefmrfrizzle/TheCubedz/issues/new?template=reproduction.yml) when you ran a named result in a separately declared environment or implementation.
+
+Every issue is working memory. It has no canonical scientific effect until a named human reviewer approves evidence through the protected pull-request process.
+
 ## Local setup
 
 ```bash

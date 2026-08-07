@@ -420,10 +420,11 @@ p { margin-top: 0; }
 .hypothesis-box blockquote { margin: 0; font-size: clamp(1.3rem, 3vw, 2.2rem); line-height: 1.4; letter-spacing: -0.025em; }
 .hypothesis-box .qualification { margin-top: 1.2rem; color: var(--muted); }
 .gates-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.gate-card { padding: 1.35rem; }
-.gate-card span { color: var(--cyan); font-family: var(--font-mono); font-size: 0.72rem; }
-.gate-card h3 { margin-top: 1.4rem; }
-.gate-card p { color: var(--muted); }
+.gate-card, .gates-grid article { padding: 1.35rem; border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(145deg, rgba(255,255,255,.025), rgba(255,255,255,.008)); }
+.gate-card span, .gates-grid article > span { color: var(--cyan); font-family: var(--font-mono); font-size: 0.72rem; }
+.gate-card h3, .gates-grid article h3 { margin-top: 1.4rem; }
+.gate-card p, .gates-grid article p { color: var(--muted); }
+.program-gate-status { margin: 1rem 0; }
 .success-ladder { display: grid; gap: 1px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--line); }
 .success-rung { display: grid; grid-template-columns: 70px minmax(180px,.45fr) 1fr auto; gap: 1rem; align-items: center; padding: 1.1rem; background: var(--surface); }
 .success-rung span:first-child { color: var(--cyan); font-family: var(--font-mono); }
@@ -457,6 +458,7 @@ p { margin-top: 0; }
 .reuse-grid { grid-template-columns: repeat(4, 1fr); }
 
 .contribution-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.contribution-grid.program-tasks { grid-template-columns: repeat(3, 1fr); }
 .contribution-grid article { padding: 1.4rem; }
 .contribution-grid article > span { color: var(--cyan); font-family: var(--font-mono); font-size: 0.7rem; }
 .contribution-grid h2 { margin-top: 1.5rem; font-size: 1.4rem; }

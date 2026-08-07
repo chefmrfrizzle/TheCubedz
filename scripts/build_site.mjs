@@ -166,7 +166,7 @@ async function build() {
     contactUrl: process.env.PUBLIC_CONTACT_URL || rawConfig.contactUrl || '',
   };
   const basePath = normalizeBase(process.env.PUBLIC_BASE_PATH || '');
-  const [candidate, result, benchmark, crosscheck, graph, agents, roadmap] = await Promise.all([
+  const [candidate, result, benchmark, crosscheck, graph, agents, roadmap, program] = await Promise.all([
     readJson('candidates/CANDIDATE-000001.json'),
     readJson('artifacts/results/CANDIDATE-000001.result.json'),
     readJson('artifacts/benchmarks/synthetic-suite-v1.result.json'),
@@ -174,6 +174,7 @@ async function build() {
     readJson('data/knowledge-graph.json'),
     readJson('data/agents.json'),
     readJson('data/roadmap.json'),
+    readJson('data/research-program.json'),
   ]);
 
   await rm(distDir, { recursive: true, force: true });
@@ -197,6 +198,7 @@ async function build() {
   await copyIfExists('data/knowledge-graph.json', 'data/knowledge-graph.json');
   await copyIfExists('data/agents.json', 'data/agents.json');
   await copyIfExists('data/roadmap.json', 'data/roadmap.json');
+  await copyIfExists('data/research-program.json', 'data/research-program.json');
   await copyIfExists('data/ledger/events.jsonl', 'data/events.jsonl');
   await copyIfExists('src/core', 'schemas');
   await copyIfExists('prompts', 'prompts');

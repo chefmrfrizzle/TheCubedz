@@ -8,6 +8,7 @@ const runtime = {
   graph: null,
   agents: null,
   roadmap: null,
+  program: null,
   config: null,
 };
 
@@ -165,12 +166,20 @@ async function initializeRuntimeConfig() {
   document.querySelectorAll('[data-repository-issue]').forEach((anchor) => {
     const kind = anchor.dataset.repositoryIssue;
     if (!repo) return;
+    const templates = {
+      question: 'research-question.yml',
+      candidate: 'candidate.yml',
+      challenge: 'challenge.yml',
+      reproduction: 'reproduction.yml',
+    };
     const titles = {
       challenge: 'Scientific challenge: ',
       build: 'Build proposal: ',
       explain: 'Explanation improvement: ',
     };
-    anchor.href = `${repo}/issues/new?title=${encodeURIComponent(titles[kind] || '')}`;
+    anchor.href = templates[kind]
+      ? `${repo}/issues/new?template=${encodeURIComponent(templates[kind])}`
+      : `${repo}/issues/new?title=${encodeURIComponent(titles[kind] || '')}`;
   });
 
   if (repo) {
@@ -676,6 +685,37 @@ async function initializeRoadmap() {
   }
 }
 
+function programStatusLabel(status) {
+  const labels = {
+    PASS: 'WORKING NOW',
+    FAIL: 'FAILED',
+    NOT_IMPLEMENTED: 'NOT BUILT',
+    NOT_EVALUATED: 'NOT TESTED',
+    UNRESOLVED: 'UNKNOWN',
+  };
+  return labels[status] || status.replaceAll('_', ' ');
+}
+
+async function initializeResearchProgram() {
+  const question = document.querySelector('[data-program-question]');
+  const summaries = [...document.querySelectorAll('[data-program-summary]')];
+  const gates = document.querySelector('[data-program-gates]');
+  if (!question && !summaries.length && !gates) return;
+  try {
+    runtime.program = await getJson('/data/research-program.json');
+    if (question) question.textContent = runtime.program.research_question;
+    summaries.forEach((node) => {
+      const value = runtime.program.public_summary[node.dataset.programSummary];
+      if (value) node.textContent = value;
+    });
+    if (gates) {
+      gates.innerHTML = runtime.program.success_gates.map((gate) => `<article><span>${escapeHtml(gate.id)}</span><h3>${escapeHtml(gate.question)}</h3><div class="program-gate-status"><span class="pill ${statusClass(gate.status)}">${escapeHtml(programStatusLabel(gate.status))}</span></div><p>${escapeHtml(gate.evidence.length ? `Evidence: ${gate.evidence.join(', ')}` : gate.downgrade_condition)}</p></article>`).join('');
+    }
+  } catch (error) {
+    if (gates) gates.innerHTML = `<div class="error-panel">${escapeHtml(error.message)}</div>`;
+  }
+}
+
 function inlineMarkdown(text) {
   return escapeHtml(text)
     .replace(/`([^`]+)`/g, '<code>$1</code>')
@@ -785,6 +825,7 @@ async function main() {
     initializeGraph(),
     initializeAgents(),
     initializeRoadmap(),
+    initializeResearchProgram(),
     initializeReports(),
   ]);
 }

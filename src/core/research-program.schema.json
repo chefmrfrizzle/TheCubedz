@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/research-program.schema.json",
+  "title": "TheCubedz bounded research program",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "program_id", "title", "research_question", "status",
+    "public_summary", "optimization_targets", "mechanism_scope",
+    "traveler_constraint", "success_gates", "current_evidence",
+    "contribution_tasks", "security", "claim_boundaries", "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "program_id": {"type": "string", "pattern": "^PROGRAM-[0-9]{6}$"},
+    "title": {"type": "string", "minLength": 10, "maxLength": 160},
+    "research_question": {"type": "string", "minLength": 20, "maxLength": 300},
+    "status": {"const": "OPEN_RESEARCH_QUESTION"},
+    "public_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["goal", "safety", "physics", "proof", "current_position"],
+      "properties": {
+        "goal": {"type": "string", "minLength": 10, "maxLength": 240},
+        "safety": {"type": "string", "minLength": 10, "maxLength": 240},
+        "physics": {"type": "string", "minLength": 10, "maxLength": 240},
+        "proof": {"type": "string", "minLength": 10, "maxLength": 240},
+        "current_position": {"type": "string", "minLength": 10, "maxLength": 240}
+      }
+    },
+    "optimization_targets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["EFFECTIVE_PATH_LENGTH", "PROPER_TRAVEL_TIME", "EXTERNAL_ELAPSED_TIME"]}
+    },
+    "mechanism_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "excluded_shortcuts", "plain_language"],
+      "properties": {
+        "allowed": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["SPACETIME_GEOMETRY", "MATTER_SOURCE", "FIELD_SOURCE", "BOUNDARY_CONDITIONS", "TRAJECTORY"]}
+        },
+        "excluded_shortcuts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["ALTER_TRAVELER_TO_FAKE_DISTANCE", "IGNORE_CAUSALITY", "IGNORE_SOURCE_REQUIREMENTS", "TREAT_SIMULATION_AS_EXPERIMENT", "TREAT_AGENT_TEXT_AS_EVIDENCE"]}
+        },
+        "plain_language": {"type": "string", "minLength": 20, "maxLength": 500}
+      }
+    },
+    "traveler_constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirement", "plain_language", "does_not_mean", "dimensions"],
+      "properties": {
+        "requirement": {"const": "REQUIRED_NOT_VERIFIED"},
+        "plain_language": {"type": "string", "minLength": 20, "maxLength": 500},
+        "does_not_mean": {"type": "string", "minLength": 20, "maxLength": 500},
+        "dimensions": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "label", "status", "description"],
+            "properties": {
+              "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+              "label": {"type": "string", "minLength": 3, "maxLength": 100},
+              "status": {"const": "NOT_IMPLEMENTED"},
+              "description": {"type": "string", "minLength": 10, "maxLength": 300}
+            }
+          }
+        }
+      }
+    },
+    "success_gates": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "question", "status", "evidence", "downgrade_condition"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^GATE-[0-9]{2}$"},
+          "question": {"type": "string", "minLength": 10, "maxLength": 240},
+          "status": {"enum": ["PASS", "FAIL", "NOT_IMPLEMENTED", "NOT_EVALUATED", "UNRESOLVED"]},
+          "evidence": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 500}},
+          "downgrade_condition": {"type": "string", "minLength": 10, "maxLength": 500}
+        }
+      }
+    },
+    "current_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["known_answer_examples", "implemented_checks", "workflow_cases", "novel_transportation_candidates", "traveler_safety_evaluations", "outside_reproductions"],
+      "properties": {
+        "known_answer_examples": {"const": 1},
+        "implemented_checks": {"const": 12},
+        "workflow_cases": {"const": 100},
+        "novel_transportation_candidates": {"const": 0},
+        "traveler_safety_evaluations": {"const": 0},
+        "outside_reproductions": {"const": 0}
+      }
+    },
+    "contribution_tasks": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "plain_language", "status", "submission_path", "canonical_effect"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^CONTRIBUTION-[0-9]{2}$"},
+          "title": {"type": "string", "minLength": 3, "maxLength": 100},
+          "plain_language": {"type": "string", "minLength": 10, "maxLength": 300},
+          "status": {"enum": ["AVAILABLE", "GUIDANCE_ONLY", "FUTURE"]},
+          "submission_path": {"type": "string", "minLength": 1, "maxLength": 300},
+          "canonical_effect": {"const": "NONE_WITHOUT_HUMAN_REVIEW"}
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_input_mode", "public_code_execution", "canonical_promotion", "agent_authority"],
+      "properties": {
+        "public_input_mode": {"const": "REPOSITORY_REVIEW_ONLY"},
+        "public_code_execution": {"const": "DISABLED"},
+        "canonical_promotion": {"const": "NAMED_HUMAN_ONLY"},
+        "agent_authority": {"const": "PROPOSE_ONLY"}
+      }
+    },
+    "claim_boundaries": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 10, "maxLength": 300}
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_by", "created_at", "license", "human_review_required"],
+      "properties": {
+        "created_by": {"type": "string", "minLength": 1, "maxLength": 120},
+        "created_at": {"type": "string", "format": "date-time"},
+        "license": {"const": "Apache-2.0"},
+        "human_review_required": {"const": true}
+      }
+    }
+  }
+}

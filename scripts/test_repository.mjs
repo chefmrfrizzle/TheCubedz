@@ -30,6 +30,7 @@ async function checkRequiredFiles() {
     'README.md', 'CONTRIBUTING.md', 'GOVERNANCE.md', 'SECURITY.md', 'CODE_OF_CONDUCT.md', 'LICENSE', 'NOTICE', 'CHANGELOG.md', 'SUPPORT.md', 'CITATION.cff',
     'docs/SCIENTIFIC_CLAIMS_POLICY.md', 'docs/THREAT_MODEL.md', 'docs/LAUNCH.md', 'docs/SECOND_BRAIN.md', 'docs/AGENT_OPERATING_SYSTEM.md', 'docs/SCALE_ARCHITECTURE.md',
     'candidates/CANDIDATE-000001.json', 'artifacts/results/CANDIDATE-000001.result.json', 'data/ledger/events.jsonl', 'data/knowledge-graph.json',
+    'data/research-program.json', 'src/core/research-program.schema.json', 'prompts/MARS_RESEARCH_PROGRAM.md', '.github/ISSUE_TEMPLATE/research-question.yml',
     '.github/workflows/ci.yml', '.github/workflows/pages.yml', '.github/workflows/codeql.yml', '.github/dependabot.yml',
   ];
   for (const item of required) if (!(await exists(path.join(root, item)))) fail(`Missing repository contract file: ${item}`);
@@ -73,11 +74,18 @@ async function checkScientificConsistency() {
   const candidate = JSON.parse(await readFile(path.join(root, 'candidates/CANDIDATE-000001.json'), 'utf8'));
   const result = JSON.parse(await readFile(path.join(root, 'artifacts/results/CANDIDATE-000001.result.json'), 'utf8'));
   const graph = JSON.parse(await readFile(path.join(root, 'data/knowledge-graph.json'), 'utf8'));
+  const benchmark = JSON.parse(await readFile(path.join(root, 'artifacts/benchmarks/synthetic-suite-v1.result.json'), 'utf8'));
+  const program = JSON.parse(await readFile(path.join(root, 'data/research-program.json'), 'utf8'));
   const readme = await readFile(path.join(root, 'README.md'), 'utf8');
   if (candidate.candidate_id !== result.candidate.candidate_id) fail('Candidate and result IDs differ');
   if (!readme.includes(result.scientific_payload_digest)) fail('README does not publish the exact scientific payload digest');
   if (!readme.includes('Novel physics claims | 0')) fail('README does not explicitly report zero novel physics claims');
   if (result.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Transportation boundary changed');
+  if (program.status !== 'OPEN_RESEARCH_QUESTION') fail('Research program is no longer an open question');
+  if (program.current_evidence.known_answer_examples !== 1 || program.current_evidence.implemented_checks !== result.checks.length) fail('Research program baseline counts do not match canonical artifacts');
+  if (program.current_evidence.workflow_cases !== benchmark.case_count) fail('Research program workflow count does not match the frozen benchmark');
+  if (program.current_evidence.novel_transportation_candidates !== 0 || program.current_evidence.traveler_safety_evaluations !== 0 || program.current_evidence.outside_reproductions !== 0) fail('Research program overstates current evidence');
+  if (program.security.public_code_execution !== 'DISABLED' || program.security.agent_authority !== 'PROPOSE_ONLY' || program.security.canonical_promotion !== 'NAMED_HUMAN_ONLY') fail('Research program weakens the public security boundary');
   const nodeIds = new Set(graph.nodes.map((node) => node.id));
   for (const edge of graph.edges) {
     if (!nodeIds.has(edge.source)) fail(`Graph edge ${edge.id} has missing source ${edge.source}`);

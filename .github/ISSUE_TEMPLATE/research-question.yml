@@ -1,0 +1,66 @@
+name: Bounded research question
+description: Turn one unclear part of the Earth-to-Mars research program into a precise, testable question.
+title: "question: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submissions are working-memory proposals. They do not change scientific status or authorize code execution. Do not include secrets, personal data, or executable payloads.
+  - type: dropdown
+    id: gate
+    attributes:
+      label: Which research gate does this question improve?
+      options:
+        - Known-answer recovery
+        - Candidate mathematics
+        - Effective distance or travel time
+        - Matter, fields, or energy limits
+        - Stability or cause and effect
+        - Traveler safety
+        - Independent reproduction
+        - Experiment or engineering
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: The question in one sentence
+      description: Make it narrow enough that a calculation, source, counterexample, or experiment could answer it.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why this question matters
+      description: Explain which current uncertainty or unsupported claim it would reduce.
+    validations:
+      required: true
+  - type: textarea
+    id: answer
+    attributes:
+      label: What would count as an answer?
+      description: Name the expected artifact, calculation, comparison, or observation.
+    validations:
+      required: true
+  - type: textarea
+    id: failure
+    attributes:
+      label: What result would reject or downgrade the idea?
+      description: Give at least one clear failure condition.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources or related artifacts
+      description: Link primary literature, documentation, candidates, results, or reproducible examples. Do not paste copyrighted papers.
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Submission boundaries
+      options:
+        - label: I understand this is a proposal for review, not a scientific result.
+          required: true
+        - label: I have not included secrets, private data, or instructions to execute untrusted code.
+          required: true

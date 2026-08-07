@@ -41,7 +41,7 @@ async function verifyRequiredFiles() {
   const required = [
     'index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html',
     '404.html', 'assets/styles.css', 'assets/site.js', 'assets/favicon.svg', 'assets/og-card.png',
-    'data/candidate.json', 'data/result.json', 'data/synthetic-suite.json', 'data/synthetic-suite-result.json', 'data/crosscheck.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/project-status.json', 'data/site-config.json',
+    'data/candidate.json', 'data/result.json', 'data/synthetic-suite.json', 'data/synthetic-suite-result.json', 'data/crosscheck.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/research-program.json', 'data/project-status.json', 'data/site-config.json',
     'site.webmanifest', 'robots.txt', 'llms.txt', 'build-manifest.json', 'README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE',
   ];
   for (const relative of required) if (!(await exists(path.join(dist, relative)))) fail(`Missing required build output: ${relative}`);
@@ -86,8 +86,8 @@ async function verifyHtml(basePath = '') {
 }
 
 async function verifyArtifacts() {
-  const [candidate, result, benchmark, crosscheck, status, graph, agents, roadmap] = await Promise.all([
-    json('data/candidate.json'), json('data/result.json'), json('data/synthetic-suite-result.json'), json('data/crosscheck.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'),
+  const [candidate, result, benchmark, crosscheck, status, graph, agents, roadmap, program] = await Promise.all([
+    json('data/candidate.json'), json('data/result.json'), json('data/synthetic-suite-result.json'), json('data/crosscheck.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'), json('data/research-program.json'),
   ]);
   const passed = result.checks.filter((check) => check.status === 'PASS').length;
   const failed = result.checks.filter((check) => check.status === 'FAIL').length;
@@ -103,6 +103,9 @@ async function verifyArtifacts() {
   if (benchmark.case_count !== 100 || benchmark.failed !== 0) fail('Synthetic workflow benchmark is incomplete or failing');
   if (crosscheck.comparison !== 'MATCH') fail('Separate implementation cross-check does not match the canonical result');
   if (crosscheck.independence.counts_as_external_reproduction !== false) fail('Implementation cross-check is overstated as external reproduction');
+  if (program.research_question !== 'Can we shorten the distance to Mars—without changing the traveler?') fail('Public research question differs from the canonical program contract');
+  if (program.current_evidence.implemented_checks !== passed || program.current_evidence.workflow_cases !== benchmark.case_count) fail('Program evidence counts do not match public artifacts');
+  if (program.current_evidence.novel_transportation_candidates !== 0 || program.current_evidence.traveler_safety_evaluations !== 0 || program.current_evidence.outside_reproductions !== 0) fail('Program contract overstates current evidence');
   const labHtml = await text('lab/index.html');
   if (!labHtml.includes('data-evidence-cube') || !labHtml.includes('Turn the cube to see what we know')) fail('Answer cube is missing from the laboratory');
   if (!labHtml.includes('Each side asks one plain question')) fail('Answer cube does not explain how to read it');
@@ -110,6 +113,8 @@ async function verifyArtifacts() {
   if (!homeHtml.includes('Can we shorten the distance to Mars')) fail('Homepage does not state the motivating research question');
   if (!homeHtml.includes('No shortcut, device, or route to Mars has been found')) fail('Homepage does not state the current scientific boundary');
   if (!homeHtml.includes('How people and the system work together')) fail('Homepage does not explain the public research workflow');
+  const contributeHtml = await text('contribute/index.html');
+  if (!contributeHtml.includes('data-program-gates') || !contributeHtml.includes('Complete Mars program')) fail('Contribution page does not expose the research contract and prompt program');
   const allHtml = (await Promise.all(['index.html','lab/index.html','graph/index.html'].map(text))).join('\n');
   if (!allHtml.includes(result.scientific_payload_digest)) fail('Scientific digest is not visible on public release pages');
   note(`${result.checks.length} scientific result checks reconciled with public status`);
