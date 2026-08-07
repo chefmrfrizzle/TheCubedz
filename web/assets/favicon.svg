@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Geometric research mark">
+  <rect width="64" height="64" rx="12" fill="#071013"/>
+  <path d="M32 8 54 20v24L32 56 10 44V20Z" fill="none" stroke="#64e9e4" stroke-width="3"/>
+  <path d="M32 8v24m22-12L32 32 10 20m22 12v24" fill="none" stroke="#b8f16d" stroke-width="2" opacity=".8"/>
+  <circle cx="32" cy="32" r="4" fill="#effcfc"/>
+</svg>

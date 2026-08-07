@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0.0",
+  "title": "Open computational spacetime research",
+  "shortTitle": "Spacetime research",
+  "description": "An open, reproducible experiment for representing, checking, challenging, and eventually searching mathematically defined spacetime candidates.",
+  "repositoryUrl": "",
+  "siteUrl": "",
+  "contactUrl": "",
+  "license": "Apache-2.0",
+  "status": "public-pre-alpha",
+  "version": "0.1.0-alpha.1"
+}

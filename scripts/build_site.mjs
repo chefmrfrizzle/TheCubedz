@@ -1,0 +1,281 @@
+#!/usr/bin/env node
+import { createHash } from 'node:crypto';
+import { access, cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { navigation, pages } from '../web/pages.mjs';
+
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const distDir = path.join(projectRoot, 'dist');
+const webDir = path.join(projectRoot, 'web');
+
+function normalizeBase(value) {
+  if (!value || value === '/') return '';
+  return `/${String(value).replace(/^\/+|\/+$/g, '')}`;
+}
+
+function joinUrl(base, route = '/') {
+  if (/^(?:https?:|mailto:|tel:|#)/i.test(route)) return route;
+  const normalizedRoute = route.startsWith('/') ? route : `/${route}`;
+  return `${base}${normalizedRoute}` || '/';
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function base64Url(value) {
+  return Buffer.from(value).toString('base64url');
+}
+
+function rewriteRootUrls(html, basePath) {
+  if (!basePath) return html;
+  return html
+    .replace(/\b(href|src|action)="\/(?!\/)/g, `$1="${basePath}/`)
+    .replace(/\bcontent="\/(?!\/)/g, `content="${basePath}/`);
+}
+
+function pageRoute(page) {
+  return page.slug ? `/${page.slug}/` : '/';
+}
+
+function siteHeader(page, basePath) {
+  const nav = navigation.map((item) => {
+    const current = item.key === page.key ? ' aria-current="page"' : '';
+    return `<a href="${joinUrl(basePath, item.href)}"${current}>${escapeHtml(item.label)}</a>`;
+  }).join('');
+  return `<header class="site-header">
+    <div class="shell header-inner">
+      <a class="site-identity" href="${joinUrl(basePath, '/')}">
+        <span class="identity-mark" aria-hidden="true"></span>
+        <span class="identity-copy"><strong>Open spacetime research</strong><small>computational laboratory</small></span>
+      </a>
+      <nav class="site-nav" id="primary-navigation" data-site-nav aria-label="Primary navigation">${nav}</nav>
+      <div class="header-actions">
+        <a class="button secondary" data-repository-link href="${joinUrl(basePath, '/contribute/')}">View source</a>
+        <a class="button primary" href="${joinUrl(basePath, '/contribute/')}">Contribute</a>
+        <button class="nav-toggle" type="button" data-nav-toggle aria-controls="primary-navigation" aria-expanded="false" aria-label="Open navigation"><span></span></button>
+      </div>
+    </div>
+  </header>`;
+}
+
+function siteFooter(config, basePath, result) {
+  return `<footer class="site-footer">
+    <div class="shell footer-grid">
+      <div><p class="eyebrow">Public pre-alpha</p><h2>Build the instrument before making the extraordinary claim.</h2><p>${escapeHtml(result.assessment.statement)}</p></div>
+      <div class="footer-links"><strong>Research</strong><a href="${joinUrl(basePath, '/lab/')}">Candidate laboratory</a><a href="${joinUrl(basePath, '/graph/')}">Evidence graph</a><a href="${joinUrl(basePath, '/method/')}">Claims policy</a><a href="${joinUrl(basePath, '/roadmap/')}">Roadmap</a></div>
+      <div class="footer-links"><strong>Project</strong><a href="${joinUrl(basePath, '/CONTRIBUTING.md')}">Contributing</a><a href="${joinUrl(basePath, '/GOVERNANCE.md')}">Governance</a><a href="${joinUrl(basePath, '/SECURITY.md')}">Security</a><a href="${joinUrl(basePath, '/LICENSE')}">Apache 2.0 license</a><a data-contact-link href="${joinUrl(basePath, '/contribute/')}">Contact</a></div>
+    </div>
+    <div class="shell footer-meta">Version ${escapeHtml(config.version)} · baseline digest ${escapeHtml(result.scientific_payload_digest)} · no transportation claim</div>
+  </footer>`;
+}
+
+function documentHtml({ page, config, result, basePath }) {
+  const route = pageRoute(page);
+  const title = `${page.title} | ${config.title}`;
+  const canonical = config.siteUrl ? new URL(joinUrl(basePath, route), `${config.siteUrl.replace(/\/$/, '')}/`).href : '';
+  const socialImage = config.siteUrl ? new URL(joinUrl(basePath, '/assets/og-card.png'), `${config.siteUrl.replace(/\/$/, '')}/`).href : joinUrl(basePath, '/assets/og-card.png');
+  const body = rewriteRootUrls(page.content, basePath);
+  return `<!doctype html>
+<html lang="en" data-base-path="${escapeHtml(basePath)}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071013">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="${escapeHtml(page.description)}">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="generator" content="repository-static-builder/1.0">
+  <title>${escapeHtml(title)}</title>
+  ${canonical ? `<link rel="canonical" href="${escapeHtml(canonical)}">` : ''}
+  <link rel="icon" href="${joinUrl(basePath, '/assets/favicon.svg')}" type="image/svg+xml">
+  <link rel="manifest" href="${joinUrl(basePath, '/site.webmanifest')}">
+  <link rel="stylesheet" href="${joinUrl(basePath, '/assets/styles.css')}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="${escapeHtml(title)}">
+  <meta property="og:description" content="${escapeHtml(page.description)}">
+  <meta property="og:image" content="${escapeHtml(socialImage)}">
+  ${canonical ? `<meta property="og:url" content="${escapeHtml(canonical)}">` : ''}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtml(title)}">
+  <meta name="twitter:description" content="${escapeHtml(page.description)}">
+  <meta name="twitter:image" content="${escapeHtml(socialImage)}">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  ${siteHeader(page, basePath)}
+  ${body}
+  ${siteFooter(config, basePath, result)}
+  <script type="module" src="${joinUrl(basePath, '/assets/site.js')}"></script>
+</body>
+</html>`;
+}
+
+async function readJson(relativePath) {
+  return JSON.parse(await readFile(path.join(projectRoot, relativePath), 'utf8'));
+}
+
+async function fileExists(filePath) {
+  try { await access(filePath); return true; } catch { return false; }
+}
+
+async function copyIfExists(relativePath, destination = relativePath) {
+  const source = path.join(projectRoot, relativePath);
+  if (!(await fileExists(source))) return;
+  const target = path.join(distDir, destination);
+  await mkdir(path.dirname(target), { recursive: true });
+  await cp(source, target, { recursive: true });
+}
+
+async function listFiles(directory, prefix = '') {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const absolute = path.join(directory, entry.name);
+    const relative = path.posix.join(prefix, entry.name);
+    if (entry.isDirectory()) files.push(...await listFiles(absolute, relative));
+    else files.push(relative);
+  }
+  return files;
+}
+
+async function sha256File(filePath) {
+  const hash = createHash('sha256');
+  hash.update(await readFile(filePath));
+  return hash.digest('hex');
+}
+
+async function build() {
+  const rawConfig = await readJson('site.config.json');
+  const config = {
+    ...rawConfig,
+    repositoryUrl: process.env.PUBLIC_REPOSITORY_URL || rawConfig.repositoryUrl || '',
+    siteUrl: process.env.PUBLIC_SITE_URL || rawConfig.siteUrl || '',
+    contactUrl: process.env.PUBLIC_CONTACT_URL || rawConfig.contactUrl || '',
+  };
+  const basePath = normalizeBase(process.env.PUBLIC_BASE_PATH || '');
+  const [candidate, result, graph, agents, roadmap] = await Promise.all([
+    readJson('candidates/CANDIDATE-000001.json'),
+    readJson('artifacts/results/CANDIDATE-000001.result.json'),
+    readJson('data/knowledge-graph.json'),
+    readJson('data/agents.json'),
+    readJson('data/roadmap.json'),
+  ]);
+
+  await rm(distDir, { recursive: true, force: true });
+  await mkdir(path.join(distDir, 'assets'), { recursive: true });
+  await mkdir(path.join(distDir, 'data'), { recursive: true });
+
+  for (const page of pages) {
+    const outputDir = page.slug ? path.join(distDir, page.slug) : distDir;
+    await mkdir(outputDir, { recursive: true });
+    await writeFile(path.join(outputDir, 'index.html'), documentHtml({ page, config, result, basePath }), 'utf8');
+  }
+
+  await copyIfExists('web/assets', 'assets');
+  await copyIfExists('candidates/CANDIDATE-000001.json', 'data/candidate.json');
+  await copyIfExists('artifacts/results/CANDIDATE-000001.result.json', 'data/result.json');
+  await copyIfExists('artifacts/reports/CANDIDATE-000001.beginner.md', 'data/report-beginner.md');
+  await copyIfExists('artifacts/reports/CANDIDATE-000001.technical.md', 'data/report-technical.md');
+  await copyIfExists('data/knowledge-graph.json', 'data/knowledge-graph.json');
+  await copyIfExists('data/agents.json', 'data/agents.json');
+  await copyIfExists('data/roadmap.json', 'data/roadmap.json');
+  await copyIfExists('data/ledger/events.jsonl', 'data/events.jsonl');
+  await copyIfExists('src/core', 'schemas');
+  await copyIfExists('prompts', 'prompts');
+
+  const publicFiles = ['README.md', 'CONTRIBUTING.md', 'GOVERNANCE.md', 'SECURITY.md', 'CODE_OF_CONDUCT.md', 'LICENSE', 'CHANGELOG.md', 'SUPPORT.md', 'CITATION.cff'];
+  for (const file of publicFiles) await copyIfExists(file);
+
+  const status = {
+    schemaVersion: '1.0.0',
+    releaseStatus: config.status,
+    version: config.version,
+    candidateCount: 1,
+    checkCount: result.checks.filter((check) => check.status === 'PASS').length,
+    failedCheckCount: result.checks.filter((check) => check.status === 'FAIL').length,
+    novelClaimCount: 0,
+    reproductionCount: graph.nodes.filter((node) => node.type === 'Reproduction' && node.status === 'REPRODUCED').length,
+    graphNodeCount: graph.nodes.length,
+    graphEdgeCount: graph.edges.length,
+    agentCount: agents.agents.length,
+    roadmapPhaseCount: roadmap.phases.length,
+    candidateId: candidate.candidate_id,
+    candidateStatus: candidate.status,
+    resultStatus: result.assessment.overall_status,
+    transportationStatus: result.assessment.transportation_status,
+    scientificPayloadDigest: result.scientific_payload_digest,
+    generatedAt: result.run.recorded_at,
+  };
+  await writeFile(path.join(distDir, 'data', 'project-status.json'), `${JSON.stringify(status, null, 2)}\n`, 'utf8');
+  await writeFile(path.join(distDir, 'data', 'site-config.json'), `${JSON.stringify({ ...config, basePath }, null, 2)}\n`, 'utf8');
+
+  const manifest = {
+    name: config.title,
+    short_name: config.shortTitle,
+    description: config.description,
+    start_url: joinUrl(basePath, '/'),
+    scope: joinUrl(basePath, '/'),
+    display: 'standalone',
+    background_color: '#071013',
+    theme_color: '#071013',
+    icons: [{ src: joinUrl(basePath, '/assets/favicon.svg'), sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
+  };
+  await writeFile(path.join(distDir, 'site.webmanifest'), `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
+  await writeFile(path.join(distDir, 'robots.txt'), `User-agent: *\nAllow: /\n${config.siteUrl ? `Sitemap: ${config.siteUrl.replace(/\/$/, '')}${basePath}/sitemap.xml\n` : ''}`, 'utf8');
+
+  const llms = `# ${config.title}\n\n> ${config.description}\n\n## Current status\n\n- Public pre-alpha.\n- Candidate 000001 is a Minkowski Cartesian baseline.\n- ${result.checks.length} scoped checks are implemented and currently pass.\n- Scientific payload digest: ${result.scientific_payload_digest}\n- Transportation status: ${result.assessment.transportation_status}.\n- No wormhole, warp device, or transportation shortcut has been demonstrated.\n\n## Core documents\n\n- ${joinUrl(basePath, '/README.md')}\n- ${joinUrl(basePath, '/CONTRIBUTING.md')}\n- ${joinUrl(basePath, '/method/')}\n- ${joinUrl(basePath, '/lab/')}\n- ${joinUrl(basePath, '/graph/')}\n\n## Machine-readable artifacts\n\n- ${joinUrl(basePath, '/data/candidate.json')}\n- ${joinUrl(basePath, '/data/result.json')}\n- ${joinUrl(basePath, '/data/knowledge-graph.json')}\n- ${joinUrl(basePath, '/data/agents.json')}\n`;
+  await writeFile(path.join(distDir, 'llms.txt'), llms, 'utf8');
+
+  const notFoundPage = {
+    slug: '404', key: '404', title: 'Page not found', description: 'The requested research page does not exist.',
+    content: `<main id="main-content"><section class="shell page-hero section-pad compact"><div><p class="eyebrow">404</p><h1>This route is not in the evidence graph.</h1><p class="hero-lede">The requested page does not exist. Return to the current baseline or inspect the project map.</p><div class="hero-actions"><a class="button primary" href="/">Return to overview</a><a class="button secondary" href="/graph/">Open the graph</a></div></div></section></main>`,
+  };
+  await writeFile(path.join(distDir, '404.html'), documentHtml({ page: notFoundPage, config, result, basePath }), 'utf8');
+
+  if (config.siteUrl) {
+    const siteRoot = config.siteUrl.replace(/\/$/, '');
+    const urls = pages.map((page) => `${siteRoot}${joinUrl(basePath, pageRoute(page))}`);
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((url) => `  <url><loc>${escapeHtml(url)}</loc></url>`).join('\n')}\n</urlset>\n`;
+    await writeFile(path.join(distDir, 'sitemap.xml'), sitemap, 'utf8');
+  }
+
+  const files = (await listFiles(distDir)).filter((file) => file !== 'build-manifest.json').sort();
+  const fileRecords = [];
+  for (const relative of files) {
+    const absolute = path.join(distDir, relative);
+    const details = await stat(absolute);
+    fileRecords.push({ path: relative, bytes: details.size, sha256: await sha256File(absolute) });
+  }
+  const buildManifest = {
+    schemaVersion: '1.0.0',
+    releaseVersion: config.version,
+    basePath,
+    generatedAt: result.run.recorded_at,
+    scientificPayloadDigest: result.scientific_payload_digest,
+    files: fileRecords,
+  };
+  const payload = `${JSON.stringify(buildManifest, null, 2)}\n`;
+  await writeFile(path.join(distDir, 'build-manifest.json'), payload, 'utf8');
+
+  const output = {
+    pages: pages.length,
+    files: fileRecords.length + 1,
+    basePath: basePath || '/',
+    repositoryConfigured: Boolean(config.repositoryUrl),
+    siteUrlConfigured: Boolean(config.siteUrl),
+    manifestDigest: `sha256:${createHash('sha256').update(payload).digest('hex')}`,
+  };
+  console.log(JSON.stringify(output, null, 2));
+}
+
+build().catch((error) => {
+  console.error(error.stack || error.message);
+  process.exitCode = 1;
+});
