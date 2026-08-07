@@ -33,7 +33,7 @@ export const pages = [
   {
     slug: '',
     key: 'home',
-    title: 'Open computational spacetime research',
+    title: 'TheCubedz',
     description: 'An open, reproducible experiment for representing, checking, challenging, and eventually searching mathematically defined spacetime candidates.',
     content: `
       <main id="main-content">

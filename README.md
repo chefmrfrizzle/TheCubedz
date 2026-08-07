@@ -1,6 +1,6 @@
-# Open Computational Spacetime Research
+# TheCubedz
 
-> **A brand name is intentionally omitted.** This repository is a public, open-source computational experiment for representing spacetime candidates, checking narrowly defined properties, preserving failures, inviting independent challenge, and learning where to investigate next.
+> **TheCubedz** is a public, open-source computational experiment for representing spacetime candidates, checking narrowly defined properties, preserving failures, inviting independent challenge, and learning where to investigate next.
 
 [![Status: public pre-alpha](https://img.shields.io/badge/status-public%20pre--alpha-f5a623)](#current-public-status)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-4c8bf5)](LICENSE)
@@ -110,9 +110,9 @@ That command performs the canonical baseline verification, Python tests, static 
 6. Set these optional public build variables:
 
 ```text
-PUBLIC_REPOSITORY_URL=https://github.com/<account>/<repository>
+PUBLIC_REPOSITORY_URL=https://github.com/chefmrfrizzle/TheCubedz
 PUBLIC_SITE_URL=https://<deployment-domain>
-PUBLIC_CONTACT_URL=https://github.com/<account>/<repository>/discussions
+PUBLIC_CONTACT_URL=https://github.com/chefmrfrizzle/TheCubedz/discussions
 ```
 
 7. Redeploy after adding `PUBLIC_SITE_URL` so canonical URLs and the sitemap use the production domain.

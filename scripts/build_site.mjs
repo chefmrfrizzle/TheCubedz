@@ -53,7 +53,7 @@ function siteHeader(page, basePath) {
     <div class="shell header-inner">
       <a class="site-identity" href="${joinUrl(basePath, '/')}">
         <span class="identity-mark" aria-hidden="true"></span>
-        <span class="identity-copy"><strong>Open spacetime research</strong><small>computational laboratory</small></span>
+        <span class="identity-copy"><strong>TheCubedz</strong><small>computational spacetime laboratory</small></span>
       </a>
       <nav class="site-nav" id="primary-navigation" data-site-nav aria-label="Primary navigation">${nav}</nav>
       <div class="header-actions">

@@ -50,7 +50,7 @@ git config user.email "<your verified GitHub email or GitHub no-reply email>"
 git commit --allow-empty -m "chore: initialize public repository ownership"
 
 git remote remove origin 2>/dev/null || true
-git remote add origin https://github.com/<account>/<repository>.git
+git remote add origin https://github.com/chefmrfrizzle/TheCubedz.git
 git branch -M main
 git push -u origin main --follow-tags
 ```
@@ -88,8 +88,8 @@ Output directory: dist
 4. Add:
 
 ```text
-PUBLIC_REPOSITORY_URL=https://github.com/<account>/<repository>
-PUBLIC_CONTACT_URL=https://github.com/<account>/<repository>/discussions
+PUBLIC_REPOSITORY_URL=https://github.com/chefmrfrizzle/TheCubedz
+PUBLIC_CONTACT_URL=https://github.com/chefmrfrizzle/TheCubedz/discussions
 ```
 
 5. Deploy.
