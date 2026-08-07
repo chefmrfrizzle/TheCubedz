@@ -1,0 +1,27 @@
+{
+  "candidate_id": "CANDIDATE-000001",
+  "version": "0.1.0",
+  "title": "Minkowski baseline",
+  "status": "DRAFT",
+  "coordinates": ["t", "x", "y", "z"],
+  "metric": {
+    "representation": "matrix",
+    "signature": "-+++",
+    "components": [
+      [-1, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1]
+    ]
+  },
+  "parameters": {},
+  "assumptions": [
+    "Naturalized coordinate representation for the initial software baseline.",
+    "This candidate is a schema/reproducibility benchmark, not a transportation proposal."
+  ],
+  "references": [],
+  "provenance": {
+    "created_by": "repository starter",
+    "created_at": "2026-08-07T00:00:00Z"
+  }
+}

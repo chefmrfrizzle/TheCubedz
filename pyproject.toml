@@ -1,0 +1,12 @@
+[project]
+name = "open-spacetime-research-starter"
+version = "0.1.0"
+description = "Unbranded starter repository for reproducible computational spacetime research."
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
