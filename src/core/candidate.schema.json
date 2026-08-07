@@ -1,74 +1,88 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.invalid/schemas/candidate.schema.json",
-  "title": "Spacetime Research Candidate",
+  "title": "Spacetime research candidate",
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "candidate_id",
-    "version",
-    "title",
-    "status",
-    "coordinates",
-    "metric",
-    "parameters",
-    "assumptions",
-    "references",
-    "provenance"
+    "schema_version", "candidate_id", "version", "title", "status",
+    "intended_use", "validation_profile", "coordinates", "coordinate_system",
+    "conventions", "metric", "parameters", "assumptions", "claims",
+    "falsification", "references", "provenance"
   ],
   "properties": {
-    "candidate_id": {
-      "type": "string",
-      "pattern": "^CANDIDATE-[0-9]{6}$"
-    },
-    "version": {
-      "type": "string",
-      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    },
-    "title": {"type": "string", "minLength": 1},
-    "status": {
-      "type": "string",
-      "enum": [
-        "DRAFT",
-        "VALIDATING",
-        "MATHEMATICALLY_VALID",
-        "MATHEMATICALLY_INVALID",
-        "PHYSICALLY_PROBLEMATIC",
-        "UNRESOLVED",
-        "REPRODUCTION_PENDING",
-        "REPRODUCED",
-        "FALSIFIED",
-        "EXPERT_REVIEW",
-        "ARCHIVED"
-      ]
-    },
+    "schema_version": {"const": "1.0.0"},
+    "candidate_id": {"type": "string", "pattern": "^CANDIDATE-[0-9]{6}$"},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "title": {"type": "string", "minLength": 3},
+    "status": {"enum": ["DRAFT", "SUBMITTED", "VALIDATED", "REJECTED", "SUPERSEDED", "RETRACTED"]},
+    "intended_use": {"enum": ["BENCHMARK", "RESEARCH", "EDUCATION"]},
+    "validation_profile": {"type": "string", "minLength": 3},
     "coordinates": {
-      "type": "array",
-      "minItems": 1,
-      "items": {"type": "string"}
+      "type": "array", "minItems": 1, "maxItems": 16,
+      "items": {"type": "string", "minLength": 1}, "uniqueItems": true
+    },
+    "coordinate_system": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "description"],
+      "properties": {"name": {"type": "string"}, "description": {"type": "string"}}
+    },
+    "conventions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["metric_signature", "units", "speed_of_light", "cosmological_constant"],
+      "properties": {
+        "metric_signature": {"enum": ["-+++", "+---"]},
+        "units": {"type": "string"},
+        "speed_of_light": {"type": "number", "exclusiveMinimum": 0},
+        "cosmological_constant": {"type": "number"}
+      }
     },
     "metric": {
-      "type": "object",
+      "type": "object", "additionalProperties": false,
       "required": ["representation", "components"],
       "properties": {
-        "representation": {"type": "string"},
-        "components": {"type": "array"},
-        "signature": {"type": "string"}
-      },
-      "additionalProperties": true
+        "representation": {"const": "matrix"},
+        "components": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "array", "minItems": 1, "items": {"type": "number"}}
+        }
+      }
     },
     "parameters": {"type": "object"},
     "assumptions": {"type": "array", "items": {"type": "string"}},
-    "references": {"type": "array", "items": {"type": "object"}},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["claim_id", "class", "statement"],
+        "properties": {
+          "claim_id": {"type": "string"},
+          "class": {"enum": ["HYPOTHESIS", "COMPUTATION_SUPPORTED", "REPRODUCED", "EXPERT_REVIEWED", "EXPERIMENT_SUPPORTED", "FALSIFIED", "RETRACTED"]},
+          "statement": {"type": "string"}
+        }
+      }
+    },
+    "falsification": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["citation_key", "title", "type", "year"],
+        "properties": {
+          "citation_key": {"type": "string"}, "title": {"type": "string"},
+          "type": {"enum": ["PRIMARY_SOURCE", "REVIEW", "DOCUMENTATION", "DATASET"]},
+          "year": {"type": "integer", "minimum": 1500, "maximum": 2100}
+        }
+      }
+    },
     "provenance": {
-      "type": "object",
-      "required": ["created_by", "created_at"],
+      "type": "object", "additionalProperties": false,
+      "required": ["created_by", "created_at", "license"],
       "properties": {
         "created_by": {"type": "string"},
         "created_at": {"type": "string", "format": "date-time"},
-        "source_commit": {"type": "string"}
-      },
-      "additionalProperties": true
+        "license": {"type": "string"}
+      }
     }
   }
 }

@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "candidate_id": "CANDIDATE-999999",
+  "version": "1.0.0",
+  "title": "Invalid nonsymmetric fixture",
+  "status": "DRAFT",
+  "intended_use": "BENCHMARK",
+  "validation_profile": "benchmark.minkowski_cartesian_v1",
+  "coordinates": ["t", "x", "y", "z"],
+  "coordinate_system": {"name": "test", "description": "test fixture"},
+  "conventions": {"metric_signature": "-+++", "units": "test", "speed_of_light": 1, "cosmological_constant": 0},
+  "metric": {"representation": "matrix", "components": [[-1, 1, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]},
+  "parameters": {},
+  "assumptions": [],
+  "claims": [],
+  "falsification": ["fixture"],
+  "references": [],
+  "provenance": {"created_by": "tests", "created_at": "2026-08-07T00:00:00Z", "license": "Apache-2.0"}
+}

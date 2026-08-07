@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/result.schema.json",
+  "title": "Deterministic research result",
+  "type": "object",
+  "required": ["schema_version", "result_id", "candidate", "validator", "checks", "assessment", "warnings", "errors", "limitations", "run", "scientific_payload_digest"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "result_id": {"type": "string"},
+    "candidate": {"type": "object"},
+    "validator": {"type": "object"},
+    "checks": {"type": "array"},
+    "assessment": {"type": "object"},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "limitations": {"type": "array"},
+    "run": {"type": "object"},
+    "scientific_payload_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

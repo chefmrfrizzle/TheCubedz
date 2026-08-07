@@ -1,26 +1,31 @@
-from scripts.validate_candidate import validate
+from __future__ import annotations
+
+import subprocess
+import sys
+from pathlib import Path
+
+from research_core.cli import main
+
+ROOT = Path(__file__).resolve().parents[1]
+CANDIDATE = ROOT / "candidates" / "CANDIDATE-000001.json"
+INVALID = ROOT / "tests" / "fixtures" / "CANDIDATE-invalid-nonsymmetric.json"
 
 
-def baseline():
-    return {
-        "candidate_id": "CANDIDATE-000001",
-        "version": "0.1.0",
-        "title": "baseline",
-        "status": "DRAFT",
-        "coordinates": ["t", "x"],
-        "metric": {"components": [[-1, 0], [0, 1]]},
-        "parameters": {},
-        "assumptions": [],
-        "references": [],
-        "provenance": {"created_by": "test", "created_at": "2026-08-07T00:00:00Z"},
-    }
+def test_cli_main_verifies_baseline():
+    assert main(["verify", str(CANDIDATE), "--reproducible"]) == 0
 
 
-def test_baseline_is_structurally_valid():
-    assert validate(baseline()) == []
+def test_cli_main_rejects_invalid_candidate():
+    assert main(["verify", str(INVALID), "--reproducible"]) == 1
 
 
-def test_non_symmetric_metric_is_rejected():
-    item = baseline()
-    item["metric"]["components"] = [[-1, 2], [0, 1]]
-    assert "metric is not symmetric" in validate(item)[0]
+def test_compatibility_script_runs_from_fresh_checkout():
+    completed = subprocess.run(
+        [sys.executable, "scripts/validate_candidate.py", str(CANDIDATE), "--reproducible"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert completed.returncode == 0, completed.stderr
+    assert "status: BASELINE_VERIFIED" in completed.stdout

@@ -1,12 +1,24 @@
 {
+  "schema_version": "1.0.0",
   "candidate_id": "CANDIDATE-000001",
-  "version": "0.1.0",
-  "title": "Minkowski baseline",
+  "version": "1.0.0",
+  "title": "Minkowski spacetime baseline in Cartesian coordinates",
   "status": "DRAFT",
+  "intended_use": "BENCHMARK",
+  "validation_profile": "benchmark.minkowski_cartesian_v1",
   "coordinates": ["t", "x", "y", "z"],
+  "coordinate_system": {
+    "name": "Cartesian inertial coordinates",
+    "description": "A four-dimensional coordinate chart using naturalized units with c = 1."
+  },
+  "conventions": {
+    "metric_signature": "-+++",
+    "units": "geometrized natural units",
+    "speed_of_light": 1,
+    "cosmological_constant": 0
+  },
   "metric": {
     "representation": "matrix",
-    "signature": "-+++",
     "components": [
       [-1, 0, 0, 0],
       [0, 1, 0, 0],
@@ -16,12 +28,33 @@
   },
   "parameters": {},
   "assumptions": [
-    "Naturalized coordinate representation for the initial software baseline.",
-    "This candidate is a schema/reproducibility benchmark, not a transportation proposal."
+    "Metric components are constant in the declared Cartesian inertial coordinates.",
+    "The cosmological constant is zero for this baseline profile.",
+    "The candidate is a software and reproducibility benchmark, not a transportation proposal."
   ],
-  "references": [],
+  "claims": [
+    {
+      "claim_id": "CLAIM-C000001-DEFINITION",
+      "class": "HYPOTHESIS",
+      "statement": "The submitted matrix is an exact machine-readable representation of the selected Minkowski baseline under the declared conventions."
+    }
+  ],
+  "falsification": [
+    "Reject the baseline result if the matrix is not 4 by 4, symmetric, non-degenerate, or equal to diag(-1, 1, 1, 1) under the declared profile.",
+    "Reject the analytic flatness implication if any metric component depends on a coordinate in this profile.",
+    "Downgrade reproducibility if an independent implementation does not recover the same scientific payload digest from the same candidate and validator version."
+  ],
+  "references": [
+    {
+      "citation_key": "minkowski_1909",
+      "title": "Space and Time",
+      "type": "PRIMARY_SOURCE",
+      "year": 1909
+    }
+  ],
   "provenance": {
-    "created_by": "repository starter",
-    "created_at": "2026-08-07T00:00:00Z"
+    "created_by": "open repository contributors",
+    "created_at": "2026-08-07T00:00:00Z",
+    "license": "Apache-2.0"
   }
 }

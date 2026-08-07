@@ -1,0 +1,54 @@
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from typing import Sequence
+
+from .pipeline import load_and_evaluate
+from .reporting import beginner_report, technical_report
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def _parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="research-core", description="Run deliberately scoped, deterministic research validators.")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    verify = subparsers.add_parser("verify", help="verify one candidate")
+    verify.add_argument("candidate", type=Path)
+    verify.add_argument("--write", action="store_true", help="write canonical result and reports")
+    verify.add_argument("--reproducible", action="store_true", help="exclude wall-clock variability")
+    verify.add_argument("--json", action="store_true", help="print the complete JSON result")
+    return parser
+
+
+def _write(candidate: dict, result: dict) -> None:
+    result_path = ROOT / "artifacts" / "results" / f"{candidate['candidate_id']}.result.json"
+    beginner_path = ROOT / "artifacts" / "reports" / f"{candidate['candidate_id']}.beginner.md"
+    technical_path = ROOT / "artifacts" / "reports" / f"{candidate['candidate_id']}.technical.md"
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+    beginner_path.parent.mkdir(parents=True, exist_ok=True)
+    result_path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    beginner_path.write_text(beginner_report(candidate, result), encoding="utf-8")
+    technical_path.write_text(technical_report(candidate, result), encoding="utf-8")
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = _parser().parse_args(argv)
+    candidate_path = args.candidate.resolve()
+    candidate, result = load_and_evaluate(candidate_path, reproducible=args.reproducible)
+    if args.write:
+        _write(candidate, result)
+    if args.json:
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+    else:
+        print(f"candidate: {candidate['candidate_id']}@{candidate['version']}")
+        print(f"status: {result['assessment']['overall_status']}")
+        print(f"checks: {sum(item['status'] == 'PASS' for item in result['checks'])} passed / {sum(item['status'] == 'FAIL' for item in result['checks'])} failed")
+        print(f"digest: {result['scientific_payload_digest']}")
+        print(f"transportation: {result['assessment']['transportation_status']}")
+    return 0 if result["assessment"]["overall_status"] == "BASELINE_VERIFIED" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
