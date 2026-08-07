@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "reproduction_id": "REPRODUCTION-C000001-INDEPENDENT-PATH-001",
+  "candidate_id": "CANDIDATE-000001",
+  "source_result_id": "RESULT-CANDIDATE-000001-91B67470DDFA",
+  "source_scientific_payload_digest": "sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b",
+  "candidate_file_sha256": "sha256:db1b00e1f9fd725a0ffd5641f7b2de1c0815d3810960ab232de15dad56e78234",
+  "source_candidate_payload_sha256": "sha256:0e9c36562cb650f3d9eb96efb6c9e1daceb8d284a4a8c5b457722d8f9c25e4c8",
+  "implementation": {
+    "name": "standard-library-leibniz-adjugate-crosscheck",
+    "version": "1.0.0",
+    "shared_research_core_code": false,
+    "method": "Leibniz determinant and cofactor-adjugate inverse using fractions.Fraction"
+  },
+  "independence": {
+    "separate_environment": false,
+    "separate_implementation": true,
+    "separate_solver": false,
+    "separate_contributor": false,
+    "level": "R2_IMPLEMENTATION_PATH_ONLY",
+    "counts_as_external_reproduction": false
+  },
+  "observations": {
+    "determinant": -1,
+    "inverse": [
+      [
+        -1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "checks": {
+      "schema.candidate.v1": "PASS",
+      "metric.dimension": "PASS",
+      "metric.symmetry": "PASS",
+      "metric.determinant": "PASS",
+      "metric.inverse": "PASS",
+      "minkowski.components": "PASS",
+      "minkowski.signature": "PASS",
+      "minkowski.cosmological_constant": "PASS",
+      "minkowski.constant_components": "PASS",
+      "minkowski.connection": "PASS",
+      "minkowski.curvature": "PASS",
+      "minkowski.vacuum_source": "PASS"
+    }
+  },
+  "comparison": "MATCH",
+  "discrepancies": [],
+  "limitations": [
+    "This is a separate implementation path created in the same repository and environment.",
+    "It is not an outside reproduction and does not increase the public independent-reproduction count.",
+    "It checks only the exact submitted Minkowski Cartesian benchmark."
+  ],
+  "record_digest": "sha256:98de6dfa03b487eb9bc7c5d3ad2ef1be58fb16ccc425701d7bed071301fe9f98"
+}

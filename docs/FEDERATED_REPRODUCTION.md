@@ -47,6 +47,8 @@ A contributor runs the repository locally and submits a reproduction record thro
 
 R0 and R1 improve software confidence. R2 and R3 provide stronger scientific reproduction. R4 applies only to physical predictions.
 
+The committed `CANDIDATE-000001.crosscheck.json` record is a separate R2-style implementation path, but it was produced inside the same repository, environment, and project workflow. It is deliberately marked as **not an outside reproduction**, and the public independent-reproduction count remains zero.
+
 ## Future signed bundle
 
 ```text

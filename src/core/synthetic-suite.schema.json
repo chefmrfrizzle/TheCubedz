@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/synthetic-suite.schema.json",
+  "title": "Synthetic workflow benchmark suite",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "suite_id", "suite_version", "frozen", "purpose", "cases"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "suite_id": {"const": "SYNTHETIC-WORKFLOW-V1"},
+    "suite_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "frozen": {"const": true},
+    "purpose": {"type": "string", "minLength": 20},
+    "cases": {
+      "type": "array",
+      "minItems": 100,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["case_id", "block", "title", "expected", "probe"],
+        "properties": {
+          "case_id": {"type": "string", "pattern": "^SYN-[0-9]{3}$"},
+          "block": {"enum": ["SCHEMA_REPRESENTATION", "ALGEBRA_CONVENTIONS", "NUMERICAL_ADVERSARIAL", "PROVENANCE_GOVERNANCE"]},
+          "title": {"type": "string", "minLength": 3},
+          "expected": {"enum": ["ACCEPT", "REJECT", "MISMATCH", "UNRESOLVED", "NOT_APPLICABLE"]},
+          "probe": {"type": "string", "pattern": "^[a-z_]+:[a-z0-9_]+$"}
+        }
+      }
+    }
+  }
+}

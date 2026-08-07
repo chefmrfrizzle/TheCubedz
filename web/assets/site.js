@@ -3,6 +3,8 @@ const basePath = normalizeBase(root.dataset.basePath || '');
 const runtime = {
   candidate: null,
   result: null,
+  benchmark: null,
+  crosscheck: null,
   graph: null,
   agents: null,
   roadmap: null,
@@ -58,7 +60,8 @@ function setAllText(selector, value, scope = document) {
 
 function statusClass(status = '') {
   const value = status.toUpperCase();
-  if (value.includes('PASS') || value.includes('VERIFIED') || value.includes('COMPLETE') || value.includes('SUPPORTED') || value.includes('LIVE')) return 'pass';
+  if (value.includes('UNSUPPORTED') || value.includes('UNRESOLVED') || value.includes('NOT_APPLICABLE')) return 'neutral';
+  if (value.includes('PASS') || value.includes('VERIFIED') || value.includes('COMPLETE') || value.includes('SUPPORTED') || value.includes('LIVE') || value.includes('MATCH')) return 'pass';
   if (value.includes('FAIL') || value.includes('RETRACT') || value.includes('FALS')) return 'fail';
   if (value.includes('WARN') || value.includes('REVIEW') || value.includes('PARTIAL') || value.includes('GATED') || value.includes('DRAFT')) return 'warning';
   return 'neutral';
@@ -218,9 +221,11 @@ function renderCheck(check, index) {
 async function initializeLab() {
   if (!document.querySelector('[data-page="lab"]')) return;
   try {
-    [runtime.candidate, runtime.result] = await Promise.all([
+    [runtime.candidate, runtime.result, runtime.benchmark, runtime.crosscheck] = await Promise.all([
       getJson('/data/candidate.json'),
       getJson('/data/result.json'),
+      getJson('/data/synthetic-suite-result.json'),
+      getJson('/data/crosscheck.json'),
     ]);
     const { candidate, result } = runtime;
     setText('[data-candidate-title]', candidate.title);
@@ -254,6 +259,7 @@ async function initializeLab() {
     }
     const limitations = document.querySelector('[data-limitations-list]');
     if (limitations) limitations.innerHTML = result.limitations.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+    initializeEvidenceCube();
   } catch (error) {
     const main = document.querySelector('.lab-main');
     if (main) main.insertAdjacentHTML('afterbegin', `<div class="error-panel">${escapeHtml(error.message)}</div>`);
@@ -262,6 +268,94 @@ async function initializeLab() {
 
   const runButton = document.querySelector('[data-run-crosscheck]');
   if (runButton) runButton.addEventListener('click', runBrowserCrosscheck);
+}
+
+function evidenceCubeFaces() {
+  const { candidate, result, benchmark, crosscheck } = runtime;
+  if (!candidate || !result || !benchmark || !crosscheck) return [];
+  const passed = result.checks.filter((check) => check.status === 'PASS');
+  const mathChecks = passed.filter((check) => ['mathematics', 'benchmark', 'analytic implication'].includes(check.category));
+  return [
+    {
+      id: 'definition', label: 'Definition', status: result.checks.find((check) => check.check_id === 'schema.candidate.v1')?.status || 'UNRESOLVED',
+      summary: 'The submitted candidate is machine-readable under the current schema.',
+      evidence: `${candidate.candidate_id}@${candidate.version} declares four coordinates, the ${candidate.validation_profile} profile, and explicit conventions.`,
+      limitation: 'Schema validity establishes document shape and declared metadata. It does not establish physical possibility.',
+      source: '/data/candidate.json', sourceLabel: 'Candidate JSON',
+    },
+    {
+      id: 'mathematics', label: 'Mathematics', status: mathChecks.length === 8 ? 'PASS' : 'UNRESOLVED',
+      summary: `${mathChecks.length} implemented mathematical, benchmark, and analytic checks pass for this exact representation.`,
+      evidence: `The committed validator reports determinant, inverse, symmetry, exact components, signature, connection, and curvature implications within its named profile.`,
+      limitation: 'This is not a general tensor engine and does not prove equivalence under arbitrary coordinate transformations.',
+      source: '/data/result.json', sourceLabel: 'Canonical result',
+    },
+    {
+      id: 'numerics', label: 'Numerics', status: 'UNSUPPORTED',
+      summary: 'No numerical-relativity solver or convergence study is implemented.',
+      evidence: `${benchmark.outcomes.UNRESOLVED || 0} synthetic workflow cases remain explicitly unresolved across all categories; unsupported capabilities are never converted into passes.`,
+      limitation: 'The exact baseline uses rational arithmetic. It supplies no numerical stability, resolution, conditioning, or convergence evidence for general metrics.',
+      source: '/data/synthetic-suite-result.json', sourceLabel: '100-case workflow benchmark',
+    },
+    {
+      id: 'physics', label: 'Physics', status: 'UNRESOLVED',
+      summary: 'The exact baseline is consistent with vacuum under the declared classical assumptions.',
+      evidence: result.assessment.physical_status.replaceAll('_', ' '),
+      limitation: 'Energy conditions, perturbative stability, causal structure, material models, and exotic candidates have not been evaluated.',
+      source: '/data/result.json', sourceLabel: 'Scoped physical interpretation',
+    },
+    {
+      id: 'reproduction', label: 'Reproduction', status: 'UNRESOLVED',
+      summary: `A separate implementation path reports ${crosscheck.comparison}; no outside reproduction is recorded.`,
+      evidence: `${crosscheck.implementation.method}. The comparison covers ${Object.keys(crosscheck.observations.checks).length} named checks.`,
+      limitation: crosscheck.limitations.join(' '),
+      source: '/data/crosscheck.json', sourceLabel: 'Implementation cross-check passport',
+    },
+    {
+      id: 'realizability', label: 'Realizability', status: 'NOT_APPLICABLE',
+      summary: 'Candidate 000001 is a benchmark, not a device or transportation proposal.',
+      evidence: result.assessment.transportation_status.replaceAll('_', ' '),
+      limitation: 'No engineering design, material requirement, energy budget, experiment, or route to Mars is claimed.',
+      source: '/data/result.json', sourceLabel: 'Assessment boundary',
+    },
+  ];
+}
+
+function initializeEvidenceCube() {
+  const container = document.querySelector('[data-evidence-cube]');
+  if (!container) return;
+  const visual = container.querySelector('[data-cube-visual]');
+  const detail = container.querySelector('[data-cube-detail]');
+  const controls = [...container.querySelectorAll('[data-cube-select]')];
+  const summary = document.querySelector('[data-cube-summary]');
+  const faces = evidenceCubeFaces();
+  const render = (id, moveFocus = false) => {
+    const face = faces.find((item) => item.id === id) || faces[0];
+    visual.dataset.activeFace = face.id;
+    controls.forEach((button) => {
+      const selected = button.dataset.cubeSelect === face.id;
+      button.setAttribute('aria-selected', String(selected));
+      button.classList.toggle('active', selected);
+      if (moveFocus && selected) button.focus();
+    });
+    detail.innerHTML = `<div class="cube-detail-heading"><div><p class="eyebrow">${escapeHtml(face.label)} face</p><h3>${escapeHtml(face.summary)}</h3></div>${createPill(face.status)}</div>
+      <dl><div><dt>Evidence</dt><dd>${escapeHtml(face.evidence)}</dd></div><div><dt>Boundary</dt><dd>${escapeHtml(face.limitation)}</dd></div></dl>
+      <a class="button secondary" href="${withBase(face.source)}">Open ${escapeHtml(face.sourceLabel)}</a>`;
+  };
+  controls.forEach((button, index) => {
+    button.addEventListener('click', () => render(button.dataset.cubeSelect));
+    button.addEventListener('keydown', (event) => {
+      if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      let next = index;
+      if (event.key === 'Home') next = 0;
+      else if (event.key === 'End') next = controls.length - 1;
+      else next = (index + (event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1) + controls.length) % controls.length;
+      render(controls[next].dataset.cubeSelect, true);
+    });
+  });
+  if (summary) summary.innerHTML = faces.map((face) => `<article><div><strong>${escapeHtml(face.label)}</strong>${createPill(face.status)}</div><p>${escapeHtml(face.summary)}</p></article>`).join('');
+  render('definition');
 }
 
 function determinant(matrix) {

@@ -1,13 +1,15 @@
 cff-version: 1.2.0
 message: "If you use this research software or its artifacts, cite the repository version and the exact candidate/result identifiers."
 type: software
-title: "Open Computational Spacetime Research"
+title: "TheCubedz"
 abstract: "An open, reproducible system for representing, validating, challenging, explaining, and eventually searching mathematically defined spacetime candidates."
-version: 0.1.0-alpha.1
+version: 0.2.0-alpha.1
 date-released: 2026-08-07
 license: Apache-2.0
+repository-code: "https://github.com/chefmrfrizzle/TheCubedz"
+url: "https://thecubedz.vercel.app"
 authors:
-  - name: "Open Research Contributors"
+  - name: "ChefMrFrizzle"
 keywords:
   - computational physics
   - general relativity

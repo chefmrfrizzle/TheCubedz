@@ -42,8 +42,11 @@ As of **August 7, 2026**, the repository contains:
 | Reports | Beginner and technical reports derived from the same result object |
 | Second brain | Append-only event ledger plus a versioned evidence-graph projection |
 | Agent contracts | 9 bounded research roles with explicit permissions and prohibitions |
-| Public website | 8 responsive routes, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
-| Automated validation | Python tests, artifact reconciliation, static-site link checks, base-path deployment checks, and build fingerprints |
+| Controlled autonomy | Machine-validated task, capability, run, evidence-bundle, and human-promotion contracts |
+| Synthetic benchmark | 100 frozen workflow cases: 23 accepted, 57 rejected, 5 mismatches preserved, and 15 unresolved |
+| Cross-check | 1 separate standard-library implementation path matches all 12 baseline checks; not an outside reproduction |
+| Public website | 8 responsive routes, six-face evidence cube, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
+| Automated validation | Scientific, control-contract, benchmark, cross-check, artifact, static-site, link, base-path, and build-fingerprint checks |
 | Independent reproductions | 0 recorded |
 | Novel physics claims | 0 |
 
@@ -89,6 +92,15 @@ python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducibl
 ```
 
 A matching repository run should emit the published scientific payload digest. Re-running the same implementation is useful software verification; it is **not yet independent scientific reproduction**.
+
+### Run the frozen workflow benchmark and separate implementation path
+
+```bash
+python scripts/research.py benchmark
+python scripts/independent_crosscheck.py
+```
+
+The 100-case suite validates the research workflow, security boundaries, and explicit unresolved states. The separate implementation uses a different exact matrix algorithm, but it shares this repository, environment, and project authorship, so it does not count as an outside reproduction.
 
 ## One command before every push
 
@@ -315,6 +327,15 @@ The roadmap preserves ambitious ideas without presenting them as implemented:
 - portable forks of the candidate → validator → artifact → graph → search loop for other scientific domains.
 
 See [docs/INNOVATION_BLUEPRINT.md](docs/INNOVATION_BLUEPRINT.md).
+
+The next controlled-autonomy milestone is specified in:
+
+- [Thesis and research program](docs/THESIS_AND_RESEARCH_PROGRAM.md)
+- [Controlled autonomy blueprint](docs/CONTROLLED_AUTONOMY_BLUEPRINT.md)
+- [Synthetic benchmark v1: 100 workflow cases](docs/SYNTHETIC_BENCHMARK_100.md)
+- [Security standards baseline](docs/SECURITY_STANDARDS_BASELINE.md)
+- [GitHub security settings record](docs/GITHUB_SECURITY_SETTINGS.md)
+- [Step-by-step controlled autonomy build prompts](prompts/CONTROLLED_AUTONOMY_BUILD_PROGRAM.md)
 
 ## Contribution paths
 

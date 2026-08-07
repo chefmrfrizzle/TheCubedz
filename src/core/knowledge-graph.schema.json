@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/schemas/knowledge-graph.schema.json",
+  "$id": "https://thecubedz.vercel.app/schemas/knowledge-graph.schema.json",
   "title": "Evidence graph snapshot",
   "type": "object",
   "additionalProperties": false,

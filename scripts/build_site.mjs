@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
 import { access, cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { navigation, pages } from '../web/pages.mjs';
@@ -96,7 +97,7 @@ function documentHtml({ page, config, result, basePath }) {
   ${canonical ? `<link rel="canonical" href="${escapeHtml(canonical)}">` : ''}
   <link rel="icon" href="${joinUrl(basePath, '/assets/favicon.svg')}" type="image/svg+xml">
   <link rel="manifest" href="${joinUrl(basePath, '/site.webmanifest')}">
-  <link rel="stylesheet" href="${joinUrl(basePath, '/assets/styles.css')}">
+  <link rel="stylesheet" href="${joinUrl(basePath, '/assets/styles.css')}?v=${encodeURIComponent(config.version)}">
   <meta property="og:type" content="website">
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(page.description)}">
@@ -112,7 +113,7 @@ function documentHtml({ page, config, result, basePath }) {
   ${siteHeader(page, basePath)}
   ${body}
   ${siteFooter(config, basePath, result)}
-  <script type="module" src="${joinUrl(basePath, '/assets/site.js')}"></script>
+  <script type="module" src="${joinUrl(basePath, '/assets/site.js')}?v=${encodeURIComponent(config.version)}"></script>
 </body>
 </html>`;
 }
@@ -151,6 +152,11 @@ async function sha256File(filePath) {
   return hash.digest('hex');
 }
 
+function gitValue(args, fallback = 'UNAVAILABLE') {
+  const process = spawnSync('git', args, { cwd: projectRoot, encoding: 'utf8' });
+  return process.status === 0 ? process.stdout.trim() || fallback : fallback;
+}
+
 async function build() {
   const rawConfig = await readJson('site.config.json');
   const config = {
@@ -160,9 +166,11 @@ async function build() {
     contactUrl: process.env.PUBLIC_CONTACT_URL || rawConfig.contactUrl || '',
   };
   const basePath = normalizeBase(process.env.PUBLIC_BASE_PATH || '');
-  const [candidate, result, graph, agents, roadmap] = await Promise.all([
+  const [candidate, result, benchmark, crosscheck, graph, agents, roadmap] = await Promise.all([
     readJson('candidates/CANDIDATE-000001.json'),
     readJson('artifacts/results/CANDIDATE-000001.result.json'),
+    readJson('artifacts/benchmarks/synthetic-suite-v1.result.json'),
+    readJson('artifacts/reproductions/CANDIDATE-000001.crosscheck.json'),
     readJson('data/knowledge-graph.json'),
     readJson('data/agents.json'),
     readJson('data/roadmap.json'),
@@ -181,6 +189,9 @@ async function build() {
   await copyIfExists('web/assets', 'assets');
   await copyIfExists('candidates/CANDIDATE-000001.json', 'data/candidate.json');
   await copyIfExists('artifacts/results/CANDIDATE-000001.result.json', 'data/result.json');
+  await copyIfExists('artifacts/benchmarks/synthetic-suite-v1.result.json', 'data/synthetic-suite-result.json');
+  await copyIfExists('benchmarks/synthetic-suite-v1.json', 'data/synthetic-suite.json');
+  await copyIfExists('artifacts/reproductions/CANDIDATE-000001.crosscheck.json', 'data/crosscheck.json');
   await copyIfExists('artifacts/reports/CANDIDATE-000001.beginner.md', 'data/report-beginner.md');
   await copyIfExists('artifacts/reports/CANDIDATE-000001.technical.md', 'data/report-technical.md');
   await copyIfExists('data/knowledge-graph.json', 'data/knowledge-graph.json');
@@ -203,6 +214,9 @@ async function build() {
     failedCheckCount: result.checks.filter((check) => check.status === 'FAIL').length,
     novelClaimCount: 0,
     reproductionCount: graph.nodes.filter((node) => node.type === 'Reproduction' && node.status === 'REPRODUCED').length,
+    implementationCrosscheckCount: crosscheck.comparison === 'MATCH' ? 1 : 0,
+    syntheticCaseCount: benchmark.case_count,
+    syntheticCaseFailureCount: benchmark.failed,
     graphNodeCount: graph.nodes.length,
     graphEdgeCount: graph.edges.length,
     agentCount: agents.agents.length,
@@ -257,6 +271,8 @@ async function build() {
   const buildManifest = {
     schemaVersion: '1.0.0',
     releaseVersion: config.version,
+    sourceCommit: gitValue(['rev-parse', 'HEAD']),
+    sourceTreeState: gitValue(['status', '--porcelain']) ? 'DIRTY' : 'CLEAN',
     basePath,
     generatedAt: result.run.recorded_at,
     scientificPayloadDigest: result.scientific_payload_digest,

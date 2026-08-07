@@ -24,7 +24,7 @@ Exit criterion: scientific status, provenance, corrections, and agent authority 
 - [x] scientific payload digest
 - [x] deterministic reproduction command
 - [x] test suite
-- [ ] independent implementation or solver cross-check
+- [x] separate standard-library implementation path and comparison passport
 - [ ] outside clean-environment reproduction record
 
 Exit criterion: at least one independent implementation recovers the declared baseline result and discrepancies are resolved or recorded.
@@ -48,6 +48,8 @@ Exit criterion: multiple established metrics recover expected properties across 
 - [x] artifact-derived explanations
 - [x] evidence-graph explorer
 - [x] browser convenience cross-check
+- [x] artifact-driven six-face evidence cube with semantic fallback
+- [x] frozen 100-case workflow-control benchmark
 - [x] build and internal-link fingerprints
 - [x] Vercel and GitHub Pages deployment paths
 - [ ] reproduction passport submission
@@ -97,6 +99,18 @@ Only after benchmark maturity:
 - [ ] external replication
 
 Exit criterion: a novel, narrow claim survives declared falsification tests and independent external scrutiny.
+
+## Controlled-autonomy implementation program
+
+The architecture, benchmark, and human-gated execution prompts for expanding this roadmap are defined in:
+
+- [`THESIS_AND_RESEARCH_PROGRAM.md`](THESIS_AND_RESEARCH_PROGRAM.md)
+- [`CONTROLLED_AUTONOMY_BLUEPRINT.md`](CONTROLLED_AUTONOMY_BLUEPRINT.md)
+- [`SYNTHETIC_BENCHMARK_100.md`](SYNTHETIC_BENCHMARK_100.md)
+- [`SECURITY_STANDARDS_BASELINE.md`](SECURITY_STANDARDS_BASELINE.md)
+- [`../prompts/CONTROLLED_AUTONOMY_BUILD_PROGRAM.md`](../prompts/CONTROLLED_AUTONOMY_BUILD_PROGRAM.md)
+
+Each phase stops for human review. Publication, canonical scientific status, agent permissions, and public execution are never automatically authorized by completion of an earlier phase.
 
 ## Explicit non-goals for the alpha
 

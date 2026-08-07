@@ -120,7 +120,9 @@ async function checkWorkflowSafety() {
     if (body.includes('pull_request_target:')) fail(`${name} uses pull_request_target and needs a dedicated threat review`);
     if (!body.includes('permissions:')) fail(`${name} does not declare permissions explicitly`);
     if (/permissions:\s*write-all/.test(body)) fail(`${name} grants write-all permissions`);
-    if (/uses:\s*actions\/checkout@(?!v6)/.test(body)) fail(`${name} does not use the reviewed checkout major version`);
+    const mutableActions = [...body.matchAll(/uses:\s*([^\s#]+)@([^\s#]+)/g)]
+      .filter(([, action, reference]) => !action.startsWith('./') && !/^[0-9a-f]{40}$/.test(reference));
+    if (mutableActions.length) fail(`${name} uses mutable action references: ${mutableActions.map(([, action, reference]) => `${action}@${reference}`).join(', ')}`);
   }
   note(`${files.length} workflow files checked for high-risk trigger/permission patterns`);
 }

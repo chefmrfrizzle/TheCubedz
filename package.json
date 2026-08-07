@@ -1,6 +1,6 @@
 {
-  "name": "open-spacetime-research",
-  "version": "0.1.0-alpha.1",
+  "name": "thecubedz",
+  "version": "0.2.0-alpha.1",
   "private": true,
   "description": "Build and validate the public static surface for an open computational spacetime research experiment.",
   "type": "module",
@@ -11,9 +11,11 @@
     "dev": "npm run build && node scripts/serve_site.mjs",
     "build": "node scripts/build_site.mjs",
     "test:web": "node scripts/test_site.mjs",
-    "test:science": "PYTHONPATH=src pytest",
+    "test:science": "python -m pytest",
     "verify:baseline": "python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible",
-    "check": "npm run verify:baseline && npm run test:science && npm run test:repo && npm run build && npm run test:web",
+    "verify:benchmark": "python scripts/research.py benchmark",
+    "verify:crosscheck": "python scripts/independent_crosscheck.py",
+    "check": "npm run verify:baseline && npm run verify:benchmark && npm run verify:crosscheck && npm run test:science && npm run test:repo && npm run build && npm run test:web",
     "test:repo": "node scripts/test_repository.mjs"
   },
   "license": "Apache-2.0"

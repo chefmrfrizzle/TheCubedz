@@ -70,6 +70,8 @@ Recommended settings:
 - Enable Discussions for research questions and community orientation.
 - Use Issues for bounded bugs, candidate proposals, challenges, and reproductions.
 
+The current public repository settings were applied and recorded in [`GITHUB_SECURITY_SETTINGS.md`](GITHUB_SECURITY_SETTINGS.md). Re-verify them before release rather than assuming the record is current.
+
 Do not enable CodeQL both through default setup and the committed advanced workflow at the same time. Choose one configuration.
 
 ## 4A. Deploy with Vercel

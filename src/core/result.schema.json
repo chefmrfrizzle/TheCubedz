@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/schemas/result.schema.json",
+  "$id": "https://thecubedz.vercel.app/schemas/result.schema.json",
   "title": "Deterministic research result",
   "type": "object",
   "required": ["schema_version", "result_id", "candidate", "validator", "checks", "assessment", "warnings", "errors", "limitations", "run", "scientific_payload_digest"],

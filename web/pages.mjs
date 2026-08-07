@@ -127,6 +127,33 @@ export const pages = [
     content: `
       <main id="main-content" data-page="lab">
         <section class="shell page-hero section-pad compact"><div><p class="eyebrow">Public laboratory</p><h1>One candidate. One scoped validator. Every boundary visible.</h1><p class="hero-lede">The laboratory renders committed machine-readable artifacts. It does not invent a friendlier result than the scientific core produced.</p></div><div class="page-status"><span class="status-dot"></span><strong data-lab-status>Loading artifact…</strong><small>Candidate status and run status are intentionally separate.</small></div></section>
+        <section class="shell evidence-cube-section" aria-labelledby="evidence-cube-title">
+          <div class="cube-intro"><div><p class="eyebrow">The evidence cube</p><h2 id="evidence-cube-title">Six questions. No single “works” score.</h2></div><p>Select a face to inspect what this candidate establishes, what remains unknown, and which artifact supports that state. Rotating the cube changes the view—not the evidence.</p></div>
+          <div class="evidence-cube-panel" data-evidence-cube>
+            <div class="cube-stage" aria-hidden="true">
+              <div class="evidence-cube" data-cube-visual data-active-face="definition">
+                <div class="evidence-cube-face cube-face-front"><span>Definition</span></div>
+                <div class="evidence-cube-face cube-face-right"><span>Mathematics</span></div>
+                <div class="evidence-cube-face cube-face-back"><span>Numerics</span></div>
+                <div class="evidence-cube-face cube-face-left"><span>Physics</span></div>
+                <div class="evidence-cube-face cube-face-top"><span>Reproduction</span></div>
+                <div class="evidence-cube-face cube-face-bottom"><span>Realizability</span></div>
+              </div>
+            </div>
+            <div class="cube-inspector">
+              <div class="cube-face-nav" role="tablist" aria-label="Evidence cube faces">
+                <button type="button" role="tab" aria-selected="true" data-cube-select="definition">Definition</button>
+                <button type="button" role="tab" aria-selected="false" data-cube-select="mathematics">Mathematics</button>
+                <button type="button" role="tab" aria-selected="false" data-cube-select="numerics">Numerics</button>
+                <button type="button" role="tab" aria-selected="false" data-cube-select="physics">Physics</button>
+                <button type="button" role="tab" aria-selected="false" data-cube-select="reproduction">Reproduction</button>
+                <button type="button" role="tab" aria-selected="false" data-cube-select="realizability">Realizability</button>
+              </div>
+              <article class="cube-detail" role="tabpanel" aria-live="polite" data-cube-detail><p>Loading evidence…</p></article>
+            </div>
+          </div>
+          <div class="cube-semantic-summary" data-cube-summary aria-label="All evidence cube face states"></div>
+        </section>
         <section class="shell lab-layout section-pad-top" id="candidate">
           <aside class="lab-sidebar"><div class="sticky-panel"><p class="eyebrow">Candidate</p><h2 data-candidate-title>Minkowski baseline</h2><dl class="metadata-list"><div><dt>ID</dt><dd data-candidate-id>—</dd></div><div><dt>Version</dt><dd data-candidate-version>—</dd></div><div><dt>Intent</dt><dd data-candidate-use>—</dd></div><div><dt>Candidate state</dt><dd data-candidate-status>—</dd></div><div><dt>Validation profile</dt><dd data-validation-profile>—</dd></div></dl><button class="button primary full" type="button" data-run-crosscheck>Run browser cross-check</button><a class="button secondary full" href="/data/candidate.json">Open raw candidate JSON</a><p class="fine-print">The browser run is a convenience check. The committed Python artifact remains canonical.</p></div></aside>
           <div class="lab-main">

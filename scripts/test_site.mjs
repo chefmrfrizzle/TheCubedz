@@ -41,7 +41,7 @@ async function verifyRequiredFiles() {
   const required = [
     'index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html',
     '404.html', 'assets/styles.css', 'assets/site.js', 'assets/favicon.svg', 'assets/og-card.png',
-    'data/candidate.json', 'data/result.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/project-status.json', 'data/site-config.json',
+    'data/candidate.json', 'data/result.json', 'data/synthetic-suite.json', 'data/synthetic-suite-result.json', 'data/crosscheck.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/project-status.json', 'data/site-config.json',
     'site.webmanifest', 'robots.txt', 'llms.txt', 'build-manifest.json', 'README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE',
   ];
   for (const relative of required) if (!(await exists(path.join(dist, relative)))) fail(`Missing required build output: ${relative}`);
@@ -86,8 +86,8 @@ async function verifyHtml(basePath = '') {
 }
 
 async function verifyArtifacts() {
-  const [candidate, result, status, graph, agents, roadmap] = await Promise.all([
-    json('data/candidate.json'), json('data/result.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'),
+  const [candidate, result, benchmark, crosscheck, status, graph, agents, roadmap] = await Promise.all([
+    json('data/candidate.json'), json('data/result.json'), json('data/synthetic-suite-result.json'), json('data/crosscheck.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'),
   ]);
   const passed = result.checks.filter((check) => check.status === 'PASS').length;
   const failed = result.checks.filter((check) => check.status === 'FAIL').length;
@@ -100,6 +100,11 @@ async function verifyArtifacts() {
   if (status.roadmapPhaseCount !== roadmap.phases.length) fail('Project status roadmap count does not match roadmap artifact');
   if (status.novelClaimCount !== 0) fail('Public V0 must report zero novel physics claims');
   if (status.transportationStatus !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Transportation status boundary changed unexpectedly');
+  if (benchmark.case_count !== 100 || benchmark.failed !== 0) fail('Synthetic workflow benchmark is incomplete or failing');
+  if (crosscheck.comparison !== 'MATCH') fail('Separate implementation cross-check does not match the canonical result');
+  if (crosscheck.independence.counts_as_external_reproduction !== false) fail('Implementation cross-check is overstated as external reproduction');
+  const labHtml = await text('lab/index.html');
+  if (!labHtml.includes('data-evidence-cube') || !labHtml.includes('Six questions. No single')) fail('Evidence cube is missing from the laboratory');
   const allHtml = (await Promise.all(['index.html','lab/index.html','graph/index.html'].map(text))).join('\n');
   if (!allHtml.includes(result.scientific_payload_digest)) fail('Scientific digest is not visible on public release pages');
   note(`${result.checks.length} scientific result checks reconciled with public status`);
@@ -137,7 +142,7 @@ async function verifyBasePathBuild() {
   if (build.status !== 0) { fail(`Base-path build failed: ${build.stderr}`); return; }
   try {
     const html = await text('index.html');
-    if (!html.includes('href="/repository-preview/assets/styles.css"')) fail('Base-path build did not prefix stylesheet URL');
+    if (!html.includes('href="/repository-preview/assets/styles.css?v=')) fail('Base-path build did not prefix or version stylesheet URL');
     if (!html.includes('href="/repository-preview/lab/"')) fail('Base-path build did not prefix internal navigation URL');
     await verifyHtml('/repository-preview');
     note('GitHub Pages-style base-path build checked');

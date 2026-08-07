@@ -2,9 +2,9 @@
   "schema_version": "1.0.0",
   "phases": [
     {"id": "PHASE-0", "title": "Integrity foundation", "status": "COMPLETE", "outcome": "Open governance, schemas, claims policy, and a versioned evidence model."},
-    {"id": "PHASE-1", "title": "One reproducible baseline", "status": "LIVE", "outcome": "Candidate 000001 is represented, checked with exact arithmetic, explained, and fingerprinted."},
+    {"id": "PHASE-1", "title": "One reproducible baseline", "status": "LIVE", "outcome": "Candidate 000001 is represented, checked with exact arithmetic, cross-checked through a separate implementation path, explained, and fingerprinted; an outside reproduction is still required."},
     {"id": "PHASE-2", "title": "Benchmark suite", "status": "NEXT", "outcome": "Add established metrics one at a time, then compare independent validator and solver adapters."},
-    {"id": "PHASE-3", "title": "Public laboratory", "status": "PARTIAL", "outcome": "Candidate registry, result records, graph exploration, challenges, and reproduction workflows."},
+    {"id": "PHASE-3", "title": "Public laboratory", "status": "PARTIAL", "outcome": "An artifact-driven evidence cube, candidate registry, result records, graph exploration, challenges, and reproduction workflows."},
     {"id": "PHASE-4", "title": "Transparent search", "status": "FUTURE", "outcome": "Compare random, evolutionary, Bayesian, and active-learning policies on frozen benchmarks."},
     {"id": "PHASE-5", "title": "Federated reproduction", "status": "FUTURE", "outcome": "Sandboxed community runners, signed manifests, cross-solver checks, and quality-based reputation."},
     {"id": "PHASE-6", "title": "Novel research", "status": "GATED", "outcome": "Only after benchmark success: novel candidate generation, expert review, and external replication."}

@@ -7,6 +7,8 @@ from typing import Sequence
 
 from .pipeline import load_and_evaluate
 from .reporting import beginner_report, technical_report
+from .control import SCHEMAS, load_and_validate_control
+from .synthetic_benchmark import run_suite
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -19,6 +21,12 @@ def _parser() -> argparse.ArgumentParser:
     verify.add_argument("--write", action="store_true", help="write canonical result and reports")
     verify.add_argument("--reproducible", action="store_true", help="exclude wall-clock variability")
     verify.add_argument("--json", action="store_true", help="print the complete JSON result")
+    control = subparsers.add_parser("validate-control", help="validate one controlled-autonomy document")
+    control.add_argument("kind", choices=sorted(SCHEMAS))
+    control.add_argument("document", type=Path)
+    benchmark = subparsers.add_parser("benchmark", help="run the frozen 100-case workflow benchmark")
+    benchmark.add_argument("--write", action="store_true", help="write the canonical benchmark result")
+    benchmark.add_argument("--json", action="store_true", help="print the complete benchmark result")
     return parser
 
 
@@ -35,6 +43,28 @@ def _write(candidate: dict, result: dict) -> None:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = _parser().parse_args(argv)
+    if args.command == "validate-control":
+        _, errors = load_and_validate_control(args.kind, args.document.resolve())
+        if errors:
+            for error in errors:
+                print(f"FAIL: {error}")
+            return 1
+        print(f"PASS: {args.kind} document is valid and policy-conforming")
+        return 0
+    if args.command == "benchmark":
+        result = run_suite()
+        if args.write:
+            output = ROOT / "artifacts" / "benchmarks" / "synthetic-suite-v1.result.json"
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        if args.json:
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+        else:
+            print(f"suite: {result['suite_id']}@{result['suite_version']}")
+            print(f"cases: {result['passed']} passed / {result['failed']} failed")
+            print(f"outcomes: {json.dumps(result['outcomes'], sort_keys=True)}")
+            print(f"digest: {result['result_digest']}")
+        return 0 if result["failed"] == 0 else 1
     candidate_path = args.candidate.resolve()
     candidate, result = load_and_evaluate(candidate_path, reproducible=args.reproducible)
     if args.write:

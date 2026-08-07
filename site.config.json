@@ -4,9 +4,9 @@
   "shortTitle": "TheCubedz",
   "description": "An open, reproducible experiment for representing, checking, challenging, and eventually searching mathematically defined spacetime candidates.",
   "repositoryUrl": "https://github.com/chefmrfrizzle/TheCubedz",
-  "siteUrl": "",
+  "siteUrl": "https://thecubedz.vercel.app",
   "contactUrl": "https://github.com/chefmrfrizzle/TheCubedz/discussions",
   "license": "Apache-2.0",
   "status": "public-pre-alpha",
-  "version": "0.1.0-alpha.1"
+  "version": "0.2.0-alpha.1"
 }
