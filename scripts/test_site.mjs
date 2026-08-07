@@ -106,6 +106,10 @@ async function verifyArtifacts() {
   const labHtml = await text('lab/index.html');
   if (!labHtml.includes('data-evidence-cube') || !labHtml.includes('Turn the cube to see what we know')) fail('Answer cube is missing from the laboratory');
   if (!labHtml.includes('Each side asks one plain question')) fail('Answer cube does not explain how to read it');
+  const homeHtml = await text('index.html');
+  if (!homeHtml.includes('Can we shorten the distance to Mars')) fail('Homepage does not state the motivating research question');
+  if (!homeHtml.includes('No shortcut, device, or route to Mars has been found')) fail('Homepage does not state the current scientific boundary');
+  if (!homeHtml.includes('How people and the system work together')) fail('Homepage does not explain the public research workflow');
   const allHtml = (await Promise.all(['index.html','lab/index.html','graph/index.html'].map(text))).join('\n');
   if (!allHtml.includes(result.scientific_payload_digest)) fail('Scientific digest is not visible on public release pages');
   note(`${result.checks.length} scientific result checks reconciled with public status`);

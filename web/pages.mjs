@@ -34,20 +34,20 @@ export const pages = [
     slug: '',
     key: 'home',
     title: 'TheCubedz',
-    description: 'An open, reproducible experiment for representing, checking, challenging, and eventually searching mathematically defined spacetime candidates.',
+    description: 'An open research system asking whether spacetime could make the effective trip from Earth to Mars shorter while keeping the traveler physically intact.',
     content: `
       <main id="main-content">
         <section class="hero shell section-pad">
           <div class="hero-copy">
-            <div class="status-line"><span class="status-dot"></span> Public pre-alpha · open source · no transportation claim</div>
-            <p class="eyebrow">A computational science experiment</p>
-            <h1>Can we search spacetime systematically—and record exactly why ideas fail?</h1>
-            <p class="hero-lede">This project turns speculative geometry into a reproducible workflow: define a candidate, run scoped validators, preserve the result, invite challenge, and learn where to search next.</p>
+            <div class="status-line"><span class="status-dot"></span> Open research question · not a solved technology</div>
+            <p class="eyebrow">The question</p>
+            <h1>Can we shorten the distance to Mars—without changing the traveler?</h1>
+            <p class="hero-lede">The question is whether an allowed shape of spacetime could reduce the effective trip—not alter the traveler or their chemical makeup. People and computers propose exact ideas. Math and physics try to reject them. Every result stays public so others can repeat it and challenge it.</p>
             <div class="hero-actions">
-              <a class="button primary" href="/lab/">Inspect Candidate 000001</a>
-              <a class="button secondary" href="/graph/">Open the evidence graph</a>
+              <a class="button primary" href="#how-it-works">See how the search works</a>
+              <a class="button secondary" href="/contribute/">Help test the question</a>
             </div>
-            <p class="microcopy">The first milestone is deliberately ordinary: verify flat Minkowski spacetime before attempting anything exotic.</p>
+            <p class="microcopy"><strong>Where we are today:</strong> the checker recognizes one known example of ordinary flat spacetime. No shortcut, device, or route to Mars has been found.</p>
           </div>
           <div class="hero-visual" aria-label="Conceptual Earth to Mars research diagram">
             <div class="coordinate-grid"></div>
@@ -55,24 +55,24 @@ export const pages = [
             <div class="route-line"><span></span></div>
             <div class="route-label route-label-mars">Mars</div>
             <div class="state-cube" aria-hidden="true"><span class="cube-face cube-front"></span><span class="cube-face cube-back"></span><span class="cube-edge cube-edge-a"></span><span class="cube-edge cube-edge-b"></span><span class="cube-edge cube-edge-c"></span><span class="cube-edge cube-edge-d"></span></div>
-            <div class="visual-caption"><span>Conventional question</span><strong>How do we cross the distance?</strong><span>Research question</span><strong>What configurations do the equations permit?</strong></div>
+            <div class="visual-caption"><span>Normal approach</span><strong>Move a vehicle across the distance.</strong><span>TheCubedz question</span><strong>Could an allowed shape of spacetime reduce the effective trip?</strong><span>Required constraint</span><strong>Keep the traveler and local matter physically intact.</strong></div>
           </div>
         </section>
 
         <section class="status-band" aria-label="Current project status">
           <div class="shell metric-grid">
-            <div class="metric"><span data-status="candidateCount">1</span><small>candidate defined</small></div>
-            <div class="metric"><span data-status="checkCount">12</span><small>implemented checks passed</small></div>
-            <div class="metric"><span data-status="novelClaimCount">0</span><small>novel physics claims</small></div>
-            <div class="metric"><span data-status="reproductionCount">0</span><small>independent reproductions</small></div>
+            <div class="metric"><span data-status="candidateCount">1</span><small>known-answer example</small></div>
+            <div class="metric"><span data-status="checkCount">12</span><small>starter checks passed</small></div>
+            <div class="metric"><span data-status="syntheticCaseCount">100</span><small>workflow practice cases</small></div>
+            <div class="metric"><span data-status="novelClaimCount">0</span><small>travel solutions found</small></div>
           </div>
         </section>
 
         <section class="shell section-pad split-section">
           <div>
-            <p class="eyebrow">One idea, three levels</p>
-            <h2>Understand the experiment without pretending the hard parts are simple.</h2>
-            <p class="section-lede">Every verified object should be explainable to a curious beginner and inspectable by a technical contributor from the same underlying artifact.</p>
+            <p class="eyebrow">The idea in plain language</p>
+            <h2>Change the route through spacetime, not the traveler.</h2>
+            <p class="section-lede">Normal travel crosses the distance between two places. This project asks whether a physically allowed spacetime could reduce the effective journey while the vehicle, its atoms, and the people inside remain locally intact.</p>
           </div>
           <div class="explanation-card" data-explanation-group>
             <div class="segmented" role="tablist" aria-label="Explanation level">
@@ -80,45 +80,45 @@ export const pages = [
               <button class="segment" type="button" data-level="technical" role="tab" aria-selected="false">Technical</button>
               <button class="segment" type="button" data-level="researcher" role="tab" aria-selected="false">Researcher</button>
             </div>
-            <div data-explanation="simple"><h3>Physics is the rulebook.</h3><p>We describe one possible arrangement, let deterministic mathematics inspect it, and save both the successes and failures. The computer may suggest the next puzzle piece. It does not get to declare itself correct.</p></div>
-            <div data-explanation="technical" hidden><h3>Candidates are parameterized scientific objects.</h3><p>A candidate contains a metric, coordinates, conventions, assumptions, source model, and provenance. Versioned validators emit immutable results with explicit scope, methods, errors, limitations, and a content digest.</p></div>
-            <div data-explanation="researcher" hidden><h3>The methodological hypothesis is measurable.</h3><p>Compare a versioned search policy against a frozen naive baseline on information gain, valid-candidate yield, calibration, computational cost, and reproducibility. Novelty is irrelevant until benchmark recovery and cross-validation succeed.</p></div>
+            <div data-explanation="simple"><h3>Think about two dots on a flexible map.</h3><p>The dots do not have to change for the distance drawn between them to change. Spacetime is not literally a rubber sheet, but the picture shows the question: can geometry change the journey while the traveler stays locally normal? Physics may say no. The system exists to test instead of guess.</p></div>
+            <div data-explanation="technical" hidden><h3>Search geometry under traveler-safety constraints.</h3><p>A future candidate would define a spacetime metric, matter or field source, boundary conditions, and a path. Tests would ask whether it reduces effective travel distance or time while respecting the equations, causal consistency, tolerable tidal forces, and local matter-state constraints.</p></div>
+            <div data-explanation="researcher" hidden><h3>Treat it as constrained search, not a promise.</h3><p>The long-term problem is to explore parameterized geometries and source models under mathematical, energetic, causal, stability, traveler-safety, and reproducibility gates. A candidate is interesting only after surviving every gate relevant to its claim.</p></div>
           </div>
         </section>
 
-        <section class="section-surface">
+        <section class="section-surface" id="how-it-works">
           <div class="shell section-pad">
-            <p class="eyebrow">The operating loop</p>
-            <h2>AI explores. Physics referees. Reproduction decides what survives.</h2>
+            <p class="eyebrow">How people and the system work together</p>
+            <h2>Suggest an idea. Try to break it. Save what we learn.</h2>
             <div class="process-grid">
-              <article><span>01</span><h3>Define</h3><p>Represent the candidate, assumptions, conventions, and falsification criteria.</p></article>
-              <article><span>02</span><h3>Validate</h3><p>Run deterministic checks whose methods and boundaries are versioned.</p></article>
-              <article><span>03</span><h3>Record</h3><p>Write an immutable result with provenance, warnings, and a scientific digest.</p></article>
-              <article><span>04</span><h3>Challenge</h3><p>Invite reproductions, objections, cross-solver comparisons, and falsification attempts.</p></article>
-              <article><span>05</span><h3>Map</h3><p>Connect sources, claims, candidates, results, failures, and corrections in a graph.</p></article>
-              <article><span>06</span><h3>Learn</h3><p>Train only on named snapshots, evaluate offline, and promote a search policy through review.</p></article>
+              <article><span>01</span><h3>Set the goal</h3><p>State what “shorter” means and what must remain safe: the traveler, matter, cause and effect, and measurable physics.</p></article>
+              <article><span>02</span><h3>Suggest a shape</h3><p>A person or bounded agent writes one possible spacetime as exact mathematics, including every assumption.</p></article>
+              <article><span>03</span><h3>Run the checks</h3><p>Approved calculators test the equations and report what passed, failed, or could not yet be tested.</p></article>
+              <article><span>04</span><h3>Try to break it</h3><p>Contributors look for bad math, impossible energy, instability, unsafe forces, or cause-and-effect problems.</p></article>
+              <article><span>05</span><h3>Repeat the result</h3><p>Other people run the test in separate environments. Disagreements stay public instead of being erased.</p></article>
+              <article><span>06</span><h3>Choose the next test</h3><p>The full map of successes and failures helps humans decide which question would teach us the most next.</p></article>
             </div>
           </div>
         </section>
 
         <section class="shell section-pad boundary-grid">
-          <article class="boundary-card positive"><p class="eyebrow">What exists today</p><h2>A reproducible baseline pipeline.</h2><ul class="clean-list"><li>A typed Candidate 000001 record.</li><li>Twelve implemented deterministic checks.</li><li>Beginner and technical reports derived from one result.</li><li>An evidence ledger, knowledge graph, and controlled-learning design.</li><li>A public, mobile-responsive exploration surface.</li></ul></article>
-          <article class="boundary-card caution"><p class="eyebrow">What does not exist today</p><h2>No wormhole. No warp device. No shortcut.</h2><ul class="clean-list"><li>No general numerical-relativity solver.</li><li>No exotic candidate has passed energy, stability, or causality review.</li><li>No physical realization or experiment has been proposed.</li><li>No independent reproduction has been recorded.</li><li>No AI model has been promoted as a scientific search policy.</li></ul></article>
+          <article class="boundary-card positive"><p class="eyebrow">What exists today</p><h2>We built the first measuring tool.</h2><ul class="clean-list"><li>One known flat-spacetime example the checker should recognize.</li><li>Twelve checks that recover the expected answer.</li><li>One hundred practice cases for the research workflow.</li><li>A public record of results, limits, and failures.</li><li>A way for contributors to inspect the evidence and propose improvements.</li></ul><a class="button secondary" href="/lab/">See the first known-answer test</a></article>
+          <article class="boundary-card caution"><p class="eyebrow">What does not exist today</p><h2>We have not found a shortcut.</h2><ul class="clean-list"><li>No exotic spacetime candidate has passed the full physics review.</li><li>No general solver can test every proposed geometry.</li><li>No traveler-safety calculation has passed.</li><li>No outside team has independently reproduced a new result.</li><li>No device, experiment, or Earth-to-Mars route has been designed.</li></ul></article>
         </section>
 
         <section class="section-surface" id="mars-benchmark">
           <div class="shell section-pad benchmark-layout">
-            <div><p class="eyebrow">The motivating benchmark</p><h2>Earth → Mars is a question, not a promise.</h2><p class="section-lede">Mars turns an abstract optimization problem into something people can understand. The first public challenge is to create a trustworthy framework capable of comparing known candidate families—not to claim the route has been solved.</p></div>
-            <div class="benchmark-card"><div><span>Baseline question</span><strong>Can the pipeline recover established results?</strong></div><div><span>Search question</span><strong>Can a policy find informative candidates efficiently?</strong></div><div><span>Long-horizon question</span><strong>Do any survivors deserve physical investigation?</strong></div><div><span>Current answer</span><strong>Only the first baseline is implemented.</strong></div></div>
+            <div><p class="eyebrow">What would count as progress?</p><h2>The trip must get effectively shorter without making the traveler the experiment.</h2><p class="section-lede">Keeping the same person, vehicle, and local matter intact is a required constraint—not something the project has already achieved. Any serious candidate must also explain the needed matter or energy and survive independent checking.</p></div>
+            <div class="benchmark-card"><div><span>Goal</span><strong>Reduce the effective Earth-to-Mars journey.</strong></div><div><span>Safety</span><strong>Keep local matter intact and forces survivable.</strong></div><div><span>Physics</span><strong>Satisfy the equations, energy limits, stability, and cause and effect.</strong></div><div><span>Proof</span><strong>Let independent teams recover the same result.</strong></div><div><span>Current position</span><strong>Only the starter measuring test works today.</strong></div></div>
           </div>
         </section>
 
         <section class="shell section-pad">
-          <div class="section-intro"><p class="eyebrow">Reusable research protocol</p><h2>The strongest invention may be the way the system separates imagination from evidence.</h2><p class="section-lede narrow">The same ledger-and-validator pattern can be forked for materials discovery, engineering design spaces, robotics policies, mathematical conjectures, and other domains where proposals, tests, uncertainty, and reproduction must remain separate.</p></div>
-          <div class="innovation-grid"><article><h3>Failure atlas</h3><p>Search every rejected configuration by reason, method, scope, and nearby parameter region.</p></article><article><h3>Adversarial review</h3><p>Make objections, failed reproductions, superseded claims, and retractions visible rather than burying them.</p></article><article><h3>Federated compute</h3><p>Later contributors can return signed result bundles from isolated runners instead of trusted prose.</p></article><article><h3>Uncertainty map</h3><p>Distinguish tested, rejected, contradictory, unresolved, and untouched regions—never one misleading promise score.</p></article></div>
+          <div class="section-intro"><p class="eyebrow">How you can help</p><h2>You do not have to solve the whole problem.</h2><p class="section-lede narrow">A useful contribution can be one clear question, one precisely written candidate, one new check, one reproduction, or one well-supported reason an idea fails.</p></div>
+          <div class="innovation-grid"><article><h3>Learn the question</h3><p>Understand what distance, time, geometry, matter, and traveler safety mean before evaluating a claim.</p><a class="button secondary" href="/learn/">Start with the guide</a></article><article><h3>Propose one idea</h3><p>Turn a spacetime idea into exact inputs, assumptions, and a statement that can be proven wrong.</p><a class="button secondary" href="/contribute/">See how to contribute</a></article><article><h3>Test one claim</h3><p>Add a calculation, compare another solver, or repeat an existing result in a separate setup.</p><a class="button secondary" href="/contribute/">Choose a test</a></article><article><h3>Challenge the system</h3><p>Find unclear wording, hidden assumptions, unsafe conclusions, or places where the evidence is too weak.</p><a class="button secondary" href="/method/">Read the rules</a></article></div>
         </section>
 
-        <section class="section-surface"><div class="shell section-pad"><div class="section-intro"><p class="eyebrow">Related open ecosystems</p><h2>Build above existing scientific tools; do not pretend to replace them.</h2></div>${sourceCards}</div></section>
+        <section class="section-surface"><div class="shell section-pad"><div class="section-intro"><p class="eyebrow">Built in public, beside existing science</p><h2>This project should connect to serious tools and invite serious criticism.</h2></div>${sourceCards}</div></section>
       </main>`,
   },
   {
