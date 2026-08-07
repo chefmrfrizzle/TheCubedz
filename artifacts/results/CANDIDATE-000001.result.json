@@ -1,0 +1,241 @@
+{
+  "schema_version": "1.0.0",
+  "result_id": "RESULT-CANDIDATE-000001-91B67470DDFA",
+  "candidate": {
+    "candidate_id": "CANDIDATE-000001",
+    "version": "1.0.0",
+    "sha256": "0e9c36562cb650f3d9eb96efb6c9e1daceb8d284a4a8c5b457722d8f9c25e4c8"
+  },
+  "validator": {
+    "name": "deterministic-baseline-validator",
+    "version": "0.2.0",
+    "profile": "benchmark.minkowski_cartesian_v1"
+  },
+  "checks": [
+    {
+      "check_id": "schema.candidate.v1",
+      "category": "definition",
+      "status": "PASS",
+      "summary": "Candidate matches the versioned candidate schema.",
+      "method": "JSON Schema Draft 2020-12 validation",
+      "scope": "Document shape, required fields, enums, patterns, and declared formats.",
+      "observed": "no schema violations",
+      "expected": "no schema violations"
+    },
+    {
+      "check_id": "metric.dimension",
+      "category": "mathematics",
+      "status": "PASS",
+      "summary": "Metric dimensions agree with the declared coordinate count.",
+      "method": "Exact matrix shape comparison",
+      "scope": "Submitted component matrix only.",
+      "observed": "4 rows for 4 coordinates",
+      "expected": "4 by 4"
+    },
+    {
+      "check_id": "metric.symmetry",
+      "category": "mathematics",
+      "status": "PASS",
+      "summary": "Metric components are symmetric.",
+      "method": "Exact component comparison g[i,j] = g[j,i]",
+      "scope": "Submitted constant component matrix.",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "check_id": "metric.determinant",
+      "category": "mathematics",
+      "status": "PASS",
+      "summary": "Metric is non-degenerate.",
+      "method": "Exact fraction-preserving Gaussian elimination",
+      "scope": "Submitted constant component matrix.",
+      "observed": -1,
+      "expected": "non-zero"
+    },
+    {
+      "check_id": "metric.inverse",
+      "category": "mathematics",
+      "status": "PASS",
+      "summary": "An exact inverse exists for the submitted matrix.",
+      "method": "Gauss-Jordan elimination using rational arithmetic",
+      "scope": "Submitted constant component matrix.",
+      "observed": [
+        [
+          -1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "expected": "an exact inverse matrix"
+    },
+    {
+      "check_id": "minkowski.components",
+      "category": "benchmark",
+      "status": "PASS",
+      "summary": "Components match the declared Minkowski Cartesian baseline.",
+      "method": "Exact matrix equality under the selected validation profile",
+      "scope": "Minkowski benchmark profile only; no coordinate transformation is attempted.",
+      "observed": [
+        [
+          -1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "expected": [
+        [
+          -1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "check_id": "minkowski.signature",
+      "category": "benchmark",
+      "status": "PASS",
+      "summary": "Declared signature matches the baseline profile.",
+      "method": "Declared convention comparison",
+      "scope": "Minkowski Cartesian benchmark profile only.",
+      "observed": "-+++",
+      "expected": "-+++"
+    },
+    {
+      "check_id": "minkowski.cosmological_constant",
+      "category": "benchmark",
+      "status": "PASS",
+      "summary": "Cosmological constant is zero for this baseline.",
+      "method": "Declared convention comparison",
+      "scope": "Minkowski vacuum baseline profile only.",
+      "observed": 0,
+      "expected": 0
+    },
+    {
+      "check_id": "minkowski.constant_components",
+      "category": "analytic implication",
+      "status": "PASS",
+      "summary": "All submitted components are coordinate-independent constants.",
+      "method": "Schema-limited inspection of numeric component literals",
+      "scope": "This profile accepts numeric constants only; symbolic expressions are not supported.",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "check_id": "minkowski.connection",
+      "category": "analytic implication",
+      "status": "PASS",
+      "summary": "Christoffel symbols vanish in the declared Cartesian inertial coordinates.",
+      "method": "Analytic implication: derivatives of constant metric components are zero.",
+      "scope": "Only the exact submitted Minkowski Cartesian profile.",
+      "observed": "all Γ^ρ_{μν} = 0",
+      "expected": "all Γ^ρ_{μν} = 0"
+    },
+    {
+      "check_id": "minkowski.curvature",
+      "category": "analytic implication",
+      "status": "PASS",
+      "summary": "Riemann, Ricci, scalar curvature, and Einstein tensors vanish for this profile.",
+      "method": "Analytic implication from the vanishing connection and its derivatives.",
+      "scope": "Only the exact submitted Minkowski Cartesian profile; not a general tensor engine.",
+      "observed": {
+        "riemann": "0",
+        "ricci": "0",
+        "ricci_scalar": 0,
+        "einstein_tensor": "0"
+      },
+      "expected": "all zero"
+    },
+    {
+      "check_id": "minkowski.vacuum_source",
+      "category": "physical interpretation",
+      "status": "PASS",
+      "summary": "The profile is consistent with a zero stress-energy tensor under Λ = 0.",
+      "method": "Einstein field equation implication for Gμν = 0 and Λ = 0.",
+      "scope": "Classical general relativity under the declared conventions.",
+      "observed": "Tμν = 0",
+      "expected": "Tμν = 0"
+    }
+  ],
+  "assessment": {
+    "overall_status": "BASELINE_VERIFIED",
+    "mathematics_status": "PASSED_IMPLEMENTED_MINKOWSKI_BASELINE_CHECKS",
+    "physical_status": "VACUUM_BASELINE_ONLY",
+    "transportation_status": "NOT_A_TRANSPORTATION_PROPOSAL",
+    "statement": "The exact submitted Minkowski Cartesian benchmark passed every implemented V0 check. This verifies the baseline pipeline, not a general relativity solver or transportation capability."
+  },
+  "warnings": [
+    "The validator recognizes one exact benchmark representation; it does not prove equivalence under arbitrary coordinate transformations."
+  ],
+  "errors": [],
+  "limitations": [
+    "The implementation validates one exact constant-component Minkowski benchmark profile.",
+    "It does not perform arbitrary coordinate transformations or symbolic tensor calculus.",
+    "It does not solve Einstein's equations for general candidate metrics.",
+    "It does not evaluate energy conditions, stability, causality, geodesics, or engineering realizability for exotic candidates.",
+    "A passing result is a software/reproducibility milestone, not evidence for spacetime transportation."
+  ],
+  "run": {
+    "recorded_at": "2026-08-07T00:00:00Z",
+    "command": "research-core verify candidates/CANDIDATE-000001.json",
+    "python": "3.13.5",
+    "source_commit": "29d57154b9d8130d1088cbc59327c00458621212"
+  },
+  "scientific_payload_digest": "sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b"
+}
