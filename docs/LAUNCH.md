@@ -42,14 +42,20 @@ Create a new **empty public repository**.
 
 Do not ask GitHub to generate another README, license, or `.gitignore` because those files already exist here.
 
-Then run:
+The supplied history uses a neutral build identity. Before your first public push, configure the name and **verified email attached to your GitHub account**, then create one ownership commit. This makes future attribution and Git-triggered deployment authorization unambiguous.
 
 ```bash
+git config user.name "<your GitHub display name>"
+git config user.email "<your verified GitHub email or GitHub no-reply email>"
+git commit --allow-empty -m "chore: initialize public repository ownership"
+
 git remote remove origin 2>/dev/null || true
 git remote add origin https://github.com/<account>/<repository>.git
 git branch -M main
-git push -u origin main --tags
+git push -u origin main --follow-tags
 ```
+
+Do not rewrite the supplied scientific commits merely to change their author. Your ownership commit becomes the public branch tip while preserving the reviewed release tag and history.
 
 ## 3. Set repository settings
 

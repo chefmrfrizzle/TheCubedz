@@ -103,10 +103,11 @@ That command performs the canonical baseline verification, Python tests, static 
 ### Vercel
 
 1. Create a new **empty public GitHub repository**. Do not initialize it with another README, license, or `.gitignore`.
-2. Push this repository and its existing Git history.
-3. In Vercel, create a project and import the GitHub repository.
-4. Vercel reads `vercel.json`, runs `npm run build`, and publishes `dist/`.
-5. Set these optional public build variables:
+2. Configure your GitHub-verified author name/email and create one empty ownership commit, as shown in [the launch runbook](docs/LAUNCH.md).
+3. Push the supplied history and release tag to the new repository.
+4. In Vercel, create a project and import the GitHub repository.
+5. Vercel reads `vercel.json`, runs `npm run build`, and publishes `dist/`.
+6. Set these optional public build variables:
 
 ```text
 PUBLIC_REPOSITORY_URL=https://github.com/<account>/<repository>
@@ -114,7 +115,7 @@ PUBLIC_SITE_URL=https://<deployment-domain>
 PUBLIC_CONTACT_URL=https://github.com/<account>/<repository>/discussions
 ```
 
-6. Redeploy after adding `PUBLIC_SITE_URL` so canonical URLs and the sitemap use the production domain.
+7. Redeploy after adding `PUBLIC_SITE_URL` so canonical URLs and the sitemap use the production domain.
 
 ### GitHub Pages
 

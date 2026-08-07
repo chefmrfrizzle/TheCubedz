@@ -47,5 +47,6 @@
 - [ ] Roadmap status is accurate.
 - [ ] Known limitations are in the release notes.
 - [ ] Public announcement uses claims-policy language.
+- [ ] Git author email matches a verified GitHub account for the ownership commit.
 - [ ] Tag is annotated and pushed.
 - [ ] Release is marked prerelease while status is alpha.
