@@ -2,161 +2,105 @@
 
 ## Design goal
 
-Build a research operating system with a deterministic scientific core and optional AI assistance around it.
+Build a research operating system with a deterministic scientific core, an append-only evidence memory, and optional AI assistance around—not inside—the scientific authority boundary.
 
-## The five planes
+## Current V0 modules
+
+```text
+candidates/*.json
+      │
+      ▼
+src/research_core/                 deterministic scientific core
+      │
+      ├── exact matrix operations
+      ├── schema validation
+      ├── scoped benchmark profile
+      └── result/report generation
+      │
+      ▼
+artifacts/results + reports        canonical release artifacts
+      │
+      ├───────────────┐
+      ▼               ▼
+data/ledger      data/knowledge-graph.json
+      │               │
+      └───────┬───────┘
+              ▼
+web/ + scripts/build_site.mjs      public read-only exploration layer
+```
+
+V0 is a modular monolith and static export. This is intentional.
+
+## Six logical planes
 
 ### 1. Evidence plane
 
-Stores literature-derived claims, benchmark definitions, equations, datasets, licenses, citations, and provenance.
+Stores source-derived claims, benchmark definitions, licenses, citations, and provenance.
 
-Core rule: derived claims retain a path back to their sources.
+Core rule: every derived claim retains a path back to a source location or deterministic artifact.
 
 ### 2. Candidate plane
 
-A candidate is immutable once published. A modified candidate receives a new version or identifier.
+A candidate is a versioned, immutable scientific proposal containing coordinates, conventions, metric/source definition, parameters, assumptions, claims, falsification conditions, references, and provenance.
 
-Minimal candidate object:
-
-```json
-{
-  "candidate_id": "CANDIDATE-000001",
-  "version": "0.1.0",
-  "title": "Minkowski baseline",
-  "metric": {},
-  "coordinates": ["t", "x", "y", "z"],
-  "parameters": {},
-  "assumptions": [],
-  "references": [],
-  "provenance": {}
-}
-```
+A modified candidate receives a new version or identifier.
 
 ### 3. Validation plane
 
 Validators consume candidate objects and emit immutable result objects.
 
 ```text
-candidate + validator version + environment
-                    ↓
-              deterministic run
-                    ↓
-result + artifacts + logs + numerical tolerances + hash
+candidate hash + validator version + declared environment
+                         │
+                         ▼
+                 deterministic run
+                         │
+                         ▼
+checks + assessment + warnings + errors + limitations + digest
 ```
 
-Validators should be composable. Examples:
-
-- schema validator;
-- tensor algebra checks;
-- invariant checks;
-- numerical constraint evaluator;
-- energy-condition evaluator;
-- convergence test;
-- perturbation runner;
-- causal-structure analysis.
+Validators are scoped and composable. A validator never inherits authority from a different validator merely because both are shown on one page.
 
 ### 4. Knowledge plane
 
-The knowledge graph connects:
+The append-only event ledger is the source of truth. The evidence graph is a rebuildable projection connecting questions, sources, claims, candidates, validators, runs, failures, reproductions, corrections, and models.
 
-```text
-Paper ──supports/challenges──▶ Claim
-Claim ──about───────────────▶ CandidateFamily
-Candidate ──instance_of─────▶ CandidateFamily
-Candidate ──evaluated_by────▶ Run
-Run ──produces──────────────▶ Result
-Result ──fails/passes───────▶ Constraint
-Result ──reproduced_by──────▶ Reproduction
-```
+### 5. Search/learning plane
 
-This graph is the project's durable "second brain."
+Models consume frozen, content-addressed snapshots and propose next experiments in working memory.
 
-### 5. Search plane
+Potential future methods include random/grid baselines, Bayesian optimization, active learning, evolutionary search, novelty search, surrogate modeling, and graph-based experiment selection.
 
-Search policies consume the current evidence map and propose **new experiments**, not new truths.
+Every proposal records policy ID, version, input snapshot, objective, compute budget, uncertainty, and baseline comparison.
 
-Possible methods later:
+### 6. Public plane
 
-- Bayesian optimization;
-- active learning;
-- evolutionary search;
-- novelty search;
-- surrogate modeling;
-- constrained optimization;
-- graph-based experiment selection.
-
-Every search proposal must preserve which model/policy/version generated it.
-
-## Services
-
-Suggested eventual service boundaries:
-
-```text
-web-ui
-api-gateway
-candidate-registry
-experiment-runner
-validator-workers
-artifact-store
-knowledge-graph
-search-service
-explanation-service
-literature-ingestion
-reproduction-service
-```
-
-Do not begin with all of these as microservices. Start as a modular monolith and separate only when scale or isolation requires it.
-
-## Technology recommendation
-
-### Phase 0
-
-- Python 3.12+
-- typed models (Pydantic or equivalent)
-- SymPy for small symbolic baseline checks
-- NumPy/SciPy for basic numerical scaffolding
-- pytest
-- JSON/JSONL artifacts
-- Docker/OCI reproducibility
-- GitHub Actions
-
-### Phase 1+
-
-- PostgreSQL for metadata
-- S3-compatible object storage for heavy artifacts
-- queue/scheduler for compute jobs
-- graph database only if relational + graph projections become insufficient
-- React/Next.js frontend for public exploration
-- scientific adapters to external numerical-relativity software
+The website reads committed artifacts and offers accessible explanations, graph exploration, reproduction commands, and contribution paths. It cannot write canonical state or execute untrusted submissions.
 
 ## Trust model
 
-### Deterministic computation
-High trust when tests, precision, implementation, and reproduction support it.
-
-### Curated evidence
-Trust depends on source quality and extraction review.
-
-### AI output
-Untrusted proposal until verified.
-
-### User-submitted code
-Untrusted executable content; eventually sandbox it.
+| Source | Default authority |
+|---|---|
+| Exact deterministic result with tests | High within declared scope |
+| Independently reproduced result | Higher, subject to independence level and discrepancies |
+| Curated primary/authoritative evidence | Depends on source and extraction review |
+| Agent/model output | Working-memory proposal only |
+| Browser convenience calculation | Noncanonical demonstration |
+| User-submitted executable | Untrusted; not run in V0 |
+| Popularity or engagement | No scientific authority |
 
 ## Reproducibility envelope
 
-Every run should eventually capture:
+A mature run should capture:
 
 ```text
-candidate hash
+candidate ID, version, and hash
 source commit
-validator version
-solver version
+validator and solver versions
 dataset snapshot
 container/image digest
-hardware summary
-precision
-numerical tolerances
+hardware and architecture
+precision and numerical tolerances
 random seeds
 command line
 stdout/stderr hashes
@@ -164,17 +108,55 @@ artifact hashes
 wall-clock metadata
 ```
 
-## What is public?
+The current baseline captures the subset relevant to its exact deterministic profile.
 
-For a genuinely open-source project, default to public:
+## Current technology
 
-- candidate schemas;
-- scientific validators;
-- benchmark data that licensing allows;
-- result schemas;
-- documentation;
-- test fixtures;
-- reproduction tooling;
-- search algorithms once ready for release.
+- Python 3.12+;
+- `jsonschema` and typed JSON contracts;
+- exact rational arithmetic using the standard library;
+- pytest;
+- JSON/JSONL/Markdown artifacts;
+- dependency-free static HTML/CSS/JavaScript;
+- Node-based deterministic site build and validation;
+- GitHub Actions, Vercel, and GitHub Pages deployment paths.
 
-If a temporary private research branch exists, never present its outputs as independently reproducible public science until the required methods are released.
+## Future service boundaries
+
+Do not begin with these as microservices. Extract only after measured demand or security isolation requires it:
+
+```text
+contribution-api
+candidate-registry
+experiment-scheduler
+sandboxed-validator-workers
+artifact-store
+evidence-ledger
+graph/search-projection
+snapshot-builder
+model-training-and-evaluation
+explanation-service
+public-export-builder
+```
+
+See [Scale architecture](SCALE_ARCHITECTURE.md) and [ADR 0002](adr/0002-modular-monolith-before-distributed-services.md).
+
+## External scientific ecosystems
+
+The project should integrate established numerical-relativity and scientific-computing systems through versioned adapters rather than pretending to replace them. Candidate and result contracts should remain solver-independent enough to enable cross-implementation comparison.
+
+## Public/open default
+
+Default to public when licensing and security allow:
+
+- schemas;
+- validators;
+- benchmark definitions;
+- results and failures;
+- reproducibility tooling;
+- dataset manifests;
+- model cards and evaluation summaries;
+- prompts and authority policies;
+- static public exports.
+
+A temporary private research branch cannot support a public reproducibility claim until the required methods and artifacts are released.

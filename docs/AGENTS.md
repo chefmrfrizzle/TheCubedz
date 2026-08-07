@@ -1,119 +1,98 @@
-# Agent System
+# Agent system
 
 ## Principle
 
-Agents are specialized research workers. They may propose, organize, calculate through approved tools, critique, and explain. They do not receive authority simply because they are autonomous.
+Agents are specialized research workers. They may propose, organize, invoke approved deterministic tools, critique, and explain. They do not receive scientific authority simply because they are autonomous or agree with one another.
 
-## Agent graph
+The current public contracts live in [`data/agents.json`](../data/agents.json). Copy-pasteable role prompts live in [`prompts/`](../prompts/).
+
+## Current nine-role graph
 
 ```text
-                     ┌───────────────┐
-                     │ Orchestrator  │
-                     └───────┬───────┘
-         ┌───────────────────┼───────────────────────┐
-         ▼                   ▼                       ▼
- Literature Agent      Candidate Agent          Skeptic Agent
-         │                   │                       │
-         ▼                   ▼                       ▼
- Evidence Queue       Candidate Queue          Challenge Queue
-         └───────────────────┼───────────────────────┘
-                             ▼
-                     Validator Pipeline
-                             │
-        ┌────────────────────┼────────────────────┐
-        ▼                    ▼                    ▼
-    Math Agent          Stability Agent       Causality Agent
-        └────────────────────┼────────────────────┘
-                             ▼
-                       Result Ledger
-                             │
-             ┌───────────────┼───────────────┐
-             ▼               ▼               ▼
-       Reproduction      Explainer        Search Agent
-          Agent            Agent              │
-             └───────────────┼────────────────┘
-                             ▼
-                        Next experiment
+                       Orchestrator
+                            │
+          ┌─────────────────┼─────────────────┐
+          ▼                 ▼                 ▼
+  Literature agent   Candidate agent    Skeptic agent
+          │                 │                 │
+          └─────────────────┼─────────────────┘
+                            ▼
+                       Math/GR agent
+                            │
+                            ▼
+                       Result ledger
+                            │
+            ┌───────────────┼────────────────┐
+            ▼               ▼                ▼
+    Reproduction agent  Explainer agent  Graph curator
+                                              │
+                                              ▼
+                                      Search-policy agent
+                                              │
+                                              ▼
+                                      next proposal only
 ```
 
-## Recommended agents
+## Current roles
 
 ### Orchestrator
-Routes tasks, enforces schemas, and prevents agents from bypassing validation gates.
 
-### Literature Agent
-Finds relevant work and produces structured candidate claims with citations, not free-floating summaries.
+Routes bounded tasks, checks authority and output schemas, and records every handoff. It cannot promote scientific status.
 
-Output example:
+### Literature agent
 
-```json
-{
-  "claim": "...",
-  "source": "...",
-  "location": "equation/section/page",
-  "confidence": "extracted_not_verified",
-  "relevance": ["energy_conditions"]
-}
-```
+Finds sources and proposes narrow claim extracts with locations, licenses, and contradictions. A summary is not proof.
 
-### Candidate Agent
-Transforms a human hypothesis or search-policy proposal into a candidate draft. It cannot mark the draft scientifically valid.
+### Candidate agent
 
-### Math/GR Agent
-Builds calculation plans and invokes deterministic math/scientific tooling. It must report conventions explicitly.
+Transforms a hypothesis into a schema-conforming draft with assumptions and falsification criteria. It cannot mark the candidate valid.
 
-### Energy-Conditions Agent
-Produces condition-specific analyses from computed tensors/metrics and records sampling/assumptions.
+### Math/GR agent
 
-### Stability Agent
-Defines controlled perturbations, convergence criteria, and stability experiments.
+Prepares and invokes approved deterministic calculations, preserves conventions, and reports uncertainty. Solver output—not agent prose—is the computation.
 
-### Causality Agent
-Checks for causal questions requiring formal analysis and prevents a transportation score from hiding causal pathologies.
+### Skeptic agent
 
-### Materials/Realizability Agent
-Searches structured materials/field evidence for compatibility with required physical properties. Its output is a compatibility assessment, not a fabrication recipe.
+Searches for hidden assumptions, coordinate mistakes, weak convergence, prior art, citation gaps, and interpretation stronger than the result.
 
-### Skeptic Agent
-Attempts to break the candidate. It asks:
-- Which assumption is doing most of the work?
-- Which coordinate/convention mistake could create a false result?
-- Is the numerical resolution sufficient?
-- Is the result already known?
-- Is a claimed physical interpretation stronger than the computation supports?
+### Reproduction agent
 
-### Reproduction Agent
-Runs the candidate in a clean environment from pinned artifacts. It compares hashes and numerical tolerances.
+Runs pinned artifacts in a clean environment, declares implementation independence, and records mismatches rather than smoothing them away.
 
-### Explainer Agent
-Takes only verified result objects plus approved evidence and generates:
-- beginner explanation;
-- intermediate explanation;
-- technical explanation.
+### Explainer agent
 
-### Search Agent
-Consumes the explored map and proposes the next candidate/experiment to maximize scientific information or a transparent optimization objective.
+Creates multiple reading levels from the same verified artifact while retaining status, provenance, and limitations.
 
-### Curator Agent
-Deduplicates and proposes canonicalization of evidence. Human approval is required for high-impact status changes.
+### Graph curator
 
-## Agent permissions
+Proposes links, deduplication, supersession, snapshots, and orphan detection. Canonical merges require human review.
 
-Use least privilege.
+### Search-policy agent
 
-Example:
+Consumes a frozen snapshot and proposes next experiments under a transparent objective and compute budget. It is not yet implemented or promoted.
 
-| Agent | Read evidence | Write working memory | Run solver | Change canonical status | Train model |
+## Future specialist roles
+
+Energy-condition, stability, causality, geodesic, numerical-convergence, materials/realizability, security, and release agents may be introduced as bounded roles once corresponding deterministic methods and review capacity exist.
+
+Do not create an agent merely to create the appearance of sophistication.
+
+## Permission pattern
+
+| Role | Read evidence | Write working memory | Run approved tool | Change canonical status | Train/promote itself |
 |---|---:|---:|---:|---:|---:|
-| Literature | Yes | Yes | No | No | No |
+| Literature | Yes | Yes | Source tools | No | No |
 | Candidate | Yes | Yes | No | No | No |
 | Math/GR | Yes | Yes | Yes | No | No |
 | Skeptic | Yes | Yes | Optional tests | No | No |
 | Reproduction | Yes | Yes | Yes | No | No |
-| Curator | Yes | Yes | No | Propose only | No |
-| Search | Yes | Yes | No | No | No |
-| Training pipeline | Snapshot only | No | No | No | Yes |
+| Explainer | Verified artifacts | Yes | No | No | No |
+| Curator | Yes | Yes | Snapshot tools | Propose only | No |
+| Search policy | Frozen snapshot | Yes | No | No | No |
+| Training pipeline | Named snapshot only | Model registry | Yes | No | No |
 
 ## Anti-loop rule
 
-An agent-generated statement may not become training truth merely because another agent repeats it. Promotion into canonical scientific data requires a deterministic result, a properly sourced evidence item, or an explicit reviewed annotation.
+An agent-generated statement may not become training truth merely because another agent repeats, summarizes, votes for, or embeds it. Promotion into canonical data requires a deterministic result, properly sourced evidence, a reviewed annotation, or an explicit reproduction/correction event.
+
+See [Agent operating system](AGENT_OPERATING_SYSTEM.md).

@@ -1,301 +1,351 @@
-# Open Computational Spacetime Research Project
+# Open Computational Spacetime Research
 
-> **Working title intentionally omitted.** This repository is a blank-brand, open-source foundation for a computational experiment: can systematic search over mathematically defined spacetime configurations help us map which ideas are valid, invalid, unresolved, or worth deeper scientific study?
+> **A brand name is intentionally omitted.** This repository is a public, open-source computational experiment for representing spacetime candidates, checking narrowly defined properties, preserving failures, inviting independent challenge, and learning where to investigate next.
 
-[![Status: Experimental](https://img.shields.io/badge/status-experimental-orange)](#project-status)
-[![License: Apache--2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)](CONTRIBUTING.md)
+[![Status: public pre-alpha](https://img.shields.io/badge/status-public%20pre--alpha-f5a623)](#current-public-status)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-4c8bf5)](LICENSE)
+[![Scientific claims: bounded](https://img.shields.io/badge/scientific%20claims-bounded-64e9e4)](docs/SCIENTIFIC_CLAIMS_POLICY.md)
+[![Contributions: welcome](https://img.shields.io/badge/contributions-welcome-b8f16d)](CONTRIBUTING.md)
 
-## The idea in plain English
+## What this is
 
-Imagine that physics is a Rubik's Cube.
+Imagine physics as the rulebook for a Rubik's Cube.
 
-You are not allowed to break the cube, remove stickers, or invent new rules. You can only make moves that the laws of physics permit.
+A candidate is one arrangement. A validator checks only the rules it explicitly implements. A result records what passed, what failed, what remains unknown, and exactly how the calculation was produced. Failures stay visible so the project gradually builds a map of explored and unexplored regions.
 
-Conventional space travel asks: **How do we move a vehicle across the distance between Earth and Mars?**
+Conventional spaceflight asks:
 
-This project asks a different research question:
+> How do we move a vehicle across the distance between Earth and Mars?
 
-> **Can a computer systematically explore allowed mathematical configurations of spacetime, matter, and fields to find configurations with interesting transportation properties — while rigorously recording why most candidates fail?**
+This project asks a different methodological question:
 
-This repository does **not** claim that wormholes, warp drives, faster-than-light travel, or practical spacetime engineering are possible. The goal is to build a reproducible search-and-evaluation system that can test ideas rather than merely speculate about them.
+> Can a reproducible computational system search mathematically defined configurations of geometry, matter, fields, and boundary conditions—and record exactly why candidates fail or survive?
 
-## The scientific version
+Earth → Mars is a motivating benchmark, **not a transportation claim**.
 
-A spacetime can be described by a metric tensor \(g_{\mu\nu}\). General relativity relates spacetime curvature to stress-energy through Einstein's field equations:
+## What this is not
 
-\[
-G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}.
-\]
+This repository does **not** demonstrate a wormhole, warp device, faster-than-light travel, a route to Mars, or practical spacetime engineering.
 
-At a high level, the project treats a candidate spacetime as a parameterized object:
+Candidate 000001 is intentionally ordinary: the Minkowski Cartesian flat-spacetime baseline. Its purpose is to test the research instrument before the project attempts anything exotic.
 
-\[
-X = \{g_{\mu\nu}, T_{\mu\nu}, \text{matter model}, \text{fields}, \text{boundary conditions}, \theta\}.
-\]
+## Current public status
 
-The engine then asks:
+As of **August 7, 2026**, the repository contains:
 
-1. Is the candidate mathematically well-defined?
-2. Does it satisfy the required equations to the chosen numerical tolerance?
-3. What stress-energy distribution does it imply?
-4. What energy conditions are satisfied or violated?
-5. Is the candidate numerically stable under perturbation?
-6. Does it create causal or other known theoretical problems?
-7. Is there any plausible known matter/field model that resembles what it requires?
-8. Can another researcher reproduce the result?
-
-The early objective is **not** "find a wormhole." The objective is:
-
-> **Generate → Evaluate → Reject or Retain → Explain → Reproduce → Learn where to search next.**
-
-## What would count as success?
-
-Success comes in levels. The project is useful long before any exotic transportation result exists.
-
-| Level | Success criterion |
+| Component | Implemented state |
 |---|---|
-| 0 | Reproduce simple benchmark spacetimes correctly. |
-| 1 | Reproduce known analyses and known failure modes. |
-| 2 | Perturb known families and recover expected nearby behavior. |
-| 3 | Search a parameter space more efficiently than naive brute force. |
-| 4 | Identify mathematically interesting candidate regions worth expert review. |
+| Candidate registry | Candidate 000001 in a versioned JSON schema |
+| Deterministic science core | Exact rational matrix operations and one scoped Minkowski validation profile |
+| Baseline result | 12 implemented checks pass; 0 fail |
+| Scientific fingerprint | `sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b` |
+| Reports | Beginner and technical reports derived from the same result object |
+| Second brain | Append-only event ledger plus a versioned evidence-graph projection |
+| Agent contracts | 9 bounded research roles with explicit permissions and prohibitions |
+| Public website | 8 responsive routes, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
+| Automated validation | Python tests, artifact reconciliation, static-site link checks, base-path deployment checks, and build fingerprints |
+| Independent reproductions | 0 recorded |
+| Novel physics claims | 0 |
+
+The baseline statement is deliberately narrow:
+
+> The exact submitted Minkowski Cartesian benchmark passed every implemented V0 check. This verifies the baseline pipeline—not a general relativity solver or transportation capability.
+
+## See the public laboratory locally
+
+### Requirements
+
+- Python 3.12 or newer
+- Node.js 20.9 or newer; Node 22 is used by the launch workflow
+- Git
+
+### Clean setup
+
+```bash
+git clone <repository-url>
+cd <repository-directory>
+
+python -m venv .venv
+source .venv/bin/activate        # Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install --no-build-isolation -e '.[dev]'
+
+npm ci
+npm run check
+```
+
+### Run the website
+
+```bash
+npm run dev
+```
+
+Open `http://127.0.0.1:4173`.
+
+### Reproduce Candidate 000001
+
+```bash
+python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible
+```
+
+A matching repository run should emit the published scientific payload digest. Re-running the same implementation is useful software verification; it is **not yet independent scientific reproduction**.
+
+## One command before every push
+
+```bash
+npm run check
+```
+
+That command performs the canonical baseline verification, Python tests, static website build, artifact reconciliation, internal-link validation, responsive/base-path checks, and build-manifest verification.
+
+## Deploy today
+
+### Vercel
+
+1. Create a new **empty public GitHub repository**. Do not initialize it with another README, license, or `.gitignore`.
+2. Push this repository and its existing Git history.
+3. In Vercel, create a project and import the GitHub repository.
+4. Vercel reads `vercel.json`, runs `npm run build`, and publishes `dist/`.
+5. Set these optional public build variables:
+
+```text
+PUBLIC_REPOSITORY_URL=https://github.com/<account>/<repository>
+PUBLIC_SITE_URL=https://<deployment-domain>
+PUBLIC_CONTACT_URL=https://github.com/<account>/<repository>/discussions
+```
+
+6. Redeploy after adding `PUBLIC_SITE_URL` so canonical URLs and the sitemap use the production domain.
+
+### GitHub Pages
+
+The included Pages workflow builds the correct repository base path automatically. After pushing:
+
+1. Open **Settings → Pages**.
+2. Under **Build and deployment**, select **GitHub Actions**.
+3. Run or re-run the `Deploy public laboratory` workflow.
+
+See [docs/LAUNCH.md](docs/LAUNCH.md) for the exact push, Vercel, GitHub Pages, rollback, and post-launch commands.
+
+## Scientific architecture
+
+```text
+question / source / candidate / challenge / reproduction / telemetry
+                              │
+                              ▼
+                 schema + provenance validation
+                              │
+                              ▼
+                   append-only event ledger
+                              │
+              ┌───────────────┴────────────────┐
+              ▼                                ▼
+       evidence graph                  frozen dataset snapshot
+              │                                │
+              ▼                                ▼
+    public exploration                offline model training
+              │                                │
+              └───────────────┬────────────────┘
+                              ▼
+                     frozen benchmark suite
+                              │
+                              ▼
+                       human promotion
+                              │
+                              ▼
+                  next-experiment proposal
+                              │
+                              └── returns to working memory
+```
+
+The **ledger is the source of truth**. The graph is a rebuildable projection. Models are replaceable consumers of frozen snapshots.
+
+Read:
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Second brain](docs/SECOND_BRAIN.md)
+- [Knowledge graph](docs/KNOWLEDGE_GRAPH.md)
+- [Data governance](docs/DATA_GOVERNANCE.md)
+- [Scientific claims policy](docs/SCIENTIFIC_CLAIMS_POLICY.md)
+- [Threat model](docs/THREAT_MODEL.md)
+
+## Three memory tiers
+
+### A. Canonical science
+
+Versioned candidates, deterministic results, reviewed evidence, reproductions, corrections, and retractions. Only explicit evidence gates may change scientific status.
+
+### B. Working research
+
+Hypotheses, unresolved paper extractions, agent proposals, candidate drafts, anomaly queues, and challenge records. These objects may guide work; they are not established facts.
+
+### C. Product telemetry
+
+Explanation-level choices, failed searches, voluntary clarity ratings, accessibility friction, and performance data. These signals may improve the interface. They may never determine whether physics is correct.
+
+## Controlled learning—not magical self-training
+
+The “second brain” does not continuously believe and retrain on public activity.
+
+A model or search policy may be promoted only after:
+
+1. a named, immutable dataset snapshot;
+2. license and provenance checks;
+3. leakage-resistant train/evaluation splits;
+4. comparison against a naive baseline and current champion;
+5. calibration, regression, reproducibility, cost, and safety tests;
+6. a model card;
+7. human approval; and
+8. a tested rollback target.
+
+The first learned component should not be a grand “physics AI.” It should be a bounded search-policy experiment answering a measurable question:
+
+> Given a frozen benchmark space, can the policy choose more informative next evaluations than random or hand-written baselines at the same compute budget?
+
+## Agent operating system
+
+Agents are specialized workers, not scientific authorities.
+
+| Role | Primary output | Can change canonical scientific status? |
+|---|---|---:|
+| Orchestrator | Typed task and handoff records | No |
+| Literature agent | Cited evidence proposals | No |
+| Candidate agent | Schema-conforming candidate draft | No |
+| Math/GR agent | Deterministic solver job and result proposal | No |
+| Skeptic agent | Challenges and failure tests | No |
+| Reproduction agent | Clean-run comparison record | No |
+| Explainer agent | Multi-level explanation from one verified artifact | No |
+| Search-policy agent | Ranked next-experiment proposals | No |
+| Graph curator | Merge/supersession proposals | No |
+
+Every handoff must contain explicit inputs, output schema, authority level, prohibited actions, validation commands, and a definition of done.
+
+Read [docs/AGENT_OPERATING_SYSTEM.md](docs/AGENT_OPERATING_SYSTEM.md) and use the copy-pasteable prompts in [`prompts/`](prompts/).
+
+## Scientific status is multidimensional
+
+Never collapse all evaluation into one “works” score.
+
+A candidate may have separate states for:
+
+- definition and schema validity;
+- mathematical consistency;
+- numerical convergence;
+- stress-energy requirements;
+- energy-condition behavior;
+- stability;
+- causality;
+- compatibility with known physical models;
+- engineering realizability;
+- independent reproduction; and
+- experimental support.
+
+A mathematically interesting configuration is not automatically physically admissible, stable, buildable, or useful for transportation.
+
+## Success ladder
+
+| Level | Evidence earned |
+|---:|---|
+| 0 | Reproduce a simple baseline correctly. |
+| 1 | Recover known properties and known failure modes. |
+| 2 | Cross-check established metrics with independent validator or solver adapters. |
+| 3 | Search a bounded benchmark more efficiently than a declared naive baseline. |
+| 4 | Identify mathematically interesting regions worth expert review. |
 | 5 | Produce a novel result that survives independent reproduction. |
-| 6 | Connect a theoretical candidate to a plausible physical model. |
-| 7 | Make a testable experimental prediction. |
+| 6 | Connect a theoretical requirement to a plausible physical model. |
+| 7 | Make a measurable experimental prediction. |
 | 8 | Obtain independent experimental confirmation. |
 
-A negative result can still be a successful result if it is reproducible and teaches us something about the search space.
-
-## The first public challenge: Earth → Mars
-
-Mars is a benchmark, not a promise.
-
-The initial challenge is to build an evaluation framework that can compare candidate configurations against conventional baselines and known spacetime families. The project should never label a candidate "Mars-capable" unless the evidence actually warrants that statement.
-
-The first milestone is much smaller:
-
-> **Candidate 000001: Minkowski spacetime. Define it, validate it, visualize it, explain it at multiple levels, and make the result exactly reproducible.**
-
-Then add additional established benchmark metrics one by one.
-
-## Architecture
-
-```text
-                     ┌──────────────────────────┐
-                     │    Human contributors    │
-                     └────────────┬─────────────┘
-                                  │
-                                  ▼
-┌──────────────┐      ┌──────────────────────────┐
-│ Literature & │─────▶│  Evidence / knowledge    │
-│ datasets     │      │  graph                   │
-└──────────────┘      └────────────┬─────────────┘
-                                  │
-                                  ▼
-                       ┌─────────────────────────┐
-                       │ Candidate generator      │
-                       │ (human + algorithmic)    │
-                       └────────────┬────────────┘
-                                    │
-                                    ▼
-                       ┌─────────────────────────┐
-                       │ Deterministic validators │
-                       └────────────┬────────────┘
-                                    │
-                 ┌──────────────────┼───────────────────┐
-                 ▼                  ▼                   ▼
-            Math checks       Physics checks      Numerical checks
-                 └──────────────────┼───────────────────┘
-                                    ▼
-                       ┌─────────────────────────┐
-                       │ Candidate registry       │
-                       │ + provenance + failures  │
-                       └────────────┬────────────┘
-                                    │
-                                    ▼
-                       ┌─────────────────────────┐
-                       │ Search policy / learner  │
-                       │ proposes where to look   │
-                       │ next                     │
-                       └─────────────────────────┘
-```
-
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the detailed design.
-
-## The "second brain" — without fake self-learning
-
-The system should **not** silently retrain itself on every click or accept popularity as scientific truth.
-
-Instead, it learns in a controlled loop:
-
-```text
-Observation
-  ↓
-Structured event
-  ↓
-Evidence/provenance validation
-  ↓
-Candidate evaluation
-  ↓
-Human/reproducibility review
-  ↓
-Versioned dataset snapshot
-  ↓
-Offline model/search-policy training
-  ↓
-Benchmark evaluation
-  ↓
-Promotion only if measurably better
-  ↓
-New search proposals
-```
-
-User activity can help answer questions such as "what explanations are confusing?" or "which candidates deserve independent reproduction?" It must **not** turn votes or engagement into physical truth.
-
-The durable memory should be a versioned knowledge graph and experiment ledger. Machine-learning models are disposable consumers of that evidence, not the source of truth.
-
-Read [docs/LEARNING_LOOP.md](docs/LEARNING_LOOP.md).
-
-## Proposed agent system
-
-Agents are assistants, not scientific authorities.
-
-| Agent | Job | May decide truth? |
-|---|---|---|
-| Literature Agent | Finds and structures relevant papers/results. | No |
-| Candidate Agent | Proposes parameterized candidates. | No |
-| GR/Math Agent | Prepares symbolic/numerical tasks and checks. | No; solver output is authoritative for the computation |
-| Energy-Conditions Agent | Runs/organizes condition analyses. | No |
-| Stability Agent | Designs perturbation and convergence tests. | No |
-| Causality Agent | Flags causal structures needing analysis. | No |
-| Materials Agent | Maps theoretical requirements to known material/field properties. | No |
-| Reproduction Agent | Re-runs exact candidates in clean environments. | No |
-| Skeptic Agent | Tries to falsify claims and locate hidden assumptions. | No |
-| Explainer Agent | Converts one result into beginner/intermediate/expert explanations. | No |
-| Search Agent | Chooses promising next regions under a transparent objective. | No |
-| Curator Agent | Proposes dataset additions; humans approve canonical data. | No |
-
-Detailed responsibilities and boundaries are in [docs/AGENTS.md](docs/AGENTS.md).
-
-## Scientific rules
-
-1. **No result without provenance.** Every candidate records equations, parameters, solver version, code commit, environment, tolerances, and references.
-2. **No AI-generated claim is automatically evidence.** AI can propose; deterministic computation and reproducible sources must verify.
-3. **Failure is permanent data.** Rejected candidates remain searchable.
-4. **Unknown means unknown.** Do not translate uncertainty into possibility or impossibility.
-5. **Separate mathematics from physical realizability.** A valid solution to equations is not automatically buildable.
-6. **Independent reproduction outranks popularity.** Stars, votes, and social engagement never change scientific status.
-7. **Benchmarks before novelty.** The system must demonstrate that it can reproduce known results before novel candidate generation matters.
-8. **Version everything.** Datasets, code, schemas, models, prompts, and candidate definitions all receive versions/hashes.
-
-## Candidate status model
-
-Suggested initial statuses:
-
-```text
-DRAFT
-VALIDATING
-MATHEMATICALLY_VALID
-MATHEMATICALLY_INVALID
-PHYSICALLY_PROBLEMATIC
-UNRESOLVED
-REPRODUCTION_PENDING
-REPRODUCED
-FALSIFIED
-EXPERT_REVIEW
-ARCHIVED
-```
-
-Never collapse these into a single "works / doesn't work" score.
+A rigorous negative result is a success when it maps a region that need not be searched again under the same assumptions.
 
 ## Repository layout
 
 ```text
 .
-├── README.md
-├── CONTRIBUTING.md
-├── GOVERNANCE.md
-├── SECURITY.md
-├── CODE_OF_CONDUCT.md
-├── LICENSE
-├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── SCIENCE.md
-│   ├── AGENTS.md
-│   ├── LEARNING_LOOP.md
-│   └── ROADMAP.md
-├── prompts/
-│   ├── BUILD_AGENT.md
-│   ├── SCIENCE_AGENT.md
-│   ├── SKEPTIC_AGENT.md
-│   └── RESEARCH_AGENT.md
+├── candidates/                  # Versioned candidate definitions
+├── artifacts/                   # Canonical result and human-readable reports
+├── data/
+│   ├── knowledge-graph.json     # Rebuildable graph snapshot
+│   ├── agents.json              # Public agent contracts
+│   ├── roadmap.json             # Machine-readable roadmap
+│   └── ledger/events.jsonl      # Append-only research events
+├── docs/                        # Science, architecture, governance, launch, and ADRs
+├── prompts/                     # Bounded copy-pasteable agent prompts
+├── scripts/
+│   ├── research.py              # Scientific CLI entry point
+│   ├── build_site.mjs           # Deterministic static-site builder
+│   ├── test_site.mjs            # Website release validator
+│   └── serve_site.mjs           # Local static preview server
 ├── src/
-│   └── core/
-│       └── candidate.schema.json
-└── tests/
-    └── README.md
+│   ├── core/                    # Versioned JSON schemas
+│   └── research_core/           # Deterministic baseline implementation
+├── tests/                       # Scientific and data-contract tests
+├── web/                         # Dependency-free public interface source
+├── package.json                 # Website build, test, and release commands
+├── pyproject.toml               # Python package and test configuration
+└── vercel.json                  # Static deployment and security headers
 ```
 
-## Recommended technology path
+## Why a dependency-free public site?
 
-Do **not** start by building a giant AI system.
+The public alpha is intentionally static:
 
-Start with a deterministic core:
+- no account system;
+- no database;
+- no untrusted code execution;
+- no live model calls;
+- no secret keys;
+- no hidden backend state.
 
-- Python for scientific orchestration and numerical work.
-- JSON Schema / Pydantic-style typed candidate records.
-- PostgreSQL later for experiment metadata.
-- Object storage later for simulation artifacts.
-- A web frontend only after the candidate format and validator are stable.
-- Containers for reproducible runs.
-- CI for schema validation, unit tests, deterministic benchmarks, and reproducibility checks.
-- External numerical-relativity tools should be integrated as adapters rather than rewritten from scratch.
+This makes the launch cheap, auditable, forkable, and deployable on Vercel, GitHub Pages, or any static host. Heavy compute, authentication, queues, and sandboxes arrive only when measured demand and security requirements justify them.
 
-Relevant existing scientific ecosystems include the open-source Einstein Toolkit, GRChombo/GRTL codes, and Warp Factory-style metric/energy-condition analysis. This repository should cite and interoperate where appropriate rather than pretend those capabilities were invented here.
+## High-value future features
 
-## What to build first
+The roadmap preserves ambitious ideas without presenting them as implemented:
 
-**Week-zero goal:** one candidate, one validator, one explanation.
+- a searchable failure atlas;
+- uncertainty and contradiction maps;
+- cross-solver reproduction passports;
+- adversarial challenge and falsification records;
+- signed federated compute bundles;
+- transparent search-policy tournaments;
+- a multi-level explanation compiler;
+- benchmark-gated model promotion;
+- provenance-preserving literature ingestion;
+- portable forks of the candidate → validator → artifact → graph → search loop for other scientific domains.
 
-1. Implement the candidate schema.
-2. Add Candidate 000001: Minkowski.
-3. Validate schema and basic metric properties.
-4. Save a machine-readable result.
-5. Render a simple human-readable report.
-6. Add tests.
-7. Make the run deterministic.
-8. Document exactly how to reproduce it.
+See [docs/INNOVATION_BLUEPRINT.md](docs/INNOVATION_BLUEPRINT.md).
 
-Only then add another benchmark.
+## Contribution paths
 
-## How to contribute
+You do not need to solve an exotic physics problem to help.
 
-You do not need to be a physicist to contribute. Useful contributions include:
+Useful first contributions include:
 
-- numerical-relativity expertise;
-- differential geometry;
-- scientific computing;
-- software engineering;
-- data engineering;
-- reproducibility infrastructure;
-- visualization;
-- materials science;
-- literature curation;
-- accessibility and education;
-- documentation;
-- adversarial review and falsification.
+- reproduce Candidate 000001 from a clean environment;
+- identify a hidden assumption or convention mismatch;
+- improve accessibility or plain-language explanation;
+- add schema failure tests;
+- review claims and provenance;
+- propose the next established benchmark;
+- implement a second independent baseline validator;
+- improve threat modeling or sandbox design;
+- validate the website on another browser or device.
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting work.
+Read [CONTRIBUTING.md](CONTRIBUTING.md), [GOVERNANCE.md](GOVERNANCE.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
-## Project status
+## Project principles
 
-**Experimental / pre-alpha.** The initial repository is architecture and research scaffolding. It is not a validated scientific instrument and contains no evidence of practical spacetime transportation.
+1. **AI explores. Physics referees. Reproduction decides what survives.**
+2. **No result without provenance.**
+3. **A validator may claim only the checks it implements.**
+4. **Failure is permanent, searchable data.**
+5. **Unknown stays unknown.**
+6. **Mathematics, physical admissibility, stability, causality, and engineering are separate.**
+7. **Popularity never changes scientific status.**
+8. **Benchmarks before novelty.**
+9. **Version the candidate, validator, result, dataset, model, prompt, and explanation.**
+10. **Make extraordinary claims harder to publish than ordinary corrections.**
 
-## License
+## License and citation
 
-Apache License 2.0. See [LICENSE](LICENSE).
-
-## Core principle
-
-> **AI explores. Physics referees. Reproduction decides what survives.**
+Source code and project documentation are available under the [Apache License 2.0](LICENSE). See [CITATION.cff](CITATION.cff) for citation metadata and [NOTICE](NOTICE) for attribution guidance.
