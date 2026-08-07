@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this research software or its artifacts, cite the repository version and the exact candidate/result identifiers."
+type: software
+title: "Open Computational Spacetime Research"
+abstract: "An open, reproducible system for representing, validating, challenging, explaining, and eventually searching mathematically defined spacetime candidates."
+version: 0.1.0-alpha.1
+date-released: 2026-08-07
+license: Apache-2.0
+authors:
+  - name: "Open Research Contributors"
+keywords:
+  - computational physics
+  - general relativity
+  - scientific computing
+  - reproducibility
+  - evidence graph
+  - open science
