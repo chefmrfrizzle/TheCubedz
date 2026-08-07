@@ -343,6 +343,7 @@ p { margin-top: 0; }
 .cube-detail { display: flex; flex-direction: column; justify-content: center; padding: clamp(1.5rem, 4vw, 3rem); }
 .cube-detail-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: start; }
 .cube-detail h3 { max-width: 22ch; font-size: clamp(1.55rem, 3vw, 2.35rem); }
+.cube-answer { max-width: 54ch; margin: 1rem 0 0; color: var(--text); font-size: 1.05rem; line-height: 1.65; }
 .cube-detail dl { margin: 1.25rem 0; }
 .cube-detail dl div { padding: .9rem 0; border-top: 1px solid var(--line); }
 .cube-detail dt { color: var(--quiet); font-family: var(--font-mono); font-size: .66rem; text-transform: uppercase; }
@@ -351,6 +352,7 @@ p { margin-top: 0; }
 .cube-semantic-summary article { padding: 1rem; background: var(--surface); }
 .cube-semantic-summary article > div { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
 .cube-semantic-summary p { margin: .7rem 0 0; color: var(--muted); font-size: .8rem; }
+.cube-semantic-summary small { display: block; margin-top: .5rem; color: var(--quiet); line-height: 1.5; }
 
 .graph-workspace { padding-bottom: 6rem; }
 .graph-controls { display: grid; grid-template-columns: minmax(220px, 1fr) 200px auto auto; gap: 0.8rem; align-items: end; margin-bottom: 1rem; }

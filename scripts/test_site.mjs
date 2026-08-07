@@ -104,7 +104,8 @@ async function verifyArtifacts() {
   if (crosscheck.comparison !== 'MATCH') fail('Separate implementation cross-check does not match the canonical result');
   if (crosscheck.independence.counts_as_external_reproduction !== false) fail('Implementation cross-check is overstated as external reproduction');
   const labHtml = await text('lab/index.html');
-  if (!labHtml.includes('data-evidence-cube') || !labHtml.includes('Six questions. No single')) fail('Evidence cube is missing from the laboratory');
+  if (!labHtml.includes('data-evidence-cube') || !labHtml.includes('Turn the cube to see what we know')) fail('Answer cube is missing from the laboratory');
+  if (!labHtml.includes('Each side asks one plain question')) fail('Answer cube does not explain how to read it');
   const allHtml = (await Promise.all(['index.html','lab/index.html','graph/index.html'].map(text))).join('\n');
   if (!allHtml.includes(result.scientific_payload_digest)) fail('Scientific digest is not visible on public release pages');
   note(`${result.checks.length} scientific result checks reconciled with public status`);

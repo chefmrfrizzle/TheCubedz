@@ -202,18 +202,33 @@ function renderMatrix(matrix) {
   return `<span class="metric-bracket left" aria-hidden="true"></span><span class="metric-grid-values" style="grid-template-columns:repeat(${columns},minmax(1.4rem,1fr))">${cells}</span><span class="metric-bracket right" aria-hidden="true"></span>`;
 }
 
+const plainCheckSummaries = {
+  'schema.candidate.v1': 'The example file includes all required information.',
+  'metric.dimension': 'The number grid is the right size.',
+  'metric.symmetry': 'The number grid matches across its diagonal.',
+  'metric.determinant': 'The number grid is usable, not collapsed.',
+  'metric.inverse': 'The checker can reverse the number grid.',
+  'minkowski.components': 'Every number matches the known flat-space answer.',
+  'minkowski.signature': 'The plus and minus signs match the chosen rule.',
+  'minkowski.cosmological_constant': 'The background-curvature value is zero, as expected here.',
+  'minkowski.constant_components': 'The numbers do not change from place to place in this example.',
+  'minkowski.connection': 'The coordinate-correction terms are zero, as expected here.',
+  'minkowski.curvature': 'Every curvature test is zero: this space is flat.',
+  'minkowski.vacuum_source': 'The result is consistent with empty space under these rules.',
+};
+
 function renderCheck(check, index) {
   const observed = formatValue(check.observed);
   const expected = formatValue(check.expected);
   return `<details class="check-card" ${index === 0 ? 'open' : ''}>
-    <summary>${createPill(check.status)}<h3>${escapeHtml(check.summary)}</h3></summary>
+    <summary>${createPill(check.status === 'PASS' ? 'PASSED' : check.status)}<h3>${escapeHtml(plainCheckSummaries[check.check_id] || check.summary)}</h3></summary>
     <div class="check-body"><dl>
-      <dt>Check ID</dt><dd><code>${escapeHtml(check.check_id)}</code></dd>
-      <dt>Category</dt><dd>${escapeHtml(check.category)}</dd>
-      <dt>Method</dt><dd>${escapeHtml(check.method)}</dd>
-      <dt>Scope</dt><dd>${escapeHtml(check.scope)}</dd>
-      <dt>Observed</dt><dd><code>${escapeHtml(observed)}</code></dd>
-      <dt>Expected</dt><dd><code>${escapeHtml(expected)}</code></dd>
+      <dt>Technical name</dt><dd><code>${escapeHtml(check.check_id)}</code></dd>
+      <dt>Group</dt><dd>${escapeHtml(check.category)}</dd>
+      <dt>How it was checked</dt><dd>${escapeHtml(check.method)}</dd>
+      <dt>What this check covers</dt><dd>${escapeHtml(check.scope)}</dd>
+      <dt>What we got</dt><dd><code>${escapeHtml(observed)}</code></dd>
+      <dt>Expected answer</dt><dd><code>${escapeHtml(expected)}</code></dd>
     </dl></div>
   </details>`;
 }
@@ -231,12 +246,12 @@ async function initializeLab() {
     setText('[data-candidate-title]', candidate.title);
     setText('[data-candidate-id]', candidate.candidate_id);
     setText('[data-candidate-version]', candidate.version);
-    setText('[data-candidate-use]', candidate.intended_use);
-    setText('[data-candidate-status]', candidate.status);
-    setText('[data-validation-profile]', candidate.validation_profile);
-    setText('[data-lab-status]', result.assessment.overall_status.replaceAll('_', ' '));
+    setText('[data-candidate-use]', candidate.intended_use === 'BENCHMARK' ? 'Known-answer practice test' : candidate.intended_use.replaceAll('_', ' '));
+    setText('[data-candidate-status]', candidate.status === 'DRAFT' ? 'Early draft' : candidate.status.replaceAll('_', ' '));
+    setText('[data-validation-profile]', candidate.validation_profile === 'benchmark.minkowski_cartesian_v1' ? 'Flat-spacetime check (version 1)' : candidate.validation_profile);
+    setText('[data-lab-status]', result.assessment.overall_status === 'BASELINE_VERIFIED' ? 'KNOWN ANSWER PASSED' : result.assessment.overall_status.replaceAll('_', ' '));
     setText('[data-fingerprint]', result.scientific_payload_digest);
-    setText('[data-metric-conventions]', `${candidate.coordinate_system.name}; signature ${candidate.conventions.metric_signature}; ${candidate.conventions.units}; Λ = ${candidate.conventions.cosmological_constant}.`);
+    setText('[data-metric-conventions]', 'We use four coordinates—time, left/right, forward/back, and up/down—with the standard -+++ sign rule. The background-curvature value is set to zero.');
 
     const matrix = document.querySelector('[data-metric-matrix]');
     if (matrix) matrix.innerHTML = renderMatrix(candidate.metric.components);
@@ -251,14 +266,19 @@ async function initializeLab() {
     const established = document.querySelector('[data-established-list]');
     if (established) {
       established.innerHTML = [
-        result.assessment.statement,
-        `${passed} implemented checks passed for the exact selected profile.`,
-        `Validator ${result.validator.name} ${result.validator.version} produced a stable scientific payload digest.`,
-        `Candidate file digest: sha256:${result.candidate.sha256}.`,
+        `This exact flat-space example passed all ${passed} checks built for it.`,
+        'The checker found the expected answer: no curvature and no matter-energy in this empty-space example.',
+        'The saved result ID will change if any important input or output changes.',
+        'This confirms the starter test works. It does not confirm a new physics idea.',
       ].map((item) => `<li>${escapeHtml(item)}</li>`).join('');
     }
     const limitations = document.querySelector('[data-limitations-list]');
-    if (limitations) limitations.innerHTML = result.limitations.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+    if (limitations) limitations.innerHTML = [
+      'The checker understands only this one simple, exact example.',
+      "It cannot yet solve general versions of Einstein's equations.",
+      'It has not tested stability, cause-and-effect problems, unusual matter, or whether anything can be built.',
+      'Passing this test is a software milestone—not evidence for warp travel or a route to Mars.',
+    ].map((item) => `<li>${escapeHtml(item)}</li>`).join('');
     initializeEvidenceCube();
   } catch (error) {
     const main = document.querySelector('.lab-main');
@@ -277,46 +297,52 @@ function evidenceCubeFaces() {
   const mathChecks = passed.filter((check) => ['mathematics', 'benchmark', 'analytic implication'].includes(check.category));
   return [
     {
-      id: 'definition', label: 'Definition', status: result.checks.find((check) => check.check_id === 'schema.candidate.v1')?.status || 'UNRESOLVED',
-      summary: 'The submitted candidate is machine-readable under the current schema.',
-      evidence: `${candidate.candidate_id}@${candidate.version} declares four coordinates, the ${candidate.validation_profile} profile, and explicit conventions.`,
-      limitation: 'Schema validity establishes document shape and declared metadata. It does not establish physical possibility.',
-      source: '/data/candidate.json', sourceLabel: 'Candidate JSON',
+      id: 'definition', label: 'Clear setup', status: result.checks.find((check) => check.check_id === 'schema.candidate.v1')?.status || 'UNRESOLVED', statusLabel: 'YES — FOR THIS TEST',
+      question: 'Did we describe the example clearly enough for a computer to read it?',
+      answer: 'Yes. The file includes a name, version, four coordinates, units, rules, and the exact test recipe.',
+      evidence: `The system read ${candidate.candidate_id}, version ${candidate.version}, without finding a missing or malformed required field.`,
+      limitation: 'A well-written idea can still be wrong. This only shows that the instructions are complete enough to test.',
+      source: '/data/candidate.json', sourceLabel: 'See the exact submitted data',
     },
     {
-      id: 'mathematics', label: 'Mathematics', status: mathChecks.length === 8 ? 'PASS' : 'UNRESOLVED',
-      summary: `${mathChecks.length} implemented mathematical, benchmark, and analytic checks pass for this exact representation.`,
-      evidence: `The committed validator reports determinant, inverse, symmetry, exact components, signature, connection, and curvature implications within its named profile.`,
-      limitation: 'This is not a general tensor engine and does not prove equivalence under arbitrary coordinate transformations.',
-      source: '/data/result.json', sourceLabel: 'Canonical result',
+      id: 'mathematics', label: 'Basic math', status: mathChecks.length === 10 ? 'PASS' : 'UNRESOLVED', statusLabel: mathChecks.length === 10 ? 'YES — FOR THIS TEST' : 'NOT YET',
+      question: 'Does the basic math match the known answer for flat spacetime?',
+      answer: `${mathChecks.length === 10 ? 'Yes' : 'Not yet'}. ${mathChecks.length} math checks agree with the expected flat-spacetime example.`,
+      evidence: 'The checker tested the matrix size, symmetry, determinant, inverse, signs, connection, and curvature.',
+      limitation: 'This checker only knows this exact beginner example. It cannot yet solve every spacetime equation or recognize the same geometry written in any coordinate system.',
+      source: '/data/result.json', sourceLabel: 'See the official saved result',
     },
     {
-      id: 'numerics', label: 'Numerics', status: 'UNSUPPORTED',
-      summary: 'No numerical-relativity solver or convergence study is implemented.',
-      evidence: `${benchmark.outcomes.UNRESOLVED || 0} synthetic workflow cases remain explicitly unresolved across all categories; unsupported capabilities are never converted into passes.`,
-      limitation: 'The exact baseline uses rational arithmetic. It supplies no numerical stability, resolution, conditioning, or convergence evidence for general metrics.',
-      source: '/data/synthetic-suite-result.json', sourceLabel: '100-case workflow benchmark',
+      id: 'numerics', label: 'Simulation', status: 'UNSUPPORTED', statusLabel: 'NOT TESTED',
+      question: 'Did we test this with a full computer simulation?',
+      answer: 'No. This version uses exact arithmetic for one simple example. It does not run a large numerical-relativity simulation.',
+      evidence: `The 100 practice cases include ${benchmark.outcomes.UNRESOLVED || 0} honest "not enough information" answers instead of turning unsupported work into passes.`,
+      limitation: 'We have no evidence yet about numerical stability, resolution, convergence, or complicated changing geometries.',
+      source: '/data/synthetic-suite-result.json', sourceLabel: 'See the 100 practice-case results',
     },
     {
-      id: 'physics', label: 'Physics', status: 'UNRESOLVED',
-      summary: 'The exact baseline is consistent with vacuum under the declared classical assumptions.',
-      evidence: result.assessment.physical_status.replaceAll('_', ' '),
-      limitation: 'Energy conditions, perturbative stability, causal structure, material models, and exotic candidates have not been evaluated.',
-      source: '/data/result.json', sourceLabel: 'Scoped physical interpretation',
+      id: 'physics', label: 'Physics meaning', status: 'UNRESOLVED', statusLabel: 'LIMITED ANSWER',
+      question: 'What does this result tell us about real physics?',
+      answer: 'Only that this known flat-space example behaves as expected under the limited rules we implemented.',
+      evidence: 'For this example, the calculated curvature and matter-energy values are zero. That is the expected answer for empty, flat spacetime.',
+      limitation: 'We did not test wormholes, warp travel, energy conditions, stability, cause-and-effect problems, or unusual matter.',
+      source: '/data/result.json', sourceLabel: 'See the physics result and limits',
     },
     {
-      id: 'reproduction', label: 'Reproduction', status: 'UNRESOLVED',
-      summary: `A separate implementation path reports ${crosscheck.comparison}; no outside reproduction is recorded.`,
-      evidence: `${crosscheck.implementation.method}. The comparison covers ${Object.keys(crosscheck.observations.checks).length} named checks.`,
-      limitation: crosscheck.limitations.join(' '),
-      source: '/data/crosscheck.json', sourceLabel: 'Implementation cross-check passport',
+      id: 'reproduction', label: 'Checked twice', status: 'UNRESOLVED', statusLabel: 'NOT INDEPENDENT',
+      question: 'Did another person independently get the same result?',
+      answer: `Not yet. A second code path inside this project ${crosscheck.comparison === 'MATCH' ? 'matched all 12 checks' : 'did not fully match'}, but that is not outside confirmation.`,
+      evidence: `Two implementations in this repository compared ${Object.keys(crosscheck.observations.checks).length} named checks.`,
+      limitation: 'A real independent reproduction needs another person, a separate setup, and their own recorded comparison.',
+      source: '/data/crosscheck.json', sourceLabel: 'See how the second check was recorded',
     },
     {
-      id: 'realizability', label: 'Realizability', status: 'NOT_APPLICABLE',
-      summary: 'Candidate 000001 is a benchmark, not a device or transportation proposal.',
-      evidence: result.assessment.transportation_status.replaceAll('_', ' '),
-      limitation: 'No engineering design, material requirement, energy budget, experiment, or route to Mars is claimed.',
-      source: '/data/result.json', sourceLabel: 'Assessment boundary',
+      id: 'realizability', label: 'Buildable', status: 'NOT_APPLICABLE', statusLabel: 'NOT A DEVICE',
+      question: 'Does this show that we can build a spacetime device?',
+      answer: 'No. This example is a ruler for testing the software, not a machine design.',
+      evidence: 'The project labels this example as a benchmark and makes no transportation claim.',
+      limitation: 'There is no device design, material plan, energy budget, experiment, or route to Mars.',
+      source: '/data/result.json', sourceLabel: 'See the official claim boundary',
     },
   ];
 }
@@ -338,9 +364,10 @@ function initializeEvidenceCube() {
       button.classList.toggle('active', selected);
       if (moveFocus && selected) button.focus();
     });
-    detail.innerHTML = `<div class="cube-detail-heading"><div><p class="eyebrow">${escapeHtml(face.label)} face</p><h3>${escapeHtml(face.summary)}</h3></div>${createPill(face.status)}</div>
-      <dl><div><dt>Evidence</dt><dd>${escapeHtml(face.evidence)}</dd></div><div><dt>Boundary</dt><dd>${escapeHtml(face.limitation)}</dd></div></dl>
-      <a class="button secondary" href="${withBase(face.source)}">Open ${escapeHtml(face.sourceLabel)}</a>`;
+    detail.innerHTML = `<div class="cube-detail-heading"><div><p class="eyebrow">${escapeHtml(face.label)}</p><h3>${escapeHtml(face.question)}</h3></div><span class="pill ${statusClass(face.status)}">${escapeHtml(face.statusLabel)}</span></div>
+      <p class="cube-answer">${escapeHtml(face.answer)}</p>
+      <dl><div><dt>What we checked</dt><dd>${escapeHtml(face.evidence)}</dd></div><div><dt>What we still cannot claim</dt><dd>${escapeHtml(face.limitation)}</dd></div></dl>
+      <a class="button secondary" href="${withBase(face.source)}">${escapeHtml(face.sourceLabel)}</a>`;
   };
   controls.forEach((button, index) => {
     button.addEventListener('click', () => render(button.dataset.cubeSelect));
@@ -354,7 +381,7 @@ function initializeEvidenceCube() {
       render(controls[next].dataset.cubeSelect, true);
     });
   });
-  if (summary) summary.innerHTML = faces.map((face) => `<article><div><strong>${escapeHtml(face.label)}</strong>${createPill(face.status)}</div><p>${escapeHtml(face.summary)}</p></article>`).join('');
+  if (summary) summary.innerHTML = faces.map((face) => `<article><div><strong>${escapeHtml(face.label)}</strong><span class="pill ${statusClass(face.status)}">${escapeHtml(face.statusLabel)}</span></div><p>${escapeHtml(face.question)}</p><small>${escapeHtml(face.answer)}</small></article>`).join('');
   render('definition');
 }
 
@@ -398,15 +425,15 @@ async function runBrowserCrosscheck() {
 
   button.disabled = true;
   log.innerHTML = '';
-  status.textContent = 'Running scoped checks…';
+  status.textContent = 'Checking five simple properties…';
   const matrix = runtime.candidate.metric.components;
   const expected = [[-1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]];
   const checks = [
-    ['Matrix has four rows', matrix.length === 4],
-    ['Every row has four components', matrix.every((row) => row.length === 4)],
-    ['Matrix is symmetric', isSymmetric(matrix)],
-    ['Determinant is non-zero', Math.abs(determinant(matrix)) > Number.EPSILON],
-    ['Components match the declared exact baseline', matrixEquals(matrix, expected)],
+    ['The number grid has four rows', matrix.length === 4],
+    ['Each row contains four numbers', matrix.every((row) => row.length === 4)],
+    ['The grid matches across its diagonal', isSymmetric(matrix)],
+    ['The grid is usable, not collapsed', Math.abs(determinant(matrix)) > Number.EPSILON],
+    ['Every number matches the known flat-space answer', matrixEquals(matrix, expected)],
   ];
 
   for (let index = 0; index < checks.length; index += 1) {
@@ -419,7 +446,7 @@ async function runBrowserCrosscheck() {
   }
 
   const failures = checks.filter(([, passed]) => !passed).length;
-  status.textContent = failures === 0 ? '5 convenience checks passed' : `${failures} convenience checks failed`;
+  status.textContent = failures === 0 ? '5 quick checks passed' : `${failures} quick checks failed`;
   button.textContent = 'Run again';
   button.disabled = false;
 }

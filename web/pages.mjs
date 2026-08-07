@@ -122,47 +122,47 @@ export const pages = [
       </main>`,
   },
   {
-    slug: 'lab', key: 'lab', title: 'Candidate laboratory',
-    description: 'Inspect Candidate 000001, its exact Minkowski metric, deterministic checks, limitations, and reproducibility fingerprint.',
+    slug: 'lab', key: 'lab', title: 'Test the first example',
+    description: 'See whether TheCubedz can correctly check the simplest known spacetime example, what passed, and what has not been tested yet.',
     content: `
       <main id="main-content" data-page="lab">
-        <section class="shell page-hero section-pad compact"><div><p class="eyebrow">Public laboratory</p><h1>One candidate. One scoped validator. Every boundary visible.</h1><p class="hero-lede">The laboratory renders committed machine-readable artifacts. It does not invent a friendlier result than the scientific core produced.</p></div><div class="page-status"><span class="status-dot"></span><strong data-lab-status>Loading artifact…</strong><small>Candidate status and run status are intentionally separate.</small></div></section>
+        <section class="shell page-hero section-pad compact"><div><p class="eyebrow">Try the first example</p><h1>Can the system correctly recognize ordinary, empty space?</h1><p class="hero-lede">We start with a known answer: flat spacetime, the simplest model used in relativity. If our checker cannot handle this example, it is not ready for harder ideas.</p></div><div class="page-status"><span class="status-dot"></span><strong data-lab-status>Loading result…</strong><small>This result applies only to this one example.</small></div></section>
         <section class="shell evidence-cube-section" aria-labelledby="evidence-cube-title">
-          <div class="cube-intro"><div><p class="eyebrow">The evidence cube</p><h2 id="evidence-cube-title">Six questions. No single “works” score.</h2></div><p>Select a face to inspect what this candidate establishes, what remains unknown, and which artifact supports that state. Rotating the cube changes the view—not the evidence.</p></div>
+          <div class="cube-intro"><div><p class="eyebrow">The answer cube</p><h2 id="evidence-cube-title">Turn the cube to see what we know—and what we do not.</h2></div><p>Each side asks one plain question. A green answer means that check passed. It never means the whole idea has been proven.</p></div>
           <div class="evidence-cube-panel" data-evidence-cube>
             <div class="cube-stage" aria-hidden="true">
               <div class="evidence-cube" data-cube-visual data-active-face="definition">
-                <div class="evidence-cube-face cube-face-front"><span>Definition</span></div>
-                <div class="evidence-cube-face cube-face-right"><span>Mathematics</span></div>
-                <div class="evidence-cube-face cube-face-back"><span>Numerics</span></div>
-                <div class="evidence-cube-face cube-face-left"><span>Physics</span></div>
-                <div class="evidence-cube-face cube-face-top"><span>Reproduction</span></div>
-                <div class="evidence-cube-face cube-face-bottom"><span>Realizability</span></div>
+                <div class="evidence-cube-face cube-face-front"><span>Clear setup</span></div>
+                <div class="evidence-cube-face cube-face-right"><span>Basic math</span></div>
+                <div class="evidence-cube-face cube-face-back"><span>Simulation</span></div>
+                <div class="evidence-cube-face cube-face-left"><span>Physics meaning</span></div>
+                <div class="evidence-cube-face cube-face-top"><span>Checked twice</span></div>
+                <div class="evidence-cube-face cube-face-bottom"><span>Buildable</span></div>
               </div>
             </div>
             <div class="cube-inspector">
-              <div class="cube-face-nav" role="tablist" aria-label="Evidence cube faces">
-                <button type="button" role="tab" aria-selected="true" data-cube-select="definition">Definition</button>
-                <button type="button" role="tab" aria-selected="false" data-cube-select="mathematics">Mathematics</button>
-                <button type="button" role="tab" aria-selected="false" data-cube-select="numerics">Numerics</button>
-                <button type="button" role="tab" aria-selected="false" data-cube-select="physics">Physics</button>
-                <button type="button" role="tab" aria-selected="false" data-cube-select="reproduction">Reproduction</button>
-                <button type="button" role="tab" aria-selected="false" data-cube-select="realizability">Realizability</button>
+              <div class="cube-face-nav" role="tablist" aria-label="Questions answered by the cube">
+                <button type="button" role="tab" aria-selected="true" data-cube-select="definition">Clear setup</button>
+                <button type="button" role="tab" aria-selected="false" data-cube-select="mathematics">Basic math</button>
+                <button type="button" role="tab" aria-selected="false" data-cube-select="numerics">Simulation</button>
+                <button type="button" role="tab" aria-selected="false" data-cube-select="physics">Physics meaning</button>
+                <button type="button" role="tab" aria-selected="false" data-cube-select="reproduction">Checked twice</button>
+                <button type="button" role="tab" aria-selected="false" data-cube-select="realizability">Buildable</button>
               </div>
-              <article class="cube-detail" role="tabpanel" aria-live="polite" data-cube-detail><p>Loading evidence…</p></article>
+              <article class="cube-detail" role="tabpanel" aria-live="polite" data-cube-detail><p>Loading answer…</p></article>
             </div>
           </div>
-          <div class="cube-semantic-summary" data-cube-summary aria-label="All evidence cube face states"></div>
+          <div class="cube-semantic-summary" data-cube-summary aria-label="Answers to all six cube questions"></div>
         </section>
         <section class="shell lab-layout section-pad-top" id="candidate">
-          <aside class="lab-sidebar"><div class="sticky-panel"><p class="eyebrow">Candidate</p><h2 data-candidate-title>Minkowski baseline</h2><dl class="metadata-list"><div><dt>ID</dt><dd data-candidate-id>—</dd></div><div><dt>Version</dt><dd data-candidate-version>—</dd></div><div><dt>Intent</dt><dd data-candidate-use>—</dd></div><div><dt>Candidate state</dt><dd data-candidate-status>—</dd></div><div><dt>Validation profile</dt><dd data-validation-profile>—</dd></div></dl><button class="button primary full" type="button" data-run-crosscheck>Run browser cross-check</button><a class="button secondary full" href="/data/candidate.json">Open raw candidate JSON</a><p class="fine-print">The browser run is a convenience check. The committed Python artifact remains canonical.</p></div></aside>
+          <aside class="lab-sidebar"><div class="sticky-panel"><p class="eyebrow">Example being tested</p><h2 data-candidate-title>Minkowski baseline</h2><dl class="metadata-list"><div><dt>Record name</dt><dd data-candidate-id>—</dd></div><div><dt>Version</dt><dd data-candidate-version>—</dd></div><div><dt>Why it exists</dt><dd data-candidate-use>—</dd></div><div><dt>Review stage</dt><dd data-candidate-status>—</dd></div><div><dt>Test recipe</dt><dd data-validation-profile>—</dd></div></dl><button class="button primary full" type="button" data-run-crosscheck>Check the basic math here</button><a class="button secondary full" href="/data/candidate.json">See the exact data file</a><p class="fine-print">This quick browser check is for learning. The saved Python result is the project's official record.</p></div></aside>
           <div class="lab-main">
-            <section class="panel" id="metric"><div class="panel-heading"><div><p class="eyebrow">Declared geometry</p><h2>Metric components</h2></div><span class="scope-tag">Exact submitted matrix</span></div><div class="metric-display" data-metric-matrix aria-label="Metric matrix">Loading…</div><p class="panel-note" data-metric-conventions>The matrix is interpreted only under the candidate's declared coordinates and conventions.</p></section>
-            <section class="panel browser-run"><div class="panel-heading"><div><p class="eyebrow">Local demonstration</p><h2>Browser cross-check</h2></div><strong data-browser-status>Ready</strong></div><div class="progress-track"><i data-browser-progress></i></div><ol class="run-log" data-browser-log><li>Press run to recompute basic matrix properties locally.</li></ol></section>
-            <section class="panel" id="result"><div class="panel-heading"><div><p class="eyebrow">Committed result</p><h2>Implemented checks</h2></div><div class="result-summary"><strong data-pass-count>—</strong><span>passed</span><strong data-fail-count>—</strong><span>failed</span></div></div><div class="check-list" data-check-list><p>Loading deterministic result…</p></div></section>
-            <section class="panel fingerprint-panel" id="validator"><div><p class="eyebrow">Reproducibility fingerprint</p><h2>Scientific payload digest</h2><code data-fingerprint>Loading…</code><p>This digest covers the candidate identity, validator identity, checks, assessment, warnings, errors, and limitations. Runtime noise is excluded.</p></div><button class="button secondary" type="button" data-copy-target="[data-fingerprint]">Copy digest</button></section>
-            <section class="two-column-panels"><article class="panel positive"><p class="eyebrow">Established within scope</p><ul class="clean-list" data-established-list><li>Loading…</li></ul></article><article class="panel caution"><p class="eyebrow">Not established</p><ul class="clean-list" data-limitations-list><li>Loading…</li></ul></article></section>
-            <section class="panel reproduce-panel" id="reproduce"><div><p class="eyebrow">Run it yourself</p><h2>A clean clone should recover the same digest.</h2></div><pre><code data-reproduction-command>python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible</code></pre><button class="button secondary" type="button" data-copy-target="[data-reproduction-command]">Copy command</button><p class="panel-note">Matching one repository run is not independent scientific reproduction. A reproduction should record a separate environment, contributor, and comparison artifact.</p></section>
+            <section class="panel" id="metric"><div class="panel-heading"><div><p class="eyebrow">The numbers behind the example</p><h2>How flat spacetime is written</h2></div><span class="scope-tag">The exact numbers we tested</span></div><div class="metric-display" data-metric-matrix aria-label="Metric matrix">Loading…</div><p class="panel-note" data-metric-conventions>These numbers only have meaning when we also state the coordinates, units, and sign rules used to read them.</p></section>
+            <section class="panel browser-run"><div class="panel-heading"><div><p class="eyebrow">Try it yourself</p><h2>Five quick checks in your browser</h2></div><strong data-browser-status>Ready</strong></div><div class="progress-track"><i data-browser-progress></i></div><ol class="run-log" data-browser-log><li>Press the button to check the matrix size, shape, symmetry, determinant, and expected values.</li></ol></section>
+            <section class="panel" id="result"><div class="panel-heading"><div><p class="eyebrow">Official saved test</p><h2>All 12 checks</h2></div><div class="result-summary"><strong data-pass-count>—</strong><span>passed</span><strong data-fail-count>—</strong><span>failed</span></div></div><div class="check-list" data-check-list><p>Loading the saved result…</p></div></section>
+            <section class="panel fingerprint-panel" id="validator"><div><p class="eyebrow">Result ID</p><h2>A fingerprint for this exact answer</h2><code data-fingerprint>Loading…</code><p>Change any important part of the example, checker, answer, warning, or limit and this long ID changes too. That makes silent changes easier to spot.</p></div><button class="button secondary" type="button" data-copy-target="[data-fingerprint]">Copy result ID</button></section>
+            <section class="two-column-panels"><article class="panel positive"><p class="eyebrow">What this test shows</p><ul class="clean-list" data-established-list><li>Loading…</li></ul></article><article class="panel caution"><p class="eyebrow">What this test does not show</p><ul class="clean-list" data-limitations-list><li>Loading…</li></ul></article></section>
+            <section class="panel reproduce-panel" id="reproduce"><div><p class="eyebrow">For developers: repeat the test</p><h2>A fresh copy should produce the same result ID.</h2></div><pre><code data-reproduction-command>python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible</code></pre><button class="button secondary" type="button" data-copy-target="[data-reproduction-command]">Copy command</button><p class="panel-note">Running our code again is a repeat, not independent proof. Independent confirmation needs another person, a separate setup, and their own saved comparison.</p></section>
           </div>
         </section>
       </main>`,
