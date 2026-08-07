@@ -1,0 +1,37 @@
+name: Documentation, explanation, or accessibility
+description: Improve clarity or access without changing scientific status.
+title: "docs: "
+labels: []
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Page, file, or concept
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is confusing or inaccessible?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement
+    validations:
+      required: true
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Primary audience
+      options: [Beginner, Student, Engineer, Researcher, Screen-reader user, Mobile user, Other]
+    validations:
+      required: true
+  - type: checkboxes
+    id: invariants
+    attributes:
+      label: Scientific invariants
+      options:
+        - label: The proposal keeps raw status, provenance, uncertainty, and limitations unchanged.
+          required: true

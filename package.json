@@ -13,7 +13,8 @@
     "test:web": "node scripts/test_site.mjs",
     "test:science": "PYTHONPATH=src pytest",
     "verify:baseline": "python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible",
-    "check": "npm run verify:baseline && npm run test:science && npm run build && npm run test:web"
+    "check": "npm run verify:baseline && npm run test:science && npm run test:repo && npm run build && npm run test:web",
+    "test:repo": "node scripts/test_repository.mjs"
   },
   "license": "Apache-2.0"
 }

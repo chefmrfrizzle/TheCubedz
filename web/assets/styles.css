@@ -252,7 +252,7 @@ p { margin-top: 0; }
 .boundary-card.positive, .panel.positive { border-color: rgba(184,241,109,.25); }
 .boundary-card.caution, .panel.caution { border-color: rgba(255,204,116,.28); }
 .clean-list { margin: 1.4rem 0 0; padding: 0; list-style: none; }
-.clean-list li { position: relative; padding: 0.6rem 0 0.6rem 1.25rem; border-top: 1px solid var(--line); color: var(--muted); }
+.clean-list li { position: relative; padding: 0.6rem 0 0.6rem 1.25rem; border-top: 1px solid var(--line); overflow-wrap: anywhere; color: var(--muted); }
 .clean-list li::before { position: absolute; left: 0; color: var(--cyan); content: "•"; }
 .benchmark-card { overflow: hidden; }
 .benchmark-card > div { display: grid; gap: 0.35rem; padding: 1.2rem 1.4rem; border-bottom: 1px solid var(--line); }
@@ -276,8 +276,8 @@ p { margin-top: 0; }
 .metadata-list div { padding: 0.7rem 0; border-top: 1px solid var(--line); }
 .metadata-list dt { color: var(--quiet); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; }
 .metadata-list dd { margin: 0.2rem 0 0; overflow-wrap: anywhere; font-family: var(--font-mono); font-size: 0.77rem; }
-.lab-main { min-width: 0; display: grid; gap: 1rem; }
-.panel { padding: clamp(1.25rem, 3.5vw, 2rem); }
+.lab-main { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+.panel { min-width: 0; padding: clamp(1.25rem, 3.5vw, 2rem); }
 .panel-heading { display: flex; align-items: start; justify-content: space-between; gap: 1rem; margin-bottom: 1.6rem; }
 .panel-heading h2 { margin: 0; font-size: 1.8rem; }
 .scope-tag { padding: 0.4rem 0.65rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-family: var(--font-mono); font-size: 0.66rem; white-space: nowrap; }
@@ -307,7 +307,8 @@ p { margin-top: 0; }
 .pill.neutral { color: var(--blue); }
 .fingerprint-panel { display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
 .fingerprint-panel code { display: block; max-width: 760px; overflow-wrap: anywhere; color: var(--lime); font-size: 0.78rem; }
-.two-column-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.two-column-panels { min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.two-column-panels > *, .fingerprint-panel > * { min-width: 0; }
 .reproduce-panel pre, .terminal-card pre { margin: 1.3rem 0; overflow-x: auto; padding: 1.1rem; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-deep); color: var(--cyan-strong); font-family: var(--font-mono); font-size: 0.78rem; }
 .progress-track { height: 4px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.06); }
 .progress-track i { display: block; width: 0; height: 100%; background: var(--cyan); transition: width 250ms ease; }
@@ -440,7 +441,7 @@ p { margin-top: 0; }
 .footer-links { display: grid; align-content: start; gap: 0.45rem; }
 .footer-links strong { margin-bottom: 0.4rem; color: var(--text); font-size: 0.78rem; text-transform: uppercase; }
 .footer-links a { text-decoration: none; }
-.footer-meta { padding-block: 1rem; border-top: 1px solid var(--line); color: var(--quiet); font-family: var(--font-mono); font-size: 0.68rem; }
+.footer-meta { padding-block: 1rem; border-top: 1px solid var(--line); overflow-wrap: anywhere; color: var(--quiet); font-family: var(--font-mono); font-size: 0.68rem; }
 
 .noscript { padding: 1rem; color: var(--amber); }
 .error-panel { padding: 1rem; border: 1px solid rgba(255,143,133,.4); border-radius: 8px; color: var(--red); }
@@ -487,6 +488,7 @@ p { margin-top: 0; }
   .check-card summary { grid-template-columns: auto minmax(0,1fr) auto; }
   .check-body { padding-left: 1rem; }
   .check-body dl { grid-template-columns: 1fr; }
+  .reproduce-panel pre, .terminal-card pre { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; }
   .graph-controls { grid-template-columns: 1fr 1fr; }
   .graph-layout { grid-template-columns: 1fr; }
   .graph-canvas-wrap, .graph-canvas, .graph-detail { min-height: 500px; height: 500px; }

@@ -1,0 +1,54 @@
+name: Software or website bug
+description: Report reproducible behavior that differs from the documented contract.
+title: "bug: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include secrets or private vulnerability details. Use the private security path for exploitable issues."
+  - type: input
+    id: commit
+    attributes:
+      label: Source commit or release
+      placeholder: "commit SHA or v0.1.0-alpha.1"
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What documented behavior did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "OS, architecture, Python, Node, browser"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or screenshots
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Scientific-claim check
+      options:
+        - label: I am not using this bug report to claim a wormhole, route to Mars, or physical device.
+          required: true

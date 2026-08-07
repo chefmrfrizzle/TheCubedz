@@ -1,0 +1,13 @@
+# Copy this file to .github/CODEOWNERS after replacing the placeholder.
+* @REPLACE_WITH_ACCOUNT
+
+# Require focused review as the team grows.
+/src/research_core/ @REPLACE_WITH_ACCOUNT
+/src/core/ @REPLACE_WITH_ACCOUNT
+/candidates/ @REPLACE_WITH_ACCOUNT
+/artifacts/ @REPLACE_WITH_ACCOUNT
+/data/ @REPLACE_WITH_ACCOUNT
+/.github/workflows/ @REPLACE_WITH_ACCOUNT
+/docs/SCIENTIFIC_CLAIMS_POLICY.md @REPLACE_WITH_ACCOUNT
+/GOVERNANCE.md @REPLACE_WITH_ACCOUNT
+/SECURITY.md @REPLACE_WITH_ACCOUNT

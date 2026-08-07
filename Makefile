@@ -1,8 +1,8 @@
-.PHONY: setup verify science-test science-artifacts web-dev web-test web-build check
+.PHONY: setup verify science-test science-artifacts web-dev web-test web-build check clean
 
 setup:
-	python -m pip install --no-build-isolation -r requirements-dev.txt
-	npm install
+	python -m pip install --no-build-isolation -e '.[dev]'
+	npm ci
 
 verify:
 	python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible
@@ -17,9 +17,14 @@ web-dev:
 	npm run dev
 
 web-test:
+	npm run build
 	npm run test:web
 
 web-build:
 	npm run build
 
-check: science-test web-test web-build
+check:
+	npm run check
+
+clean:
+	rm -rf dist .pytest_cache **/__pycache__

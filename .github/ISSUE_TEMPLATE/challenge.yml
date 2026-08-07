@@ -1,0 +1,45 @@
+name: Scientific challenge or falsification
+description: Challenge a claim, assumption, method, interpretation, or reproduction.
+title: "challenge: "
+labels: []
+body:
+  - type: input
+    id: target
+    attributes:
+      label: Target artifact or claim ID
+      placeholder: "CANDIDATE-..., RESULT-..., CLAIM-..., commit, or route"
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: Precise challenge
+      description: Identify the equation, assumption, convention, method, scope, or interpretation at issue.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or counterexample
+      description: Include sources, derivation, code, or a reproducible failing case.
+    validations:
+      required: true
+  - type: textarea
+    id: consequence
+    attributes:
+      label: Expected status consequence
+      description: What should be corrected, downgraded, marked unresolved, or falsified if the challenge succeeds?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction commands
+      render: shell
+  - type: checkboxes
+    id: conduct
+    attributes:
+      label: Review standard
+      options:
+        - label: I am challenging the artifact or claim, not attacking a contributor.
+          required: true

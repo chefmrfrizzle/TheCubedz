@@ -78,7 +78,7 @@ function siteFooter(config, basePath, result) {
 
 function documentHtml({ page, config, result, basePath }) {
   const route = pageRoute(page);
-  const title = `${page.title} | ${config.title}`;
+  const title = page.title === config.title ? config.title : `${page.title} | ${config.title}`;
   const canonical = config.siteUrl ? new URL(joinUrl(basePath, route), `${config.siteUrl.replace(/\/$/, '')}/`).href : '';
   const socialImage = config.siteUrl ? new URL(joinUrl(basePath, '/assets/og-card.png'), `${config.siteUrl.replace(/\/$/, '')}/`).href : joinUrl(basePath, '/assets/og-card.png');
   const body = rewriteRootUrls(page.content, basePath);
@@ -189,8 +189,9 @@ async function build() {
   await copyIfExists('data/ledger/events.jsonl', 'data/events.jsonl');
   await copyIfExists('src/core', 'schemas');
   await copyIfExists('prompts', 'prompts');
+  await copyIfExists('docs', 'docs');
 
-  const publicFiles = ['README.md', 'CONTRIBUTING.md', 'GOVERNANCE.md', 'SECURITY.md', 'CODE_OF_CONDUCT.md', 'LICENSE', 'CHANGELOG.md', 'SUPPORT.md', 'CITATION.cff'];
+  const publicFiles = ['README.md', 'CONTRIBUTING.md', 'GOVERNANCE.md', 'SECURITY.md', 'CODE_OF_CONDUCT.md', 'LICENSE', 'NOTICE', 'CHANGELOG.md', 'SUPPORT.md', 'CITATION.cff'];
   for (const file of publicFiles) await copyIfExists(file);
 
   const status = {

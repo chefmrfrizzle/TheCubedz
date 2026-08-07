@@ -1,0 +1,65 @@
+name: Benchmark or candidate proposal
+description: Propose a bounded, testable candidate or established benchmark.
+title: "candidate: "
+labels: []
+body:
+  - type: input
+    id: family
+    attributes:
+      label: Candidate family
+      placeholder: "Established family or narrowly defined parameterization"
+    validations:
+      required: true
+  - type: dropdown
+    id: intent
+    attributes:
+      label: Intended use
+      options:
+        - Established benchmark
+        - Failure fixture
+        - Working-research hypothesis
+        - Search benchmark
+    validations:
+      required: true
+  - type: textarea
+    id: definition
+    attributes:
+      label: Mathematical definition
+      description: State metric/source model, coordinates, signature, units, parameters, and domain.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Primary or authoritative sources
+      description: Include exact equation, page, section, or dataset location where possible.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected properties and failure tests
+      description: Separate analytic, numerical, and interpretive expectations.
+    validations:
+      required: true
+  - type: textarea
+    id: falsification
+    attributes:
+      label: Falsification or rejection conditions
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Independent reproduction plan
+    validations:
+      required: true
+  - type: checkboxes
+    id: claims
+    attributes:
+      label: Claims boundary
+      options:
+        - label: This is a proposal, not a validated result.
+          required: true
+        - label: I have not represented a mathematical candidate as physically buildable.
+          required: true

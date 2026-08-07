@@ -1,0 +1,72 @@
+name: Independent reproduction
+description: Record a clean rerun or independent implementation comparison.
+title: "reproduction: "
+labels: []
+body:
+  - type: input
+    id: target
+    attributes:
+      label: Candidate and result ID
+      placeholder: "CANDIDATE-000001 / RESULT-..."
+    validations:
+      required: true
+  - type: dropdown
+    id: level
+    attributes:
+      label: Independence level
+      description: See docs/FEDERATED_REPRODUCTION.md.
+      options:
+        - R0 — same implementation and environment
+        - R1 — same implementation, clean separate environment
+        - R2 — independent implementation
+        - R3 — different validated method or solver
+        - R4 — independent physical experiment
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Source commit
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and independence declaration
+      description: OS, architecture, versions, shared code/methods, contributor relationship.
+    validations:
+      required: true
+  - type: textarea
+    id: commands
+    attributes:
+      label: Exact commands
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: digest
+    attributes:
+      label: Observed scientific payload digest
+      placeholder: "sha256:..."
+    validations:
+      required: true
+  - type: dropdown
+    id: comparison
+    attributes:
+      label: Comparison
+      options: [MATCH, MISMATCH, PARTIAL, UNABLE_TO_RUN]
+    validations:
+      required: true
+  - type: textarea
+    id: discrepancies
+    attributes:
+      label: Differences, warnings, and artifact links
+    validations:
+      required: true
+  - type: checkboxes
+    id: honesty
+    attributes:
+      label: Reproduction declaration
+      options:
+        - label: I have accurately disclosed shared implementations, methods, environments, and authorship.
+          required: true
