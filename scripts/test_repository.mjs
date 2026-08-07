@@ -90,7 +90,7 @@ async function checkTrackedFiles() {
   const process = spawnSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'buffer' });
   if (process.status !== 0) { fail('Unable to inspect tracked Git files'); return; }
   const tracked = process.stdout.toString('utf8').split('\0').filter(Boolean);
-  const forbidden = tracked.filter((file) => file === '.env' || file.startsWith('.venv/') || file.startsWith('dist/') || file.startsWith('node_modules/'));
+  const forbidden = tracked.filter((file) => file === '.env' || file.startsWith('.venv/') || file.startsWith('dist/') || file.startsWith('node_modules/') || file.startsWith('build/') || file.includes('/__pycache__/') || file.endsWith('.pyc') || file.endsWith('.pyo'));
   if (forbidden.length) fail(`Forbidden generated/private paths are tracked: ${forbidden.join(', ')}`);
   note(`${tracked.length} tracked paths checked for private/generated files`);
 }

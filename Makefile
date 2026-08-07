@@ -27,4 +27,5 @@ check:
 	npm run check
 
 clean:
-	rm -rf dist .pytest_cache **/__pycache__
+	rm -rf dist build .pytest_cache
+	find . -type d -name __pycache__ -prune -exec rm -rf {} +
