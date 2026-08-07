@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/knowledge-node.schema.json",
+  "title": "Evidence-graph node",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "label", "status", "canonical", "summary"],
+  "properties": {
+    "id": {"type": "string"},
+    "type": {"enum": ["ResearchQuestion", "Hypothesis", "Challenge", "CandidateFamily", "Candidate", "Validator", "Run", "Claim", "ReproductionQueue", "Reproduction", "SearchPolicy", "Source", "Correction"]},
+    "label": {"type": "string"},
+    "status": {"type": "string"},
+    "canonical": {"type": "boolean"},
+    "summary": {"type": "string"},
+    "href": {"type": "string"}
+  }
+}

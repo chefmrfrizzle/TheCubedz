@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/knowledge-graph.schema.json",
+  "title": "Evidence graph snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "snapshot_id", "generated_from", "nodes", "edges"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "snapshot_id": {"type": "string"},
+    "generated_from": {"type": "array", "items": {"type": "string"}},
+    "nodes": {"type": "array", "items": {"$ref": "knowledge-node.schema.json"}},
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "source", "target", "relationship", "canonical", "summary"],
+        "properties": {
+          "id": {"type": "string"}, "source": {"type": "string"}, "target": {"type": "string"},
+          "relationship": {"type": "string"}, "canonical": {"type": "boolean"}, "summary": {"type": "string"}
+        }
+      }
+    }
+  }
+}

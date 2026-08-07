@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/claim.schema.json",
+  "title": "Scientific claim record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["claim_id", "statement", "class", "status", "scope", "supported_by", "downgrade_conditions"],
+  "properties": {
+    "claim_id": {"type": "string", "pattern": "^CLAIM-[A-Z0-9-]+$"},
+    "statement": {"type": "string", "minLength": 10},
+    "class": {"enum": ["HYPOTHESIS", "COMPUTATION_SUPPORTED", "REPRODUCED", "EXPERT_REVIEWED", "EXPERIMENT_SUPPORTED", "FALSIFIED", "RETRACTED"]},
+    "status": {"enum": ["PROPOSED", "ACTIVE", "CHALLENGED", "SUPERSEDED", "FALSIFIED", "RETRACTED"]},
+    "scope": {"type": "string"},
+    "supported_by": {"type": "array", "items": {"type": "string"}},
+    "downgrade_conditions": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "snapshot_id": "GRAPH-SNAPSHOT-000001",
+  "generated_from": [
+    "data/ledger/events.jsonl",
+    "candidates/CANDIDATE-000001.json",
+    "artifacts/results/CANDIDATE-000001.result.json",
+    "docs/SCIENTIFIC_CLAIMS_POLICY.md"
+  ],
+  "nodes": [
+    {"id": "RQ-000001", "type": "ResearchQuestion", "label": "Can systematic computational search map spacetime solution space?", "status": "OPEN", "canonical": true, "summary": "The project's methodological research question. It does not presume a transportation shortcut exists.", "href": "/method/"},
+    {"id": "HYPOTHESIS-000001", "type": "Hypothesis", "label": "Search may outperform isolated manual proposal", "status": "UNTESTED", "canonical": true, "summary": "A reproducible search policy may classify or identify scientifically interesting regions more efficiently than a defined naive baseline.", "href": "/method/#hypothesis"},
+    {"id": "CHALLENGE-000001", "type": "Challenge", "label": "Earth to Mars benchmark", "status": "FRAMED", "canonical": true, "summary": "Mars is a motivating benchmark and communication frame, not a claim that the project can alter travel today.", "href": "/#mars-benchmark"},
+    {"id": "FAMILY-000001", "type": "CandidateFamily", "label": "Flat spacetime baselines", "status": "ACTIVE", "canonical": true, "summary": "Simple metrics used to verify that the pipeline handles established mathematics before exploring novelty.", "href": "/lab/"},
+    {"id": "CANDIDATE-000001", "type": "Candidate", "label": "Minkowski baseline", "status": "DRAFT", "canonical": true, "summary": "The standard constant flat-spacetime metric in Cartesian coordinates.", "href": "/lab/#candidate"},
+    {"id": "VALIDATOR-000001", "type": "Validator", "label": "Constant Minkowski analytic validator", "status": "EXPERIMENTAL", "canonical": true, "summary": "Exact arithmetic checks scoped only to the first baseline.", "href": "/lab/#validator"},
+    {"id": "RUN-000001", "type": "Run", "label": "Baseline deterministic verification run", "status": "BASELINE_VERIFIED", "canonical": true, "summary": "Twelve implemented checks passed using exact arithmetic and scoped analytic implications.", "href": "/lab/#result"},
+    {"id": "CLAIM-000001", "type": "Claim", "label": "The stored baseline metric is exactly flat in its declared scope", "status": "COMPUTATION_SUPPORTED", "canonical": true, "summary": "Supported by the versioned baseline validator and exact committed artifact. Not independently reproduced yet.", "href": "/lab/#result"},
+    {"id": "REPRODUCTION-QUEUE-000001", "type": "ReproductionQueue", "label": "Independent reproduction requested", "status": "OPEN", "canonical": false, "summary": "An outside contributor should rerun the baseline from a clean clone and compare the fingerprint.", "href": "/contribute/#reproduce"},
+    {"id": "SEARCH-POLICY-000001", "type": "SearchPolicy", "label": "No learned search policy deployed", "status": "NOT_STARTED", "canonical": true, "summary": "The project has not trained or promoted any model. Benchmarks and data governance come first.", "href": "/graph/#learning-loop"}
+  ],
+  "edges": [
+    {"id": "EDGE-000001", "source": "RQ-000001", "target": "HYPOTHESIS-000001", "relationship": "FRAMES", "canonical": true, "summary": "The research question is tested through a methodological hypothesis."},
+    {"id": "EDGE-000002", "source": "CHALLENGE-000001", "target": "RQ-000001", "relationship": "MOTIVATES", "canonical": true, "summary": "The Mars benchmark makes the abstract research question concrete."},
+    {"id": "EDGE-000003", "source": "CANDIDATE-000001", "target": "FAMILY-000001", "relationship": "INSTANCE_OF", "canonical": true, "summary": "The candidate is a flat-spacetime baseline."},
+    {"id": "EDGE-000004", "source": "RUN-000001", "target": "CANDIDATE-000001", "relationship": "EVALUATES", "canonical": true, "summary": "The run evaluates the committed candidate document."},
+    {"id": "EDGE-000005", "source": "RUN-000001", "target": "VALIDATOR-000001", "relationship": "USES", "canonical": true, "summary": "The run records the validator identity and version."},
+    {"id": "EDGE-000006", "source": "CLAIM-000001", "target": "RUN-000001", "relationship": "SUPPORTED_BY", "canonical": true, "summary": "The claim is narrower than and directly traceable to the run output."},
+    {"id": "EDGE-000007", "source": "REPRODUCTION-QUEUE-000001", "target": "RUN-000001", "relationship": "REQUESTS_REPRODUCTION_OF", "canonical": false, "summary": "Independent reproduction remains open."},
+    {"id": "EDGE-000008", "source": "SEARCH-POLICY-000001", "target": "HYPOTHESIS-000001", "relationship": "WILL_TEST", "canonical": true, "summary": "A future versioned search policy will be compared with a naive baseline."}
+  ]
+}

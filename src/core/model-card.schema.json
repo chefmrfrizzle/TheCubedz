@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/model-card.schema.json",
+  "title": "Search or explanation model card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["model_id", "version", "purpose", "authority", "training_snapshot", "benchmarks", "limitations", "promotion"],
+  "properties": {
+    "model_id": {"type": "string"},
+    "version": {"type": "string"},
+    "purpose": {"enum": ["RETRIEVAL", "RANKING", "SURROGATE", "EXPLANATION", "SEARCH_POLICY"]},
+    "authority": {"const": "PROPOSAL_ONLY"},
+    "training_snapshot": {"type": "string"},
+    "benchmarks": {"type": "array", "items": {"type": "object"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "promotion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "reviewers", "rollback_target"],
+      "properties": {
+        "status": {"enum": ["DRAFT", "EVALUATING", "REJECTED", "PROMOTED", "ROLLED_BACK"]},
+        "reviewers": {"type": "array", "items": {"type": "string"}},
+        "rollback_target": {"type": ["string", "null"]}
+      }
+    }
+  }
+}
