@@ -13,6 +13,7 @@ from .matrix import as_fraction_matrix, determinant, inverse, is_square, is_symm
 from .schema_validation import validate_benchmark_passport_schema, validate_candidate_schema
 
 VALIDATOR_NAME = "deterministic-baseline-validator"
+BASELINE_VALIDATOR_VERSION = "0.2.0"
 PROFILE = "benchmark.minkowski_cartesian_v1"
 LINEAR_PROFILE = "benchmark.minkowski_linear_rescaled_v1"
 ROOT = Path(__file__).resolve().parents[2]
@@ -458,7 +459,11 @@ def evaluate(
         "schema_version": "1.0.0",
         "result_id": "PENDING",
         "candidate": {"candidate_id": candidate.get("candidate_id"), "version": candidate.get("version"), "sha256": candidate_hash},
-        "validator": {"name": VALIDATOR_NAME, "version": __version__, "profile": candidate.get("validation_profile")},
+        "validator": {
+            "name": VALIDATOR_NAME,
+            "version": BASELINE_VALIDATOR_VERSION,
+            "profile": candidate.get("validation_profile"),
+        },
         "checks": checks,
         "assessment": assessment,
         "warnings": warnings,
