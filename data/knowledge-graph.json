@@ -4,7 +4,9 @@
   "generated_from": [
     "data/ledger/events.jsonl",
     "candidates/CANDIDATE-000001.json",
+    "candidates/CANDIDATE-000002.json",
     "artifacts/results/CANDIDATE-000001.result.json",
+    "artifacts/results/CANDIDATE-000002.result.json",
     "docs/SCIENTIFIC_CLAIMS_POLICY.md"
   ],
   "nodes": [
@@ -13,11 +15,14 @@
     {"id": "CHALLENGE-000001", "type": "Challenge", "label": "Earth to Mars benchmark", "status": "FRAMED", "canonical": true, "summary": "Mars is a motivating benchmark and communication frame, not a claim that the project can alter travel today.", "href": "/#mars-benchmark"},
     {"id": "FAMILY-000001", "type": "CandidateFamily", "label": "Flat spacetime baselines", "status": "ACTIVE", "canonical": true, "summary": "Simple metrics used to verify that the pipeline handles established mathematics before exploring novelty.", "href": "/lab/"},
     {"id": "CANDIDATE-000001", "type": "Candidate", "label": "Minkowski baseline", "status": "DRAFT", "canonical": true, "summary": "The standard constant flat-spacetime metric in Cartesian coordinates.", "href": "/lab/#candidate"},
-    {"id": "VALIDATOR-000001", "type": "Validator", "label": "Constant Minkowski analytic validator", "status": "EXPERIMENTAL", "canonical": true, "summary": "Exact arithmetic checks scoped only to the first baseline.", "href": "/lab/#validator"},
+    {"id": "VALIDATOR-000001", "type": "Validator", "label": "Scoped Minkowski benchmark validator", "status": "EXPERIMENTAL", "canonical": true, "summary": "Exact arithmetic checks for the Cartesian baseline and one declared constant linear coordinate map.", "href": "/lab/#validator"},
     {"id": "RUN-000001", "type": "Run", "label": "Baseline deterministic verification run", "status": "BASELINE_VERIFIED", "canonical": true, "summary": "Twelve implemented checks passed using exact arithmetic and scoped analytic implications.", "href": "/lab/#result"},
     {"id": "CLAIM-000001", "type": "Claim", "label": "The stored baseline metric is exactly flat in its declared scope", "status": "COMPUTATION_SUPPORTED", "canonical": true, "summary": "Supported by the versioned baseline validator and exact committed artifact. Not independently reproduced yet.", "href": "/lab/#result"},
     {"id": "REPRODUCTION-QUEUE-000001", "type": "ReproductionQueue", "label": "Independent reproduction requested", "status": "OPEN", "canonical": false, "summary": "An outside contributor should rerun the baseline from a clean clone and compare the fingerprint.", "href": "/contribute/#reproduce"},
-    {"id": "SEARCH-POLICY-000001", "type": "SearchPolicy", "label": "No learned search policy deployed", "status": "NOT_STARTED", "canonical": true, "summary": "The project has not trained or promoted any model. Benchmarks and data governance come first.", "href": "/graph/#learning-loop"}
+    {"id": "SEARCH-POLICY-000001", "type": "SearchPolicy", "label": "No learned search policy deployed", "status": "NOT_STARTED", "canonical": true, "summary": "The project has not trained or promoted any model. Benchmarks and data governance come first.", "href": "/graph/#learning-loop"},
+    {"id": "CANDIDATE-000002", "type": "Candidate", "label": "Rescaled-coordinate Minkowski benchmark", "status": "DRAFT", "canonical": true, "summary": "The same flat spacetime expressed through one declared constant linear coordinate map.", "href": "/lab/#benchmark-ladder"},
+    {"id": "RUN-000002", "type": "Run", "label": "Coordinate-equivalence verification run", "status": "BENCHMARK_VERIFIED", "canonical": true, "summary": "Fourteen preregistered checks passed using exact pullback arithmetic.", "href": "/lab/#benchmark-ladder"},
+    {"id": "CLAIM-000002", "type": "Claim", "label": "Two submitted component grids describe the same scoped flat geometry", "status": "COMPUTATION_SUPPORTED", "canonical": true, "summary": "Supported only for the exact declared constant linear map and separately checked inside this repository.", "href": "/lab/#benchmark-ladder"}
   ],
   "edges": [
     {"id": "EDGE-000001", "source": "RQ-000001", "target": "HYPOTHESIS-000001", "relationship": "FRAMES", "canonical": true, "summary": "The research question is tested through a methodological hypothesis."},
@@ -27,6 +32,10 @@
     {"id": "EDGE-000005", "source": "RUN-000001", "target": "VALIDATOR-000001", "relationship": "USES", "canonical": true, "summary": "The run records the validator identity and version."},
     {"id": "EDGE-000006", "source": "CLAIM-000001", "target": "RUN-000001", "relationship": "SUPPORTED_BY", "canonical": true, "summary": "The claim is narrower than and directly traceable to the run output."},
     {"id": "EDGE-000007", "source": "REPRODUCTION-QUEUE-000001", "target": "RUN-000001", "relationship": "REQUESTS_REPRODUCTION_OF", "canonical": false, "summary": "Independent reproduction remains open."},
-    {"id": "EDGE-000008", "source": "SEARCH-POLICY-000001", "target": "HYPOTHESIS-000001", "relationship": "WILL_TEST", "canonical": true, "summary": "A future versioned search policy will be compared with a naive baseline."}
+    {"id": "EDGE-000008", "source": "SEARCH-POLICY-000001", "target": "HYPOTHESIS-000001", "relationship": "WILL_TEST", "canonical": true, "summary": "A future versioned search policy will be compared with a naive baseline."},
+    {"id": "EDGE-000009", "source": "CANDIDATE-000002", "target": "FAMILY-000001", "relationship": "INSTANCE_OF", "canonical": true, "summary": "The second candidate is another representation of the established flat-spacetime family."},
+    {"id": "EDGE-000010", "source": "RUN-000002", "target": "CANDIDATE-000002", "relationship": "EVALUATES", "canonical": true, "summary": "The run evaluates the committed rescaled-coordinate candidate."},
+    {"id": "EDGE-000011", "source": "RUN-000002", "target": "VALIDATOR-000001", "relationship": "USES", "canonical": true, "summary": "The run uses the exact linear-coordinate profile of the deterministic validator."},
+    {"id": "EDGE-000012", "source": "CLAIM-000002", "target": "RUN-000002", "relationship": "SUPPORTED_BY", "canonical": true, "summary": "The coordinate-equivalence claim is limited to and traceable to the preregistered run."}
   ]
 }

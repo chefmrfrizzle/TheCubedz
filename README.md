@@ -27,24 +27,24 @@ Earth → Mars is a motivating benchmark, **not a transportation claim**.
 
 This repository does **not** demonstrate a wormhole, warp device, faster-than-light travel, a route to Mars, or practical spacetime engineering.
 
-Candidate 000001 is intentionally ordinary: the Minkowski Cartesian flat-spacetime baseline. Its purpose is to test the research instrument before the project attempts anything exotic.
+Candidates 000001 and 000002 are intentionally ordinary. They describe the same Minkowski flat spacetime using two coordinate grids. Their purpose is to test whether the research instrument can distinguish a changed description from changed physics before the project attempts anything exotic.
 
 ## Current public status
 
-As of **August 7, 2026**, the repository contains:
+As of **August 8, 2026**, the repository contains:
 
 | Component | Implemented state |
 |---|---|
-| Candidate registry | Candidate 000001 in a versioned JSON schema |
-| Deterministic science core | Exact rational matrix operations and one scoped Minkowski validation profile |
-| Baseline result | 12 implemented checks pass; 0 fail |
-| Scientific fingerprint | `sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b` |
+| Candidate registry | Two established, non-novel Minkowski benchmarks in a versioned JSON schema |
+| Deterministic science core | Exact rational matrix operations plus Cartesian and constant-linear coordinate profiles |
+| Benchmark results | 26 implemented checks pass across two known-answer examples; 0 fail |
+| Scientific fingerprints | Candidate 000001: `sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b`; Candidate 000002: `sha256:78857db3e9a72756c4a884bbbe90912dc9d772dbd27ae2edee1c53c6455d4046` |
 | Reports | Beginner and technical reports derived from the same result object |
 | Second brain | Append-only event ledger plus a versioned evidence-graph projection |
 | Agent contracts | 9 bounded research roles with explicit permissions and prohibitions |
 | Controlled autonomy | Machine-validated task, capability, run, evidence-bundle, and human-promotion contracts |
 | Synthetic benchmark | 100 frozen workflow cases: 23 accepted, 57 rejected, 5 mismatches preserved, and 15 unresolved |
-| Cross-check | 1 separate standard-library implementation path matches all 12 baseline checks; not an outside reproduction |
+| Cross-check | Two separate standard-library implementation paths match all 26 benchmark checks; neither is an outside reproduction |
 | Public website | 8 responsive routes, six-face evidence cube, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
 | Automated validation | Scientific, control-contract, benchmark, cross-check, artifact, static-site, link, base-path, and build-fingerprint checks |
 | Independent reproductions | 0 recorded |
@@ -53,6 +53,10 @@ As of **August 7, 2026**, the repository contains:
 The baseline statement is deliberately narrow:
 
 > The exact submitted Minkowski Cartesian benchmark passed every implemented V0 check. This verifies the baseline pipeline—not a general relativity solver or transportation capability.
+
+The second benchmark is equally narrow:
+
+> The submitted rescaled-coordinate metric exactly matches one declared linear pullback of the canonical Minkowski metric. This verifies a bounded coordinate-equivalence check—not an arbitrary coordinate solver, curved-spacetime solver, or transportation capability.
 
 ## See the public laboratory locally
 
@@ -85,10 +89,11 @@ npm run dev
 
 Open `http://127.0.0.1:4173`.
 
-### Reproduce Candidate 000001
+### Reproduce both established benchmarks
 
 ```bash
 python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible
+python scripts/research.py verify candidates/CANDIDATE-000002.json --reproducible
 ```
 
 A matching repository run should emit the published scientific payload digest. Re-running the same implementation is useful software verification; it is **not yet independent scientific reproduction**.
@@ -98,6 +103,7 @@ A matching repository run should emit the published scientific payload digest. R
 ```bash
 python scripts/research.py benchmark
 python scripts/independent_crosscheck.py
+python scripts/independent_coordinate_crosscheck.py
 ```
 
 The 100-case suite validates the research workflow, security boundaries, and explicit unresolved states. The separate implementation uses a different exact matrix algorithm, but it shares this repository, environment, and project authorship, so it does not count as an outside reproduction.

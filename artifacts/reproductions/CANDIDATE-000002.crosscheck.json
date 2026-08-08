@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0.0",
+  "reproduction_id": "REPRODUCTION-C000002-INDEPENDENT-PATH-001",
+  "candidate_id": "CANDIDATE-000002",
+  "source_result_id": "RESULT-CANDIDATE-000002-78857DB3E9A7",
+  "source_scientific_payload_digest": "sha256:78857db3e9a72756c4a884bbbe90912dc9d772dbd27ae2edee1c53c6455d4046",
+  "candidate_file_sha256": "sha256:54a195e7a596d67ff1f588be96db417d12d89e354abf0839c5dcc51ab587ff4b",
+  "source_candidate_payload_sha256": "sha256:d80416efff1f74a63104f4f56d003b9b2e844f34976893349645726917351bd4",
+  "implementation": {
+    "name": "standard-library-leibniz-coordinate-pullback-crosscheck",
+    "version": "1.0.0",
+    "shared_research_core_code": false,
+    "method": "Independent Leibniz determinant, cofactor inverse, transpose, and matrix multiplication using fractions.Fraction"
+  },
+  "independence": {
+    "separate_environment": false,
+    "separate_implementation": true,
+    "separate_solver": false,
+    "separate_contributor": false,
+    "level": "R2_IMPLEMENTATION_PATH_ONLY",
+    "counts_as_external_reproduction": false
+  },
+  "observations": {
+    "metric_determinant": -14400,
+    "metric_inverse": [
+      [
+        "-1/4",
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        "1/9",
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        "1/16",
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        "1/25"
+      ]
+    ],
+    "jacobian_determinant": 120,
+    "pullback": [
+      [
+        -4,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        9,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        16,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        25
+      ]
+    ],
+    "checks": {
+      "schema.candidate.v1": "PASS",
+      "metric.dimension": "PASS",
+      "metric.symmetry": "PASS",
+      "metric.determinant": "PASS",
+      "metric.inverse": "PASS",
+      "coordinate_map.coordinates": "PASS",
+      "coordinate_map.jacobian": "PASS",
+      "coordinate_map.pullback": "PASS",
+      "minkowski.signature": "PASS",
+      "minkowski.cosmological_constant": "PASS",
+      "minkowski.constant_components": "PASS",
+      "minkowski.connection": "PASS",
+      "minkowski.curvature": "PASS",
+      "minkowski.vacuum_source": "PASS"
+    }
+  },
+  "comparison": "MATCH",
+  "discrepancies": [],
+  "limitations": [
+    "This is a separate implementation path created in the same repository and environment.",
+    "It is not an outside reproduction and does not increase the public independent-reproduction count.",
+    "It checks only one exact constant linear coordinate map for an established flat-spacetime benchmark."
+  ],
+  "record_digest": "sha256:a4276597ce853212c432b6d92c59cd8eeee28b9469da1f9ee77e499d8723aa2f"
+}

@@ -7,11 +7,24 @@ def beginner_report(candidate: dict[str, Any], result: dict[str, Any]) -> str:
     passed = sum(check["status"] == "PASS" for check in result["checks"])
     failed = sum(check["status"] == "FAIL" for check in result["checks"])
     limitations = "\n".join(f"- {item}" for item in result["limitations"])
+    is_coordinate_benchmark = candidate["validation_profile"] == "benchmark.minkowski_linear_rescaled_v1"
+    tested = (
+        "We tested whether a differently numbered coordinate grid still describes the same ordinary flat spacetime. "
+        "The checker used the declared conversion table to transform the original metric and compared every number exactly."
+        if is_coordinate_benchmark else
+        "We tested the project's first baseline: ordinary flat spacetime, written as a four-by-four matrix. "
+        "This candidate is the empty test track for the research system. It is not a shortcut to Mars."
+    )
+    reason = (
+        "A trustworthy geometry checker must distinguish a real physical difference from a harmless change in coordinate labels or scales."
+        if is_coordinate_benchmark else
+        "Before a search system examines unusual ideas, it must show that it can represent, hash, check, explain, and reproduce a simple known baseline without changing the result."
+    )
     return f"""# {candidate['candidate_id']} — beginner report
 
 ## What did we test?
 
-We tested the project's first baseline: ordinary flat spacetime, written as a four-by-four matrix. This candidate is the empty test track for the research system. It is not a shortcut to Mars.
+{tested}
 
 ## What happened?
 
@@ -24,7 +37,7 @@ We tested the project's first baseline: ordinary flat spacetime, written as a fo
 
 ## Why begin here?
 
-Before a search system examines unusual ideas, it must show that it can represent, hash, check, explain, and reproduce a simple known baseline without changing the result.
+{reason}
 
 ## What this does not prove
 

@@ -18,6 +18,28 @@ def is_symmetric(matrix: Matrix) -> bool:
     return is_square(matrix) and all(matrix[i][j] == matrix[j][i] for i in range(len(matrix)) for j in range(len(matrix)))
 
 
+def transpose(matrix: Matrix) -> Matrix:
+    if not matrix or any(len(row) != len(matrix[0]) for row in matrix):
+        raise ValueError("transpose requires a non-empty rectangular matrix")
+    return [list(column) for column in zip(*matrix, strict=True)]
+
+
+def multiply(left: Matrix, right: Matrix) -> Matrix:
+    if not left or not right or any(len(row) != len(left[0]) for row in left) or any(len(row) != len(right[0]) for row in right):
+        raise ValueError("matrix multiplication requires non-empty rectangular matrices")
+    if len(left[0]) != len(right):
+        raise ValueError("matrix dimensions are incompatible for multiplication")
+    right_columns = transpose(right)
+    return [[sum((a * b for a, b in zip(row, column, strict=True)), Fraction(0)) for column in right_columns] for row in left]
+
+
+def pullback(metric: Matrix, jacobian: Matrix) -> Matrix:
+    """Return J^T g J for a declared constant linear coordinate map."""
+    if not is_square(metric) or not is_square(jacobian) or len(metric) != len(jacobian):
+        raise ValueError("pullback requires square metric and Jacobian matrices of the same size")
+    return multiply(multiply(transpose(jacobian), metric), jacobian)
+
+
 def determinant(matrix: Matrix) -> Fraction:
     if not is_square(matrix):
         raise ValueError("determinant requires a non-empty square matrix")

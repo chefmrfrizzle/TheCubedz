@@ -45,3 +45,15 @@ def test_roadmap_gates_novel_research():
     phases = load(ROOT / "data" / "roadmap.json")["phases"]
     assert phases[-1]["title"] == "Novel research"
     assert phases[-1]["status"] == "GATED"
+
+
+def test_second_benchmark_passport_is_valid_and_matches_preregistered_result():
+    passport = load(ROOT / "benchmarks" / "BENCHMARK-000002.passport.json")
+    schema = load(CORE / "benchmark-passport.schema.json")
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+    assert not list(validator.iter_errors(passport))
+    result = load(ROOT / "artifacts" / "results" / "CANDIDATE-000002.result.json")
+    assert passport["scientific_review"] == "REQUESTED"
+    assert passport["candidate_id"] == result["candidate"]["candidate_id"]
+    assert passport["preregistered_checks"] == [check["check_id"] for check in result["checks"]]
+    assert passport["expected_results"]["tolerance"] == "exact rational equality"

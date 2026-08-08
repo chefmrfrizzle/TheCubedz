@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.0.0",
+  "result_id": "RESULT-CANDIDATE-000002-78857DB3E9A7",
+  "candidate": {
+    "candidate_id": "CANDIDATE-000002",
+    "version": "1.0.0",
+    "sha256": "d80416efff1f74a63104f4f56d003b9b2e844f34976893349645726917351bd4"
+  },
+  "validator": {
+    "name": "deterministic-baseline-validator",
+    "version": "0.2.0",
+    "profile": "benchmark.minkowski_linear_rescaled_v1"
+  },
+  "checks": [
+    {
+      "check_id": "schema.candidate.v1",
+      "category": "definition",
+      "status": "PASS",
+      "summary": "Candidate matches the versioned candidate schema.",
+      "method": "JSON Schema Draft 2020-12 validation",
+      "scope": "Document shape, required fields, enums, patterns, and declared formats.",
+      "observed": "no schema violations",
+      "expected": "no schema violations"
+    },
+    {
+      "check_id": "metric.dimension",
+      "category": "mathematics",
+      "status": "PASS",
+      "summary": "Metric dimensions agree with the declared coordinate count.",
+      "method": "Exact matrix shape comparison",
+      "scope": "Submitted component matrix only.",
+      "observed": "4 rows for 4 coordinates",
+      "expected": "4 by 4"
+    },
+    {
+      "check_id": "metric.symmetry",
+      "category": "mathematics",
+      "status": "PASS",
+      "summary": "Metric components are symmetric.",
+      "method": "Exact component comparison g[i,j] = g[j,i]",
+      "scope": "Submitted constant component matrix.",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "check_id": "metric.determinant",
+      "category": "mathematics",
+      "status": "PASS",
+      "summary": "Metric is non-degenerate.",
+      "method": "Exact fraction-preserving Gaussian elimination",
+      "scope": "Submitted constant component matrix.",
+      "observed": -14400,
+      "expected": "non-zero"
+    },
+    {
+      "check_id": "metric.inverse",
+      "category": "mathematics",
+      "status": "PASS",
+      "summary": "An exact inverse exists for the submitted matrix.",
+      "method": "Gauss-Jordan elimination using rational arithmetic",
+      "scope": "Submitted constant component matrix.",
+      "observed": [
+        [
+          "-1/4",
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          "1/9",
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          "1/16",
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          "1/25"
+        ]
+      ],
+      "expected": "an exact inverse matrix"
+    },
+    {
+      "check_id": "coordinate_map.coordinates",
+      "category": "coordinate equivalence",
+      "status": "PASS",
+      "summary": "Coordinate-map labels match both benchmark charts.",
+      "method": "Exact ordered coordinate-list comparison",
+      "scope": "The approved four-dimensional linear-rescaling profile only.",
+      "observed": {
+        "from": [
+          "tau",
+          "xi",
+          "eta",
+          "zeta"
+        ],
+        "to": [
+          "t",
+          "x",
+          "y",
+          "z"
+        ]
+      },
+      "expected": {
+        "from": [
+          "tau",
+          "xi",
+          "eta",
+          "zeta"
+        ],
+        "to": [
+          "t",
+          "x",
+          "y",
+          "z"
+        ]
+      }
+    },
+    {
+      "check_id": "coordinate_map.jacobian",
+      "category": "coordinate equivalence",
+      "status": "PASS",
+      "summary": "The declared linear coordinate map is invertible.",
+      "method": "Exact Jacobian determinant using rational arithmetic",
+      "scope": "Constant four-dimensional linear maps only.",
+      "observed": 120,
+      "expected": "non-zero"
+    },
+    {
+      "check_id": "coordinate_map.pullback",
+      "category": "coordinate equivalence",
+      "status": "PASS",
+      "summary": "The submitted metric exactly equals J^T eta J.",
+      "method": "Exact matrix multiplication using rational arithmetic",
+      "scope": "One declared constant linear map to the canonical Minkowski chart; no arbitrary transformation search.",
+      "observed": [
+        [
+          -4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          16,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          25
+        ]
+      ],
+      "expected": [
+        [
+          -4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          16,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          25
+        ]
+      ]
+    },
+    {
+      "check_id": "minkowski.signature",
+      "category": "benchmark",
+      "status": "PASS",
+      "summary": "Declared signature matches the benchmark profile.",
+      "method": "Declared convention comparison",
+      "scope": "Approved rescaled-coordinate Minkowski profile only.",
+      "observed": "-+++",
+      "expected": "-+++"
+    },
+    {
+      "check_id": "minkowski.cosmological_constant",
+      "category": "benchmark",
+      "status": "PASS",
+      "summary": "Cosmological constant is zero for this benchmark.",
+      "method": "Declared convention comparison",
+      "scope": "Minkowski vacuum benchmark only.",
+      "observed": 0,
+      "expected": 0
+    },
+    {
+      "check_id": "minkowski.constant_components",
+      "category": "analytic implication",
+      "status": "PASS",
+      "summary": "Metric and Jacobian entries are supported exact constants.",
+      "method": "Schema-limited inspection of numeric literals",
+      "scope": "Position-dependent components and symbolic expressions are unsupported.",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "check_id": "minkowski.connection",
+      "category": "analytic implication",
+      "status": "PASS",
+      "summary": "Christoffel symbols vanish in the declared rescaled inertial coordinates.",
+      "method": "Analytic implication from constant metric components",
+      "scope": "Only the exact approved constant linear-rescaling profile.",
+      "observed": "all connection coefficients = 0",
+      "expected": "all connection coefficients = 0"
+    },
+    {
+      "check_id": "minkowski.curvature",
+      "category": "analytic implication",
+      "status": "PASS",
+      "summary": "Riemann, Ricci, scalar curvature, and Einstein tensors vanish for this profile.",
+      "method": "Analytic implication from the vanishing connection and its derivatives",
+      "scope": "Only the exact approved constant linear-rescaling profile; not a general tensor engine.",
+      "observed": {
+        "riemann": "0",
+        "ricci": "0",
+        "ricci_scalar": 0,
+        "einstein_tensor": "0"
+      },
+      "expected": "all zero"
+    },
+    {
+      "check_id": "minkowski.vacuum_source",
+      "category": "physical interpretation",
+      "status": "PASS",
+      "summary": "The profile is consistent with zero stress-energy under a zero cosmological constant.",
+      "method": "Einstein field equation implication for a vanishing Einstein tensor and cosmological constant",
+      "scope": "Classical general relativity under the declared conventions.",
+      "observed": "stress-energy tensor = 0",
+      "expected": "stress-energy tensor = 0"
+    }
+  ],
+  "assessment": {
+    "overall_status": "BENCHMARK_VERIFIED",
+    "mathematics_status": "PASSED_IMPLEMENTED_LINEAR_COORDINATE_BENCHMARK_CHECKS",
+    "physical_status": "VACUUM_BASELINE_ONLY",
+    "transportation_status": "NOT_A_TRANSPORTATION_PROPOSAL",
+    "statement": "The submitted rescaled-coordinate metric exactly matches the declared linear pullback of the canonical Minkowski metric. This verifies one bounded coordinate-equivalence capability, not a general coordinate solver or transportation capability."
+  },
+  "warnings": [
+    "Coordinate equivalence is established only for the exact declared constant linear map; nonlinear and inferred transformations remain unsupported."
+  ],
+  "errors": [],
+  "limitations": [
+    "The implementation validates one preregistered constant linear coordinate map, not arbitrary coordinate transformations.",
+    "It does not support position-dependent metric components or symbolic tensor calculus.",
+    "It does not solve Einstein's equations for general candidate metrics.",
+    "It does not evaluate geodesics, travel time, energy conditions, stability, causality, traveler safety, or engineering realizability.",
+    "A passing result shows the same established flat geometry in two representations; it is not a novel-physics result or transportation evidence."
+  ],
+  "run": {
+    "recorded_at": "2026-08-08T00:00:00Z",
+    "command": "research-core verify candidates/CANDIDATE-000002.json",
+    "python": "3.12.13",
+    "source_commit": "f92c62492064cd280fae02860b11797ec822ce7a"
+  },
+  "scientific_payload_digest": "sha256:78857db3e9a72756c4a884bbbe90912dc9d772dbd27ae2edee1c53c6455d4046"
+}

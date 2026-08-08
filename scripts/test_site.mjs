@@ -41,7 +41,8 @@ async function verifyRequiredFiles() {
   const required = [
     'index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html',
     '404.html', 'assets/styles.css', 'assets/site.js', 'assets/favicon.svg', 'assets/og-card.png',
-    'data/candidate.json', 'data/result.json', 'data/synthetic-suite.json', 'data/synthetic-suite-result.json', 'data/crosscheck.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/research-program.json', 'data/project-status.json', 'data/site-config.json',
+    'data/candidate.json', 'data/result.json', 'data/candidate-000002.json', 'data/result-000002.json', 'data/benchmark-000002-passport.json',
+    'data/synthetic-suite.json', 'data/synthetic-suite-result.json', 'data/crosscheck.json', 'data/crosscheck-000002.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/research-program.json', 'data/project-status.json', 'data/site-config.json',
     'site.webmanifest', 'robots.txt', 'llms.txt', 'build-manifest.json', 'README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE',
   ];
   for (const relative of required) if (!(await exists(path.join(dist, relative)))) fail(`Missing required build output: ${relative}`);
@@ -86,15 +87,20 @@ async function verifyHtml(basePath = '') {
 }
 
 async function verifyArtifacts() {
-  const [candidate, result, benchmark, crosscheck, status, graph, agents, roadmap, program] = await Promise.all([
-    json('data/candidate.json'), json('data/result.json'), json('data/synthetic-suite-result.json'), json('data/crosscheck.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'), json('data/research-program.json'),
+  const [candidate, result, coordinateCandidate, coordinateResult, passport, benchmark, crosscheck, coordinateCrosscheck, status, graph, agents, roadmap, program] = await Promise.all([
+    json('data/candidate.json'), json('data/result.json'), json('data/candidate-000002.json'), json('data/result-000002.json'), json('data/benchmark-000002-passport.json'),
+    json('data/synthetic-suite-result.json'), json('data/crosscheck.json'), json('data/crosscheck-000002.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'), json('data/research-program.json'),
   ]);
   const passed = result.checks.filter((check) => check.status === 'PASS').length;
   const failed = result.checks.filter((check) => check.status === 'FAIL').length;
+  const coordinatePassed = coordinateResult.checks.filter((check) => check.status === 'PASS').length;
+  const coordinateFailed = coordinateResult.checks.filter((check) => check.status === 'FAIL').length;
   if (candidate.candidate_id !== status.candidateId) fail('Project status candidate ID does not match candidate artifact');
   if (result.scientific_payload_digest !== status.scientificPayloadDigest) fail('Project status digest does not match result artifact');
-  if (status.checkCount !== passed) fail(`Project status passed-check count ${status.checkCount} does not match result ${passed}`);
-  if (status.failedCheckCount !== failed) fail(`Project status failed-check count ${status.failedCheckCount} does not match result ${failed}`);
+  if (status.candidateCount !== 2 || status.coordinateBenchmarkId !== coordinateCandidate.candidate_id) fail('Project status does not expose both benchmark candidates');
+  if (status.checkCount !== passed + coordinatePassed) fail(`Project status passed-check count ${status.checkCount} does not match benchmark total ${passed + coordinatePassed}`);
+  if (status.failedCheckCount !== failed + coordinateFailed) fail(`Project status failed-check count ${status.failedCheckCount} does not match benchmark total ${failed + coordinateFailed}`);
+  if (status.coordinateBenchmarkDigest !== coordinateResult.scientific_payload_digest || status.coordinateBenchmarkStatus !== 'BENCHMARK_VERIFIED') fail('Coordinate benchmark public status differs from its result');
   if (status.graphNodeCount !== graph.nodes.length || status.graphEdgeCount !== graph.edges.length) fail('Project status graph counts do not match graph snapshot');
   if (status.agentCount !== agents.agents.length) fail('Project status agent count does not match agent contracts');
   if (status.roadmapPhaseCount !== roadmap.phases.length) fail('Project status roadmap count does not match roadmap artifact');
@@ -102,13 +108,16 @@ async function verifyArtifacts() {
   if (status.transportationStatus !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Transportation status boundary changed unexpectedly');
   if (benchmark.case_count !== 100 || benchmark.failed !== 0) fail('Synthetic workflow benchmark is incomplete or failing');
   if (crosscheck.comparison !== 'MATCH') fail('Separate implementation cross-check does not match the canonical result');
+  if (coordinateCrosscheck.comparison !== 'MATCH') fail('Coordinate benchmark separate implementation does not match');
   if (crosscheck.independence.counts_as_external_reproduction !== false) fail('Implementation cross-check is overstated as external reproduction');
   if (program.research_question !== 'Can we shorten the distance to Mars—without changing the traveler?') fail('Public research question differs from the canonical program contract');
-  if (program.current_evidence.implemented_checks !== passed || program.current_evidence.workflow_cases !== benchmark.case_count) fail('Program evidence counts do not match public artifacts');
+  if (passport.scientific_review !== 'REQUESTED') fail('Coordinate benchmark must remain visibly pending scientific review');
+  if (program.current_evidence.implemented_checks !== passed + coordinatePassed || program.current_evidence.known_answer_examples !== 2 || program.current_evidence.workflow_cases !== benchmark.case_count) fail('Program evidence counts do not match public artifacts');
   if (program.current_evidence.novel_transportation_candidates !== 0 || program.current_evidence.traveler_safety_evaluations !== 0 || program.current_evidence.outside_reproductions !== 0) fail('Program contract overstates current evidence');
   const labHtml = await text('lab/index.html');
   if (!labHtml.includes('data-evidence-cube') || !labHtml.includes('Turn the cube to see what we know')) fail('Answer cube is missing from the laboratory');
   if (!labHtml.includes('Each side asks one plain question')) fail('Answer cube does not explain how to read it');
+  if (!labHtml.includes('data-benchmark-ladder') || !labHtml.includes('Same space, different numbers')) fail('Laboratory does not expose the coordinate benchmark ladder');
   const homeHtml = await text('index.html');
   if (!homeHtml.includes('Can we shorten the distance to Mars')) fail('Homepage does not state the motivating research question');
   if (!homeHtml.includes('No shortcut, device, or route to Mars has been found')) fail('Homepage does not state the current scientific boundary');
@@ -117,7 +126,7 @@ async function verifyArtifacts() {
   if (!contributeHtml.includes('data-program-gates') || !contributeHtml.includes('Complete Mars program')) fail('Contribution page does not expose the research contract and prompt program');
   const allHtml = (await Promise.all(['index.html','lab/index.html','graph/index.html'].map(text))).join('\n');
   if (!allHtml.includes(result.scientific_payload_digest)) fail('Scientific digest is not visible on public release pages');
-  note(`${result.checks.length} scientific result checks reconciled with public status`);
+  note(`${result.checks.length + coordinateResult.checks.length} scientific result checks reconciled with public status`);
 }
 
 async function verifyManifest() {

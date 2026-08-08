@@ -9,11 +9,12 @@ from typing import Any
 
 from . import __version__
 from .canonical import scientific_payload, sha256_hex
-from .matrix import as_fraction_matrix, determinant, inverse, is_square, is_symmetric, json_matrix
+from .matrix import as_fraction_matrix, determinant, inverse, is_square, is_symmetric, json_matrix, pullback
 from .schema_validation import validate_candidate_schema
 
 VALIDATOR_NAME = "deterministic-baseline-validator"
 PROFILE = "benchmark.minkowski_cartesian_v1"
+LINEAR_PROFILE = "benchmark.minkowski_linear_rescaled_v1"
 EXPECTED_MINKOWSKI = as_fraction_matrix([
     [-1, 0, 0, 0],
     [0, 1, 0, 0],
@@ -40,6 +41,155 @@ def _source_commit() -> str:
         return subprocess.run(["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip()
     except (OSError, subprocess.CalledProcessError):
         return "UNAVAILABLE"
+
+
+def _linear_coordinate_result(
+    candidate: dict[str, Any],
+    matrix: list[list[Any]],
+    checks: list[dict[str, Any]],
+    errors: list[str],
+    *,
+    reproducible: bool,
+    source_commit: str | None,
+) -> dict[str, Any]:
+    coordinate_map = candidate.get("parameters", {}).get("coordinate_map", {})
+    from_coordinates = coordinate_map.get("from_coordinates", [])
+    to_coordinates = coordinate_map.get("to_coordinates", [])
+    coordinates_ok = (
+        from_coordinates == candidate.get("coordinates")
+        and to_coordinates == ["t", "x", "y", "z"]
+        and len(from_coordinates) == len(matrix) == 4
+    )
+    checks.append(_check(
+        "coordinate_map.coordinates", "coordinate equivalence", "PASS" if coordinates_ok else "FAIL",
+        "Coordinate-map labels match both benchmark charts." if coordinates_ok else "Coordinate-map labels do not match the declared benchmark charts.",
+        "Exact ordered coordinate-list comparison", "The approved four-dimensional linear-rescaling profile only.",
+        {"from": from_coordinates, "to": to_coordinates}, {"from": candidate.get("coordinates"), "to": ["t", "x", "y", "z"]},
+    ))
+
+    try:
+        jacobian = as_fraction_matrix(coordinate_map.get("jacobian", []))
+        jacobian_determinant = determinant(jacobian) if is_square(jacobian) and len(jacobian) == 4 else None
+    except (TypeError, ValueError, ZeroDivisionError) as exc:
+        jacobian = []
+        jacobian_determinant = None
+        errors.append(f"coordinate-map Jacobian is not an exact square numeric matrix: {exc}")
+    jacobian_ok = jacobian_determinant is not None and jacobian_determinant != 0
+    checks.append(_check(
+        "coordinate_map.jacobian", "coordinate equivalence", "PASS" if jacobian_ok else "FAIL",
+        "The declared linear coordinate map is invertible." if jacobian_ok else "The declared linear coordinate map is singular or unavailable.",
+        "Exact Jacobian determinant using rational arithmetic", "Constant four-dimensional linear maps only.",
+        int(jacobian_determinant) if jacobian_determinant is not None and jacobian_determinant.denominator == 1 else str(jacobian_determinant), "non-zero",
+    ))
+
+    try:
+        transformed = pullback(EXPECTED_MINKOWSKI, jacobian) if jacobian_ok else None
+    except ValueError as exc:
+        transformed = None
+        errors.append(f"coordinate pullback could not be computed: {exc}")
+    pullback_ok = coordinates_ok and transformed == matrix
+    checks.append(_check(
+        "coordinate_map.pullback", "coordinate equivalence", "PASS" if pullback_ok else "FAIL",
+        "The submitted metric exactly equals J^T eta J." if pullback_ok else "The submitted metric does not equal the declared pullback of the reference metric.",
+        "Exact matrix multiplication using rational arithmetic", "One declared constant linear map to the canonical Minkowski chart; no arbitrary transformation search.",
+        json_matrix(transformed) if transformed else None, json_matrix(matrix) if matrix else None,
+    ))
+
+    signature_ok = candidate.get("conventions", {}).get("metric_signature") == "-+++"
+    checks.append(_check(
+        "minkowski.signature", "benchmark", "PASS" if signature_ok else "FAIL",
+        "Declared signature matches the benchmark profile." if signature_ok else "Declared signature does not match the benchmark profile.",
+        "Declared convention comparison", "Approved rescaled-coordinate Minkowski profile only.",
+        candidate.get("conventions", {}).get("metric_signature"), "-+++",
+    ))
+
+    lambda_ok = candidate.get("conventions", {}).get("cosmological_constant") == 0
+    checks.append(_check(
+        "minkowski.cosmological_constant", "benchmark", "PASS" if lambda_ok else "FAIL",
+        "Cosmological constant is zero for this benchmark." if lambda_ok else "Cosmological constant is not zero.",
+        "Declared convention comparison", "Minkowski vacuum benchmark only.",
+        candidate.get("conventions", {}).get("cosmological_constant"), 0,
+    ))
+
+    constants_ok = bool(matrix) and bool(jacobian)
+    checks.append(_check(
+        "minkowski.constant_components", "analytic implication", "PASS" if constants_ok else "FAIL",
+        "Metric and Jacobian entries are supported exact constants." if constants_ok else "Metric or Jacobian entries are not supported exact constants.",
+        "Schema-limited inspection of numeric literals", "Position-dependent components and symbolic expressions are unsupported.",
+        constants_ok, True,
+    ))
+
+    connection_ok = pullback_ok and constants_ok
+    checks.append(_check(
+        "minkowski.connection", "analytic implication", "PASS" if connection_ok else "FAIL",
+        "Christoffel symbols vanish in the declared rescaled inertial coordinates." if connection_ok else "A vanishing connection is not established.",
+        "Analytic implication from constant metric components", "Only the exact approved constant linear-rescaling profile.",
+        "all connection coefficients = 0" if connection_ok else "not established", "all connection coefficients = 0",
+    ))
+
+    curvature_ok = connection_ok
+    checks.append(_check(
+        "minkowski.curvature", "analytic implication", "PASS" if curvature_ok else "FAIL",
+        "Riemann, Ricci, scalar curvature, and Einstein tensors vanish for this profile." if curvature_ok else "Vanishing curvature is not established.",
+        "Analytic implication from the vanishing connection and its derivatives", "Only the exact approved constant linear-rescaling profile; not a general tensor engine.",
+        {"riemann": "0", "ricci": "0", "ricci_scalar": 0, "einstein_tensor": "0"} if curvature_ok else "not established", "all zero",
+    ))
+
+    vacuum_ok = curvature_ok and lambda_ok
+    checks.append(_check(
+        "minkowski.vacuum_source", "physical interpretation", "PASS" if vacuum_ok else "FAIL",
+        "The profile is consistent with zero stress-energy under a zero cosmological constant." if vacuum_ok else "A zero vacuum source is not established.",
+        "Einstein field equation implication for a vanishing Einstein tensor and cosmological constant", "Classical general relativity under the declared conventions.",
+        "stress-energy tensor = 0" if vacuum_ok else "not established", "stress-energy tensor = 0",
+    ))
+
+    failed = [item for item in checks if item["status"] == "FAIL"]
+    assessment = {
+        "overall_status": "BENCHMARK_VERIFIED" if not failed else "VALIDATION_FAILED",
+        "mathematics_status": "PASSED_IMPLEMENTED_LINEAR_COORDINATE_BENCHMARK_CHECKS" if not failed else "FAILED_ONE_OR_MORE_IMPLEMENTED_CHECKS",
+        "physical_status": "VACUUM_BASELINE_ONLY" if vacuum_ok else "NOT_ESTABLISHED",
+        "transportation_status": "NOT_A_TRANSPORTATION_PROPOSAL",
+        "statement": (
+            "The submitted rescaled-coordinate metric exactly matches the declared linear pullback of the canonical Minkowski metric. "
+            "This verifies one bounded coordinate-equivalence capability, not a general coordinate solver or transportation capability."
+            if not failed else
+            "The submitted candidate failed one or more implemented checks. No mathematical, physical, or transportation conclusion is established."
+        ),
+    }
+    limitations = [
+        "The implementation validates one preregistered constant linear coordinate map, not arbitrary coordinate transformations.",
+        "It does not support position-dependent metric components or symbolic tensor calculus.",
+        "It does not solve Einstein's equations for general candidate metrics.",
+        "It does not evaluate geodesics, travel time, energy conditions, stability, causality, traveler safety, or engineering realizability.",
+        "A passing result shows the same established flat geometry in two representations; it is not a novel-physics result or transportation evidence.",
+    ]
+    warnings = [
+        "Coordinate equivalence is established only for the exact declared constant linear map; nonlinear and inferred transformations remain unsupported."
+    ]
+    candidate_hash = sha256_hex(candidate)
+    recorded_at = candidate.get("provenance", {}).get("created_at") if reproducible else datetime.now(UTC).isoformat().replace("+00:00", "Z")
+    result: dict[str, Any] = {
+        "schema_version": "1.0.0",
+        "result_id": "PENDING",
+        "candidate": {"candidate_id": candidate.get("candidate_id"), "version": candidate.get("version"), "sha256": candidate_hash},
+        "validator": {"name": VALIDATOR_NAME, "version": __version__, "profile": candidate.get("validation_profile")},
+        "checks": checks,
+        "assessment": assessment,
+        "warnings": warnings,
+        "errors": errors,
+        "limitations": limitations,
+        "run": {
+            "recorded_at": recorded_at,
+            "command": f"research-core verify candidates/{candidate.get('candidate_id')}.json",
+            "python": platform.python_version(),
+            "source_commit": source_commit or _source_commit(),
+        },
+        "scientific_payload_digest": "PENDING",
+    }
+    digest = sha256_hex(scientific_payload(result))
+    result["scientific_payload_digest"] = f"sha256:{digest}"
+    result["result_id"] = f"RESULT-{candidate.get('candidate_id')}-{digest[:12].upper()}"
+    return result
 
 
 def evaluate(candidate: dict[str, Any], *, reproducible: bool = False, source_commit: str | None = None) -> dict[str, Any]:
@@ -98,6 +248,11 @@ def evaluate(candidate: dict[str, Any], *, reproducible: bool = False, source_co
         "Gauss-Jordan elimination using rational arithmetic", "Submitted constant component matrix.",
         json_matrix(inverse_matrix) if inverse_matrix else None, "an exact inverse matrix",
     ))
+
+    if candidate.get("validation_profile") == LINEAR_PROFILE:
+        return _linear_coordinate_result(
+            candidate, matrix, checks, errors, reproducible=reproducible, source_commit=source_commit
+        )
 
     profile_ok = candidate.get("validation_profile") == PROFILE
     components_ok = profile_ok and matrix == EXPECTED_MINKOWSKI

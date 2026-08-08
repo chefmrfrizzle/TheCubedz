@@ -18,8 +18,8 @@ def errors(document):
 def test_research_program_matches_schema_and_preserves_current_counts():
     assert errors(PROGRAM) == []
     assert PROGRAM["current_evidence"] == {
-        "known_answer_examples": 1,
-        "implemented_checks": 12,
+        "known_answer_examples": 2,
+        "implemented_checks": 26,
         "workflow_cases": 100,
         "novel_transportation_candidates": 0,
         "traveler_safety_evaluations": 0,

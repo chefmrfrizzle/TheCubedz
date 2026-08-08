@@ -47,7 +47,7 @@ export const pages = [
               <a class="button primary" href="#how-it-works">See how the search works</a>
               <a class="button secondary" href="/contribute/">Help test the question</a>
             </div>
-            <p class="microcopy"><strong>Where we are today:</strong> the checker recognizes one known example of ordinary flat spacetime. No shortcut, device, or route to Mars has been found.</p>
+            <p class="microcopy"><strong>Where we are today:</strong> the checker recognizes the same ordinary flat spacetime in two exact coordinate descriptions. No shortcut, device, or route to Mars has been found.</p>
           </div>
           <div class="hero-visual" aria-label="Conceptual Earth to Mars research diagram">
             <div class="coordinate-grid"></div>
@@ -61,8 +61,8 @@ export const pages = [
 
         <section class="status-band" aria-label="Current project status">
           <div class="shell metric-grid">
-            <div class="metric"><span data-status="candidateCount">1</span><small>known-answer example</small></div>
-            <div class="metric"><span data-status="checkCount">12</span><small>starter checks passed</small></div>
+            <div class="metric"><span data-status="candidateCount">2</span><small>known-answer examples</small></div>
+            <div class="metric"><span data-status="checkCount">26</span><small>scoped checks passed</small></div>
             <div class="metric"><span data-status="syntheticCaseCount">100</span><small>workflow practice cases</small></div>
             <div class="metric"><span data-status="novelClaimCount">0</span><small>travel solutions found</small></div>
           </div>
@@ -102,14 +102,14 @@ export const pages = [
         </section>
 
         <section class="shell section-pad boundary-grid">
-          <article class="boundary-card positive"><p class="eyebrow">What exists today</p><h2>We built the first measuring tool.</h2><ul class="clean-list"><li>One known flat-spacetime example the checker should recognize.</li><li>Twelve checks that recover the expected answer.</li><li>One hundred practice cases for the research workflow.</li><li>A public record of results, limits, and failures.</li><li>A way for contributors to inspect the evidence and propose improvements.</li></ul><a class="button secondary" href="/lab/">See the first known-answer test</a></article>
+          <article class="boundary-card positive"><p class="eyebrow">What exists today</p><h2>The measuring tool recognizes one harmless coordinate change.</h2><ul class="clean-list"><li>Two files describing the same known flat spacetime with different coordinate scales.</li><li>Twenty-six scoped checks that recover both expected answers.</li><li>Two separate in-repository implementations that agree.</li><li>One hundred practice cases for the research workflow.</li><li>A public record of results, limits, and failures.</li></ul><a class="button secondary" href="/lab/">Compare the known-answer tests</a></article>
           <article class="boundary-card caution"><p class="eyebrow">What does not exist today</p><h2>We have not found a shortcut.</h2><ul class="clean-list"><li>No exotic spacetime candidate has passed the full physics review.</li><li>No general solver can test every proposed geometry.</li><li>No traveler-safety calculation has passed.</li><li>No outside team has independently reproduced a new result.</li><li>No device, experiment, or Earth-to-Mars route has been designed.</li></ul></article>
         </section>
 
         <section class="section-surface" id="mars-benchmark">
           <div class="shell section-pad benchmark-layout">
             <div><p class="eyebrow">What would count as progress?</p><h2>The trip must get effectively shorter without making the traveler the experiment.</h2><p class="section-lede">Keeping the same person, vehicle, and local matter intact is a required constraint—not something the project has already achieved. Any serious candidate must also explain the needed matter or energy and survive independent checking.</p></div>
-            <div class="benchmark-card"><div><span>Goal</span><strong data-program-summary="goal">Reduce the effective Earth-to-Mars journey.</strong></div><div><span>Safety</span><strong data-program-summary="safety">Keep local matter intact and forces survivable.</strong></div><div><span>Physics</span><strong data-program-summary="physics">Satisfy the equations, energy limits, stability, and cause and effect.</strong></div><div><span>Proof</span><strong data-program-summary="proof">Let independent teams recover the same result.</strong></div><div><span>Current position</span><strong data-program-summary="current_position">Only the starter measuring test works today.</strong></div></div>
+            <div class="benchmark-card"><div><span>Goal</span><strong data-program-summary="goal">Reduce the effective Earth-to-Mars journey.</strong></div><div><span>Safety</span><strong data-program-summary="safety">Keep local matter intact and forces survivable.</strong></div><div><span>Physics</span><strong data-program-summary="physics">Satisfy the equations, energy limits, stability, and cause and effect.</strong></div><div><span>Proof</span><strong data-program-summary="proof">Let independent teams recover the same result.</strong></div><div><span>Current position</span><strong data-program-summary="current_position">Two calibration tests work; no travel candidate has been evaluated.</strong></div></div>
           </div>
         </section>
 
@@ -122,11 +122,11 @@ export const pages = [
       </main>`,
   },
   {
-    slug: 'lab', key: 'lab', title: 'Test the first example',
-    description: 'See whether TheCubedz can correctly check the simplest known spacetime example, what passed, and what has not been tested yet.',
+    slug: 'lab', key: 'lab', title: 'Test the measuring tools',
+    description: 'See whether TheCubedz recognizes the same established flat spacetime in two coordinate descriptions, what passed, and what remains unsupported.',
     content: `
       <main id="main-content" data-page="lab">
-        <section class="shell page-hero section-pad compact"><div><p class="eyebrow">Try the first example</p><h1>Can the system correctly recognize ordinary, empty space?</h1><p class="hero-lede">We start with a known answer: flat spacetime, the simplest model used in relativity. If our checker cannot handle this example, it is not ready for harder ideas.</p></div><div class="page-status"><span class="status-dot"></span><strong data-lab-status>Loading result…</strong><small>This result applies only to this one example.</small></div></section>
+        <section class="shell page-hero section-pad compact"><div><p class="eyebrow">Test the measuring tools</p><h1>Can the system recognize the same empty space when the coordinate numbers change?</h1><p class="hero-lede">We begin with flat spacetime, the simplest known answer in relativity. The first test checks its familiar number grid. The second changes the coordinate scales and asks whether exact mathematics recovers the same geometry.</p></div><div class="page-status"><span class="status-dot"></span><strong data-lab-status>Loading result…</strong><small>Both examples are calibration tests, not travel proposals.</small></div></section>
         <section class="shell evidence-cube-section" aria-labelledby="evidence-cube-title">
           <div class="cube-intro"><div><p class="eyebrow">The answer cube</p><h2 id="evidence-cube-title">Turn the cube to see what we know—and what we do not.</h2></div><p>Each side asks one plain question. A green answer means that check passed. It never means the whole idea has been proven.</p></div>
           <div class="evidence-cube-panel" data-evidence-cube>
@@ -163,6 +163,22 @@ export const pages = [
             <section class="panel fingerprint-panel" id="validator"><div><p class="eyebrow">Result ID</p><h2>A fingerprint for this exact answer</h2><code data-fingerprint>Loading…</code><p>Change any important part of the example, checker, answer, warning, or limit and this long ID changes too. That makes silent changes easier to spot.</p></div><button class="button secondary" type="button" data-copy-target="[data-fingerprint]">Copy result ID</button></section>
             <section class="two-column-panels"><article class="panel positive"><p class="eyebrow">What this test shows</p><ul class="clean-list" data-established-list><li>Loading…</li></ul></article><article class="panel caution"><p class="eyebrow">What this test does not show</p><ul class="clean-list" data-limitations-list><li>Loading…</li></ul></article></section>
             <section class="panel reproduce-panel" id="reproduce"><div><p class="eyebrow">For developers: repeat the test</p><h2>A fresh copy should produce the same result ID.</h2></div><pre><code data-reproduction-command>python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible</code></pre><button class="button secondary" type="button" data-copy-target="[data-reproduction-command]">Copy command</button><p class="panel-note">Running our code again is a repeat, not independent proof. Independent confirmation needs another person, a separate setup, and their own saved comparison.</p></section>
+          </div>
+        </section>
+        <section class="section-surface" id="benchmark-ladder" data-benchmark-ladder>
+          <div class="shell section-pad">
+            <div class="section-intro"><p class="eyebrow">Benchmark 2 of the ladder</p><h2>Same space, different numbers.</h2><p class="section-lede">Coordinates are labels on a map. Stretch the labels and the number grid changes, even when the physical space does not. This test checks one declared, constant rescaling exactly.</p></div>
+            <div class="coordinate-comparison">
+              <article class="panel"><span class="scope-tag">Original coordinates</span><h3>t, x, y, z</h3><div class="metric-display compact-matrix" data-reference-metric aria-label="Original Minkowski metric">Loading…</div><p>One unit on each coordinate uses the original scale.</p></article>
+              <div class="coordinate-equation" aria-label="Coordinate conversion"><strong>t = 2tau</strong><strong>x = 3xi</strong><strong>y = 4eta</strong><strong>z = 5zeta</strong><span>apply J<sup>T</sup> eta J</span></div>
+              <article class="panel"><span class="scope-tag">Rescaled coordinates</span><h3>tau, xi, eta, zeta</h3><div class="metric-display compact-matrix" data-coordinate-metric aria-label="Rescaled Minkowski metric">Loading…</div><p>The component numbers change because the coordinate ruler changed.</p></article>
+            </div>
+            <div class="benchmark-verdict panel">
+              <div><p class="eyebrow">Exact result</p><h3 data-coordinate-title>Loading the second benchmark…</h3><p data-coordinate-statement>The official result is loading.</p></div>
+              <dl class="benchmark-facts"><div><dt>Result</dt><dd data-coordinate-status>—</dd></div><div><dt>Checks</dt><dd><span data-coordinate-pass-count>—</span> passed / <span data-coordinate-fail-count>—</span> failed</dd></div><div><dt>Separate code path</dt><dd data-coordinate-crosscheck>—</dd></div><div><dt>Scientific review</dt><dd data-coordinate-review>—</dd></div></dl>
+            </div>
+            <div class="boundary-grid benchmark-boundary"><article class="boundary-card positive"><p class="eyebrow">What passing proves</p><h3>One coordinate conversion works exactly.</h3><p>The submitted metric equals the original metric transformed by the declared constant Jacobian. Both in-repository implementations agree on all fourteen checks.</p></article><article class="boundary-card caution"><p class="eyebrow">What passing does not prove</p><h3>This is not a general solver.</h3><p>The checker cannot infer unknown transformations, handle nonlinear coordinate maps, test a curved geometry, calculate a trip, or support a transportation claim. Qualified scientific review is still requested.</p></article></div>
+            <div class="hero-actions"><a class="button secondary" href="/data/benchmark-000002-passport.json">Read the preregistered passport</a><a class="button secondary" href="/data/result-000002.json">Inspect all fourteen checks</a><a class="button secondary" href="/data/crosscheck-000002.json">Inspect the separate comparison</a></div>
           </div>
         </section>
       </main>`,

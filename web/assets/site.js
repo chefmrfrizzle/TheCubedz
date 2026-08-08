@@ -3,6 +3,10 @@ const basePath = normalizeBase(root.dataset.basePath || '');
 const runtime = {
   candidate: null,
   result: null,
+  coordinateCandidate: null,
+  coordinateResult: null,
+  coordinateCrosscheck: null,
+  coordinatePassport: null,
   benchmark: null,
   crosscheck: null,
   graph: null,
@@ -217,6 +221,9 @@ const plainCheckSummaries = {
   'metric.symmetry': 'The number grid matches across its diagonal.',
   'metric.determinant': 'The number grid is usable, not collapsed.',
   'metric.inverse': 'The checker can reverse the number grid.',
+  'coordinate_map.coordinates': 'The two coordinate lists match the declared conversion.',
+  'coordinate_map.jacobian': 'The conversion can be reversed without collapsing a direction.',
+  'coordinate_map.pullback': 'The converted number grid exactly matches the submitted one.',
   'minkowski.components': 'Every number matches the known flat-space answer.',
   'minkowski.signature': 'The plus and minus signs match the chosen rule.',
   'minkowski.cosmological_constant': 'The background-curvature value is zero, as expected here.',
@@ -245,9 +252,13 @@ function renderCheck(check, index) {
 async function initializeLab() {
   if (!document.querySelector('[data-page="lab"]')) return;
   try {
-    [runtime.candidate, runtime.result, runtime.benchmark, runtime.crosscheck] = await Promise.all([
+    [runtime.candidate, runtime.result, runtime.coordinateCandidate, runtime.coordinateResult, runtime.coordinateCrosscheck, runtime.coordinatePassport, runtime.benchmark, runtime.crosscheck] = await Promise.all([
       getJson('/data/candidate.json'),
       getJson('/data/result.json'),
+      getJson('/data/candidate-000002.json'),
+      getJson('/data/result-000002.json'),
+      getJson('/data/crosscheck-000002.json'),
+      getJson('/data/benchmark-000002-passport.json'),
       getJson('/data/synthetic-suite-result.json'),
       getJson('/data/crosscheck.json'),
     ]);
@@ -283,11 +294,12 @@ async function initializeLab() {
     }
     const limitations = document.querySelector('[data-limitations-list]');
     if (limitations) limitations.innerHTML = [
-      'The checker understands only this one simple, exact example.',
+      'This first panel checks one simple, exact representation; the second benchmark below adds only one declared constant coordinate conversion.',
       "It cannot yet solve general versions of Einstein's equations.",
       'It has not tested stability, cause-and-effect problems, unusual matter, or whether anything can be built.',
       'Passing this test is a software milestone—not evidence for warp travel or a route to Mars.',
     ].map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+    initializeBenchmarkLadder();
     initializeEvidenceCube();
   } catch (error) {
     const main = document.querySelector('.lab-main');
@@ -297,6 +309,26 @@ async function initializeLab() {
 
   const runButton = document.querySelector('[data-run-crosscheck]');
   if (runButton) runButton.addEventListener('click', runBrowserCrosscheck);
+}
+
+function initializeBenchmarkLadder() {
+  const section = document.querySelector('[data-benchmark-ladder]');
+  if (!section) return;
+  const { candidate, coordinateCandidate, coordinateResult, coordinateCrosscheck, coordinatePassport } = runtime;
+  if (!candidate || !coordinateCandidate || !coordinateResult || !coordinateCrosscheck || !coordinatePassport) return;
+  const referenceMatrix = section.querySelector('[data-reference-metric]');
+  const coordinateMatrix = section.querySelector('[data-coordinate-metric]');
+  if (referenceMatrix) referenceMatrix.innerHTML = renderMatrix(candidate.metric.components);
+  if (coordinateMatrix) coordinateMatrix.innerHTML = renderMatrix(coordinateCandidate.metric.components);
+  const passed = coordinateResult.checks.filter((check) => check.status === 'PASS').length;
+  const failed = coordinateResult.checks.filter((check) => check.status === 'FAIL').length;
+  setText('[data-coordinate-title]', coordinateCandidate.title, section);
+  setText('[data-coordinate-statement]', coordinateResult.assessment.statement, section);
+  setText('[data-coordinate-status]', coordinateResult.assessment.overall_status === 'BENCHMARK_VERIFIED' ? 'KNOWN ANSWER PASSED' : coordinateResult.assessment.overall_status.replaceAll('_', ' '), section);
+  setText('[data-coordinate-pass-count]', passed, section);
+  setText('[data-coordinate-fail-count]', failed, section);
+  setText('[data-coordinate-crosscheck]', `${coordinateCrosscheck.comparison === 'MATCH' ? 'MATCHED' : coordinateCrosscheck.comparison} ${Object.keys(coordinateCrosscheck.observations.checks).length}/${coordinateResult.checks.length} (same project)`, section);
+  setText('[data-coordinate-review]', coordinatePassport.scientific_review === 'REQUESTED' ? 'REVIEW REQUESTED' : coordinatePassport.scientific_review.replaceAll('_', ' '), section);
 }
 
 function evidenceCubeFaces() {
@@ -318,7 +350,7 @@ function evidenceCubeFaces() {
       question: 'Does the basic math match the known answer for flat spacetime?',
       answer: `${mathChecks.length === 10 ? 'Yes' : 'Not yet'}. ${mathChecks.length} math checks agree with the expected flat-spacetime example.`,
       evidence: 'The checker tested the matrix size, symmetry, determinant, inverse, signs, connection, and curvature.',
-      limitation: 'This checker only knows this exact beginner example. It cannot yet solve every spacetime equation or recognize the same geometry written in any coordinate system.',
+      limitation: 'The second benchmark recognizes one declared constant coordinate rescaling. The checker still cannot infer arbitrary transformations or solve general spacetime equations.',
       source: '/data/result.json', sourceLabel: 'See the official saved result',
     },
     {

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/benchmark-passport.schema.json",
+  "title": "Established-geometry benchmark passport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "passport_id", "benchmark_id", "candidate_id", "title",
+    "classification", "capability_added", "scientific_review", "domain",
+    "source_model", "expected_results", "preregistered_checks", "negative_cases",
+    "unsupported_properties", "references", "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "passport_id": {"type": "string", "pattern": "^PASSPORT-[0-9]{6}$"},
+    "benchmark_id": {"type": "string", "pattern": "^BENCHMARK-[0-9]{6}$"},
+    "candidate_id": {"type": "string", "pattern": "^CANDIDATE-[0-9]{6}$"},
+    "title": {"type": "string", "minLength": 3},
+    "classification": {"const": "ESTABLISHED_NON_NOVEL_GEOMETRY"},
+    "capability_added": {"type": "string", "minLength": 10},
+    "scientific_review": {"enum": ["REQUESTED", "APPROVED", "CHANGES_REQUIRED", "REJECTED"]},
+    "domain": {
+      "type": "object", "additionalProperties": false,
+      "required": ["coordinates", "coordinate_ranges", "excluded_boundaries"],
+      "properties": {
+        "coordinates": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+        "coordinate_ranges": {"type": "string", "minLength": 1},
+        "excluded_boundaries": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "source_model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["cosmological_constant", "stress_energy", "interpretation"],
+      "properties": {
+        "cosmological_constant": {"type": "number"},
+        "stress_energy": {"type": "string"},
+        "interpretation": {"type": "string"}
+      }
+    },
+    "expected_results": {"type": "object", "minProperties": 1},
+    "preregistered_checks": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 3}
+    },
+    "negative_cases": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["case", "expected_failure"],
+        "properties": {"case": {"type": "string"}, "expected_failure": {"type": "string"}}
+      }
+    },
+    "unsupported_properties": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "references": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["title", "url", "purpose"],
+        "properties": {
+          "title": {"type": "string"},
+          "url": {"type": "string", "format": "uri"},
+          "purpose": {"type": "string"}
+        }
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["implementation_authorized_by", "implemented_by", "created_at", "license", "human_scientific_review_required"],
+      "properties": {
+        "implementation_authorized_by": {"type": "string"},
+        "implemented_by": {"type": "string"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "license": {"type": "string"},
+        "human_scientific_review_required": {"const": true}
+      }
+    }
+  }
+}

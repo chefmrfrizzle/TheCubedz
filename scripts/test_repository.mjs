@@ -29,7 +29,8 @@ async function checkRequiredFiles() {
   const required = [
     'README.md', 'CONTRIBUTING.md', 'GOVERNANCE.md', 'SECURITY.md', 'CODE_OF_CONDUCT.md', 'LICENSE', 'NOTICE', 'CHANGELOG.md', 'SUPPORT.md', 'CITATION.cff',
     'docs/SCIENTIFIC_CLAIMS_POLICY.md', 'docs/THREAT_MODEL.md', 'docs/LAUNCH.md', 'docs/SECOND_BRAIN.md', 'docs/AGENT_OPERATING_SYSTEM.md', 'docs/SCALE_ARCHITECTURE.md',
-    'candidates/CANDIDATE-000001.json', 'artifacts/results/CANDIDATE-000001.result.json', 'data/ledger/events.jsonl', 'data/knowledge-graph.json',
+    'candidates/CANDIDATE-000001.json', 'artifacts/results/CANDIDATE-000001.result.json', 'candidates/CANDIDATE-000002.json', 'artifacts/results/CANDIDATE-000002.result.json',
+    'benchmarks/BENCHMARK-000002.passport.json', 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json', 'src/core/benchmark-passport.schema.json', 'data/ledger/events.jsonl', 'data/knowledge-graph.json',
     'data/research-program.json', 'src/core/research-program.schema.json', 'prompts/MARS_RESEARCH_PROGRAM.md', '.github/ISSUE_TEMPLATE/research-question.yml',
     '.github/workflows/ci.yml', '.github/workflows/pages.yml', '.github/workflows/codeql.yml', '.github/dependabot.yml',
   ];
@@ -73,16 +74,25 @@ async function checkMarkdownLinks(files) {
 async function checkScientificConsistency() {
   const candidate = JSON.parse(await readFile(path.join(root, 'candidates/CANDIDATE-000001.json'), 'utf8'));
   const result = JSON.parse(await readFile(path.join(root, 'artifacts/results/CANDIDATE-000001.result.json'), 'utf8'));
+  const coordinateCandidate = JSON.parse(await readFile(path.join(root, 'candidates/CANDIDATE-000002.json'), 'utf8'));
+  const coordinateResult = JSON.parse(await readFile(path.join(root, 'artifacts/results/CANDIDATE-000002.result.json'), 'utf8'));
+  const coordinateCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json'), 'utf8'));
+  const passport = JSON.parse(await readFile(path.join(root, 'benchmarks/BENCHMARK-000002.passport.json'), 'utf8'));
   const graph = JSON.parse(await readFile(path.join(root, 'data/knowledge-graph.json'), 'utf8'));
   const benchmark = JSON.parse(await readFile(path.join(root, 'artifacts/benchmarks/synthetic-suite-v1.result.json'), 'utf8'));
   const program = JSON.parse(await readFile(path.join(root, 'data/research-program.json'), 'utf8'));
   const readme = await readFile(path.join(root, 'README.md'), 'utf8');
   if (candidate.candidate_id !== result.candidate.candidate_id) fail('Candidate and result IDs differ');
+  if (coordinateCandidate.candidate_id !== coordinateResult.candidate.candidate_id || passport.candidate_id !== coordinateCandidate.candidate_id) fail('Coordinate benchmark candidate, result, and passport IDs differ');
   if (!readme.includes(result.scientific_payload_digest)) fail('README does not publish the exact scientific payload digest');
   if (!readme.includes('Novel physics claims | 0')) fail('README does not explicitly report zero novel physics claims');
   if (result.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Transportation boundary changed');
   if (program.status !== 'OPEN_RESEARCH_QUESTION') fail('Research program is no longer an open question');
-  if (program.current_evidence.known_answer_examples !== 1 || program.current_evidence.implemented_checks !== result.checks.length) fail('Research program baseline counts do not match canonical artifacts');
+  const implementedChecks = result.checks.length + coordinateResult.checks.length;
+  if (program.current_evidence.known_answer_examples !== 2 || program.current_evidence.implemented_checks !== implementedChecks) fail('Research program benchmark counts do not match canonical artifacts');
+  if (coordinateResult.assessment.overall_status !== 'BENCHMARK_VERIFIED' || coordinateResult.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Coordinate benchmark status or transportation boundary changed');
+  if (coordinateCrosscheck.comparison !== 'MATCH' || coordinateCrosscheck.independence.counts_as_external_reproduction !== false) fail('Coordinate cross-check mismatch or independence overclaim');
+  if (passport.scientific_review !== 'REQUESTED' || passport.preregistered_checks.join('|') !== coordinateResult.checks.map((item) => item.check_id).join('|')) fail('Benchmark passport review state or preregistered check order changed');
   if (program.current_evidence.workflow_cases !== benchmark.case_count) fail('Research program workflow count does not match the frozen benchmark');
   if (program.current_evidence.novel_transportation_candidates !== 0 || program.current_evidence.traveler_safety_evaluations !== 0 || program.current_evidence.outside_reproductions !== 0) fail('Research program overstates current evidence');
   if (program.security.public_code_execution !== 'DISABLED' || program.security.agent_authority !== 'PROPOSE_ONLY' || program.security.canonical_promotion !== 'NAMED_HUMAN_ONLY') fail('Research program weakens the public security boundary');

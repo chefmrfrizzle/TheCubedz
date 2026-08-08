@@ -77,7 +77,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"checks: {sum(item['status'] == 'PASS' for item in result['checks'])} passed / {sum(item['status'] == 'FAIL' for item in result['checks'])} failed")
         print(f"digest: {result['scientific_payload_digest']}")
         print(f"transportation: {result['assessment']['transportation_status']}")
-    return 0 if result["assessment"]["overall_status"] == "BASELINE_VERIFIED" else 1
+    return 0 if result["assessment"]["overall_status"] in {"BASELINE_VERIFIED", "BENCHMARK_VERIFIED"} else 1
 
 
 if __name__ == "__main__":
