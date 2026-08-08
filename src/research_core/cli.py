@@ -21,6 +21,7 @@ def _parser() -> argparse.ArgumentParser:
     verify.add_argument("--write", action="store_true", help="write canonical result and reports")
     verify.add_argument("--reproducible", action="store_true", help="exclude wall-clock variability")
     verify.add_argument("--json", action="store_true", help="print the complete JSON result")
+    verify.add_argument("--passport", type=Path, help="explicit benchmark passport used by a passport-bound profile")
     control = subparsers.add_parser("validate-control", help="validate one controlled-autonomy document")
     control.add_argument("kind", choices=sorted(SCHEMAS))
     control.add_argument("document", type=Path)
@@ -66,7 +67,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"digest: {result['result_digest']}")
         return 0 if result["failed"] == 0 else 1
     candidate_path = args.candidate.resolve()
-    candidate, result = load_and_evaluate(candidate_path, reproducible=args.reproducible)
+    passport_path = args.passport.resolve() if args.passport else None
+    candidate, result = load_and_evaluate(candidate_path, reproducible=args.reproducible, passport_path=passport_path)
     if args.write:
         _write(candidate, result)
     if args.json:

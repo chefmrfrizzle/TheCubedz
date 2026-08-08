@@ -78,7 +78,6 @@ def run_crosscheck() -> dict[str, Any]:
     curvature = connection
     vacuum = curvature and cosmological_constant
     independent = {
-        "schema.candidate.v1": True,
         "metric.dimension": square,
         "metric.symmetry": symmetric,
         "metric.determinant": det == -1,
@@ -92,6 +91,7 @@ def run_crosscheck() -> dict[str, Any]:
         "minkowski.vacuum_source": vacuum,
     }
     reference_status = {item["check_id"]: item["status"] for item in reference["checks"]}
+    excluded_reference_checks = sorted(set(reference_status) - set(independent))
     discrepancies = [
         check_id for check_id, passed in independent.items()
         if ("PASS" if passed else "FAIL") != reference_status.get(check_id)
@@ -106,9 +106,17 @@ def run_crosscheck() -> dict[str, Any]:
         "source_candidate_payload_sha256": f"sha256:{reference['candidate']['sha256']}",
         "implementation": {
             "name": "standard-library-leibniz-adjugate-crosscheck",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "shared_research_core_code": False,
             "method": "Leibniz determinant and cofactor-adjugate inverse using fractions.Fraction",
+        },
+        "comparison_scope": {
+            "reference_check_count": len(reference_status),
+            "compared_check_count": len(independent),
+            "compared_reference_checks": list(independent),
+            "excluded_reference_checks": excluded_reference_checks,
+            "schema_conformance_crosschecked": False,
+            "exclusion_reason": "This standard-library arithmetic path does not implement JSON Schema Draft 2020-12; schema.candidate.v1 remains a primary-validator-only check.",
         },
         "independence": {
             "separate_environment": False,
@@ -123,10 +131,11 @@ def run_crosscheck() -> dict[str, Any]:
             "inverse": _plain_matrix(computed_inverse) if computed_inverse else None,
             "checks": {check_id: "PASS" if passed else "FAIL" for check_id, passed in independent.items()},
         },
-        "comparison": "MATCH" if not discrepancies else "MISMATCH",
+        "comparison": "MATCH" if not discrepancies and excluded_reference_checks == ["schema.candidate.v1"] else "MISMATCH",
         "discrepancies": discrepancies,
         "limitations": [
             "This is a separate implementation path created in the same repository and environment.",
+            "It does not implement or claim an independent Draft 2020-12 schema validation.",
             "It is not an outside reproduction and does not increase the public independent-reproduction count.",
             "It checks only the exact submitted Minkowski Cartesian benchmark.",
         ],

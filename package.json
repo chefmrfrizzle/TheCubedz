@@ -13,7 +13,7 @@
     "test:web": "node scripts/test_site.mjs",
     "test:science": "python -m pytest",
     "verify:baseline": "python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible",
-    "verify:coordinate-benchmark": "python scripts/research.py verify candidates/CANDIDATE-000002.json --reproducible",
+    "verify:coordinate-benchmark": "python scripts/research.py verify candidates/CANDIDATE-000002.json --passport benchmarks/BENCHMARK-000002.passport.json --reproducible",
     "verify:benchmark": "python scripts/research.py benchmark",
     "verify:crosscheck": "python scripts/independent_crosscheck.py",
     "verify:coordinate-crosscheck": "python scripts/independent_coordinate_crosscheck.py",
