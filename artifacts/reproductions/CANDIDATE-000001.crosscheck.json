@@ -8,9 +8,31 @@
   "source_candidate_payload_sha256": "sha256:0e9c36562cb650f3d9eb96efb6c9e1daceb8d284a4a8c5b457722d8f9c25e4c8",
   "implementation": {
     "name": "standard-library-leibniz-adjugate-crosscheck",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "shared_research_core_code": false,
     "method": "Leibniz determinant and cofactor-adjugate inverse using fractions.Fraction"
+  },
+  "comparison_scope": {
+    "reference_check_count": 12,
+    "compared_check_count": 11,
+    "compared_reference_checks": [
+      "metric.dimension",
+      "metric.symmetry",
+      "metric.determinant",
+      "metric.inverse",
+      "minkowski.components",
+      "minkowski.signature",
+      "minkowski.cosmological_constant",
+      "minkowski.constant_components",
+      "minkowski.connection",
+      "minkowski.curvature",
+      "minkowski.vacuum_source"
+    ],
+    "excluded_reference_checks": [
+      "schema.candidate.v1"
+    ],
+    "schema_conformance_crosschecked": false,
+    "exclusion_reason": "This standard-library arithmetic path does not implement JSON Schema Draft 2020-12; schema.candidate.v1 remains a primary-validator-only check."
   },
   "independence": {
     "separate_environment": false,
@@ -49,7 +71,6 @@
       ]
     ],
     "checks": {
-      "schema.candidate.v1": "PASS",
       "metric.dimension": "PASS",
       "metric.symmetry": "PASS",
       "metric.determinant": "PASS",
@@ -67,8 +88,9 @@
   "discrepancies": [],
   "limitations": [
     "This is a separate implementation path created in the same repository and environment.",
+    "It does not implement or claim an independent Draft 2020-12 schema validation.",
     "It is not an outside reproduction and does not increase the public independent-reproduction count.",
     "It checks only the exact submitted Minkowski Cartesian benchmark."
   ],
-  "record_digest": "sha256:98de6dfa03b487eb9bc7c5d3ad2ef1be58fb16ccc425701d7bed071301fe9f98"
+  "record_digest": "sha256:6a8fe56626b3212ae7461320d5062880931c6aa45568bf8af63d33f71d43192a"
 }

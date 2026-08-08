@@ -38,13 +38,15 @@ As of **August 8, 2026**, the repository contains:
 | Candidate registry | Two established, non-novel Minkowski benchmarks in a versioned JSON schema |
 | Deterministic science core | Exact rational matrix operations plus Cartesian and constant-linear coordinate profiles |
 | Benchmark results | 26 implemented checks pass across two known-answer examples; 0 fail |
-| Scientific fingerprints | Candidate 000001: `sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b`; Candidate 000002: `sha256:78857db3e9a72756c4a884bbbe90912dc9d772dbd27ae2edee1c53c6455d4046` |
+| Scientific fingerprints | Candidate 000001: `sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b`; Candidate 000002: `sha256:73af7803b5ae10a9f8b1269398a126e6da94072b30a7e12da16f3e8f53e012d2` |
 | Reports | Beginner and technical reports derived from the same result object |
 | Second brain | Append-only event ledger plus a versioned evidence-graph projection |
 | Agent contracts | 9 bounded research roles with explicit permissions and prohibitions |
 | Controlled autonomy | Machine-validated task, capability, run, evidence-bundle, and human-promotion contracts |
 | Synthetic benchmark | 100 frozen workflow cases: 23 accepted, 57 rejected, 5 mismatches preserved, and 15 unresolved |
-| Cross-check | Two separate standard-library implementation paths match all 26 benchmark checks; neither is an outside reproduction |
+| Cross-check | Separate standard-library arithmetic paths match 11/11 and 13/13 comparable checks; Draft 2020-12 schema validation remains primary-only, and neither path is an outside reproduction |
+| Scientific review | Mathematics confirmed; implementation corrections addressed after `CHANGES_REQUIRED`; qualified re-review remains required |
+| Source provenance | Candidate 000002 records source commit `038b8e3a9d7f`; repository checks verify that commit contains the exact candidate, passport, schemas, validator, and matrix implementation |
 | Public website | 8 responsive routes, six-face evidence cube, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
 | Automated validation | Scientific, control-contract, benchmark, cross-check, artifact, static-site, link, base-path, and build-fingerprint checks |
 | Independent reproductions | 0 recorded |

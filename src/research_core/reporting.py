@@ -59,6 +59,13 @@ def technical_report(candidate: dict[str, Any], result: dict[str, Any]) -> str:
     limitations = "\n".join(f"- {item}" for item in result["limitations"])
     warnings = "\n".join(f"- {item}" for item in result["warnings"]) or "- None"
     errors = "\n".join(f"- {item}" for item in result["errors"]) or "- None"
+    passport = result["validator"].get("benchmark_passport")
+    passport_lines = (
+        f"- Benchmark passport: `{passport['passport_id']}@{passport['passport_version']}`\n"
+        f"- Validation-contract digest: `{passport['validation_contract_sha256']}`"
+        if passport else
+        "- Benchmark passport: `not applicable to this profile`"
+    )
     return f"""# {candidate['candidate_id']} — technical report
 
 ## Candidate
@@ -69,6 +76,7 @@ def technical_report(candidate: dict[str, Any], result: dict[str, Any]) -> str:
 - Validation profile: `{candidate['validation_profile']}`
 - Validator: `{result['validator']['name']}@{result['validator']['version']}`
 - Scientific payload: `{result['scientific_payload_digest']}`
+{passport_lines}
 
 ## Conventions
 

@@ -53,7 +53,9 @@ def test_second_benchmark_passport_is_valid_and_matches_preregistered_result():
     validator = Draft202012Validator(schema, format_checker=FormatChecker())
     assert not list(validator.iter_errors(passport))
     result = load(ROOT / "artifacts" / "results" / "CANDIDATE-000002.result.json")
-    assert passport["scientific_review"] == "REQUESTED"
+    assert passport["passport_version"] == "1.0.1"
+    assert passport["scientific_review"] == "CHANGES_REQUIRED"
+    assert passport["review_history"][-1]["response_status"] == "ADDRESSED_AWAITING_REREVIEW"
     assert passport["candidate_id"] == result["candidate"]["candidate_id"]
     assert passport["preregistered_checks"] == [check["check_id"] for check in result["checks"]]
     assert passport["expected_results"]["tolerance"] == "exact rational equality"

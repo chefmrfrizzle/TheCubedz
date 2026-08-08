@@ -66,6 +66,7 @@
     "The current validator recognizes two exact flat-spacetime profiles, including one declared constant linear coordinate map, and is not a general relativity solver.",
     "No traveler-preservation, stability, causality, energy, realizability, or experimental gate has passed for a novel candidate.",
     "The separate implementation in this repository is not an outside reproduction.",
+    "The separate arithmetic paths do not reimplement Draft 2020-12 schema validation; schema conformance remains a primary-validator-only check.",
     "Agent proposals, votes, popularity, and generated explanations are not scientific evidence or canonical approval."
   ],
   "provenance": {

@@ -4,11 +4,14 @@ from pathlib import Path
 from independent.minkowski_crosscheck import determinant, inverse, run_crosscheck
 
 
-def test_separate_crosscheck_matches_all_reference_checks():
+def test_separate_crosscheck_matches_all_comparable_reference_checks():
     result = run_crosscheck()
     assert result["comparison"] == "MATCH"
-    assert len(result["observations"]["checks"]) == 12
+    assert len(result["observations"]["checks"]) == 11
     assert set(result["observations"]["checks"].values()) == {"PASS"}
+    assert "schema.candidate.v1" not in result["observations"]["checks"]
+    assert result["comparison_scope"]["excluded_reference_checks"] == ["schema.candidate.v1"]
+    assert result["comparison_scope"]["schema_conformance_crosschecked"] is False
     assert result["discrepancies"] == []
 
 

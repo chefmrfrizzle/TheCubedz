@@ -77,6 +77,7 @@ async function checkScientificConsistency() {
   const coordinateCandidate = JSON.parse(await readFile(path.join(root, 'candidates/CANDIDATE-000002.json'), 'utf8'));
   const coordinateResult = JSON.parse(await readFile(path.join(root, 'artifacts/results/CANDIDATE-000002.result.json'), 'utf8'));
   const coordinateCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json'), 'utf8'));
+  const baselineCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000001.crosscheck.json'), 'utf8'));
   const passport = JSON.parse(await readFile(path.join(root, 'benchmarks/BENCHMARK-000002.passport.json'), 'utf8'));
   const graph = JSON.parse(await readFile(path.join(root, 'data/knowledge-graph.json'), 'utf8'));
   const benchmark = JSON.parse(await readFile(path.join(root, 'artifacts/benchmarks/synthetic-suite-v1.result.json'), 'utf8'));
@@ -92,7 +93,27 @@ async function checkScientificConsistency() {
   if (program.current_evidence.known_answer_examples !== 2 || program.current_evidence.implemented_checks !== implementedChecks) fail('Research program benchmark counts do not match canonical artifacts');
   if (coordinateResult.assessment.overall_status !== 'BENCHMARK_VERIFIED' || coordinateResult.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Coordinate benchmark status or transportation boundary changed');
   if (coordinateCrosscheck.comparison !== 'MATCH' || coordinateCrosscheck.independence.counts_as_external_reproduction !== false) fail('Coordinate cross-check mismatch or independence overclaim');
-  if (passport.scientific_review !== 'REQUESTED' || passport.preregistered_checks.join('|') !== coordinateResult.checks.map((item) => item.check_id).join('|')) fail('Benchmark passport review state or preregistered check order changed');
+  if (passport.scientific_review !== 'CHANGES_REQUIRED' || passport.review_history.at(-1)?.response_status !== 'ADDRESSED_AWAITING_REREVIEW' || passport.preregistered_checks.join('|') !== coordinateResult.checks.map((item) => item.check_id).join('|')) fail('Benchmark passport review state or preregistered check order changed');
+  if (coordinateCrosscheck.comparison_scope.schema_conformance_crosschecked !== false || coordinateCrosscheck.comparison_scope.excluded_reference_checks.join('|') !== 'schema.candidate.v1') fail('Coordinate cross-check overstates schema validation coverage');
+  if (baselineCrosscheck.comparison_scope.schema_conformance_crosschecked !== false || baselineCrosscheck.comparison_scope.excluded_reference_checks.join('|') !== 'schema.candidate.v1') fail('Baseline cross-check overstates schema validation coverage');
+  const sourceCommit = coordinateResult.run.source_commit;
+  const sourcePaths = [
+    'candidates/CANDIDATE-000002.json',
+    'benchmarks/BENCHMARK-000002.passport.json',
+    'src/core/candidate.schema.json',
+    'src/core/benchmark-passport.schema.json',
+    'src/research_core/pipeline.py',
+    'src/research_core/matrix.py',
+    'src/research_core/schema_validation.py',
+  ];
+  if (!/^[0-9a-f]{40}$/.test(sourceCommit)) fail('Coordinate result does not record a concrete source commit');
+  for (const sourcePath of sourcePaths) {
+    const existsAtCommit = spawnSync('git', ['cat-file', '-e', `${sourceCommit}:${sourcePath}`], { cwd: root });
+    if (existsAtCommit.status !== 0) fail(`Coordinate result source commit does not contain ${sourcePath}`);
+    const unchangedSinceCommit = spawnSync('git', ['diff', '--quiet', sourceCommit, '--', sourcePath], { cwd: root });
+    if (unchangedSinceCommit.status !== 0) fail(`Coordinate result source commit does not contain the exact current ${sourcePath}`);
+  }
+  note(`${sourcePaths.length} coordinate-result source paths verified at ${sourceCommit.slice(0, 12)}`);
   if (program.current_evidence.workflow_cases !== benchmark.case_count) fail('Research program workflow count does not match the frozen benchmark');
   if (program.current_evidence.novel_transportation_candidates !== 0 || program.current_evidence.traveler_safety_evaluations !== 0 || program.current_evidence.outside_reproductions !== 0) fail('Research program overstates current evidence');
   if (program.security.public_code_execution !== 'DISABLED' || program.security.agent_authority !== 'PROPOSE_ONLY' || program.security.canonical_promotion !== 'NAMED_HUMAN_ONLY') fail('Research program weakens the public security boundary');

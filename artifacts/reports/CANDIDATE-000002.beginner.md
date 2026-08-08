@@ -27,6 +27,6 @@ A trustworthy geometry checker must distinguish a real physical difference from 
 
 ## Reproducibility fingerprint
 
-`sha256:78857db3e9a72756c4a884bbbe90912dc9d772dbd27ae2edee1c53c6455d4046`
+`sha256:73af7803b5ae10a9f8b1269398a126e6da94072b30a7e12da16f3e8f53e012d2`
 
 This fingerprint covers the candidate identity, validator identity, checks, assessment, warnings, errors, and limitations. Runtime metadata such as the clock time is not allowed to change that scientific payload.

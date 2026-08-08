@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "result_id": "RESULT-CANDIDATE-000002-78857DB3E9A7",
+  "result_id": "RESULT-CANDIDATE-000002-73AF7803B5AE",
   "candidate": {
     "candidate_id": "CANDIDATE-000002",
     "version": "1.0.0",
@@ -8,8 +8,13 @@
   },
   "validator": {
     "name": "deterministic-baseline-validator",
-    "version": "0.2.0",
-    "profile": "benchmark.minkowski_linear_rescaled_v1"
+    "version": "0.2.1",
+    "profile": "benchmark.minkowski_linear_rescaled_v1",
+    "benchmark_passport": {
+      "passport_id": "PASSPORT-000002",
+      "passport_version": "1.0.1",
+      "validation_contract_sha256": "sha256:e79125b196019405e244106ecb5000087f37b18910a36c1fcd389bd45958ae76"
+    }
   },
   "checks": [
     {
@@ -46,19 +51,19 @@
       "check_id": "metric.determinant",
       "category": "mathematics",
       "status": "PASS",
-      "summary": "Metric is non-degenerate.",
-      "method": "Exact fraction-preserving Gaussian elimination",
-      "scope": "Submitted constant component matrix.",
+      "summary": "Metric determinant exactly matches the benchmark passport.",
+      "method": "Exact fraction-preserving Gaussian elimination and passport comparison",
+      "scope": "Submitted metric and versioned benchmark passport only.",
       "observed": -14400,
-      "expected": "non-zero"
+      "expected": -14400
     },
     {
       "check_id": "metric.inverse",
       "category": "mathematics",
       "status": "PASS",
-      "summary": "An exact inverse exists for the submitted matrix.",
-      "method": "Gauss-Jordan elimination using rational arithmetic",
-      "scope": "Submitted constant component matrix.",
+      "summary": "Metric inverse exactly matches the benchmark passport.",
+      "method": "Exact Gauss-Jordan inversion and passport comparison",
+      "scope": "Submitted metric and versioned benchmark passport only.",
       "observed": [
         [
           "-1/4",
@@ -85,7 +90,32 @@
           "1/25"
         ]
       ],
-      "expected": "an exact inverse matrix"
+      "expected": [
+        [
+          "-1/4",
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          "1/9",
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          "1/16",
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          "1/25"
+        ]
+      ]
     },
     {
       "check_id": "coordinate_map.coordinates",
@@ -106,7 +136,8 @@
           "x",
           "y",
           "z"
-        ]
+        ],
+        "relation": "g_submitted = J^T g_reference J"
       },
       "expected": {
         "from": [
@@ -120,78 +151,191 @@
           "x",
           "y",
           "z"
-        ]
+        ],
+        "relation": "g_submitted = J^T g_reference J"
       }
     },
     {
       "check_id": "coordinate_map.jacobian",
       "category": "coordinate equivalence",
       "status": "PASS",
-      "summary": "The declared linear coordinate map is invertible.",
-      "method": "Exact Jacobian determinant using rational arithmetic",
-      "scope": "Constant four-dimensional linear maps only.",
-      "observed": 120,
-      "expected": "non-zero"
+      "summary": "The complete Jacobian exactly matches the versioned benchmark passport and is invertible.",
+      "method": "Exact component and determinant comparison against the benchmark passport",
+      "scope": "The one preregistered constant four-dimensional linear map only.",
+      "observed": {
+        "jacobian": [
+          [
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            5
+          ]
+        ],
+        "determinant": 120
+      },
+      "expected": {
+        "jacobian": [
+          [
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            5
+          ]
+        ],
+        "determinant": 120
+      }
     },
     {
       "check_id": "coordinate_map.pullback",
       "category": "coordinate equivalence",
       "status": "PASS",
-      "summary": "The submitted metric exactly equals J^T eta J.",
-      "method": "Exact matrix multiplication using rational arithmetic",
-      "scope": "One declared constant linear map to the canonical Minkowski chart; no arbitrary transformation search.",
-      "observed": [
-        [
-          -4,
-          0,
-          0,
-          0
+      "summary": "The submitted metric and exact pullback both match the benchmark passport.",
+      "method": "Exact matrix multiplication and component comparison against the benchmark passport",
+      "scope": "One preregistered constant linear map to the canonical Minkowski chart; no arbitrary transformation search.",
+      "observed": {
+        "submitted": [
+          [
+            -4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            9,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            25
+          ]
         ],
-        [
-          0,
-          9,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          16,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          25
+        "pullback": [
+          [
+            -4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            9,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            25
+          ]
         ]
-      ],
-      "expected": [
-        [
-          -4,
-          0,
-          0,
-          0
+      },
+      "expected": {
+        "submitted": [
+          [
+            -4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            9,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            25
+          ]
         ],
-        [
-          0,
-          9,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          16,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          25
+        "pullback": [
+          [
+            -4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            9,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            25
+          ]
         ]
-      ]
+      }
     },
     {
       "check_id": "minkowski.signature",
@@ -279,9 +423,10 @@
   ],
   "run": {
     "recorded_at": "2026-08-08T00:00:00Z",
-    "command": "research-core verify candidates/CANDIDATE-000002.json",
+    "command": "research-core verify candidates/CANDIDATE-000002.json --passport benchmarks/BENCHMARK-000002.passport.json",
     "python": "3.12.13",
-    "source_commit": "f92c62492064cd280fae02860b11797ec822ce7a"
+    "source_commit": "038b8e3a9d7f46a1f3091bcc76c4df91c2375112",
+    "benchmark_passport_path": "benchmarks/BENCHMARK-000002.passport.json"
   },
-  "scientific_payload_digest": "sha256:78857db3e9a72756c4a884bbbe90912dc9d772dbd27ae2edee1c53c6455d4046"
+  "scientific_payload_digest": "sha256:73af7803b5ae10a9f8b1269398a126e6da94072b30a7e12da16f3e8f53e012d2"
 }

@@ -327,8 +327,13 @@ function initializeBenchmarkLadder() {
   setText('[data-coordinate-status]', coordinateResult.assessment.overall_status === 'BENCHMARK_VERIFIED' ? 'KNOWN ANSWER PASSED' : coordinateResult.assessment.overall_status.replaceAll('_', ' '), section);
   setText('[data-coordinate-pass-count]', passed, section);
   setText('[data-coordinate-fail-count]', failed, section);
-  setText('[data-coordinate-crosscheck]', `${coordinateCrosscheck.comparison === 'MATCH' ? 'MATCHED' : coordinateCrosscheck.comparison} ${Object.keys(coordinateCrosscheck.observations.checks).length}/${coordinateResult.checks.length} (same project)`, section);
-  setText('[data-coordinate-review]', coordinatePassport.scientific_review === 'REQUESTED' ? 'REVIEW REQUESTED' : coordinatePassport.scientific_review.replaceAll('_', ' '), section);
+  const comparedChecks = coordinateCrosscheck.comparison_scope?.compared_check_count || Object.keys(coordinateCrosscheck.observations.checks).length;
+  setText('[data-coordinate-crosscheck]', `${coordinateCrosscheck.comparison === 'MATCH' ? 'MATCHED' : coordinateCrosscheck.comparison} ${comparedChecks}/${comparedChecks} comparable checks; schema excluded`, section);
+  const latestReview = coordinatePassport.review_history?.at(-1);
+  const reviewLabel = latestReview?.response_status === 'ADDRESSED_AWAITING_REREVIEW'
+    ? 'CHANGES ADDRESSED — RE-REVIEW NEEDED'
+    : coordinatePassport.scientific_review.replaceAll('_', ' ');
+  setText('[data-coordinate-review]', reviewLabel, section);
 }
 
 function evidenceCubeFaces() {
@@ -372,9 +377,9 @@ function evidenceCubeFaces() {
     {
       id: 'reproduction', label: 'Checked twice', status: 'UNRESOLVED', statusLabel: 'NOT INDEPENDENT',
       question: 'Did another person independently get the same result?',
-      answer: `Not yet. A second code path inside this project ${crosscheck.comparison === 'MATCH' ? 'matched all 12 checks' : 'did not fully match'}, but that is not outside confirmation.`,
-      evidence: `Two implementations in this repository compared ${Object.keys(crosscheck.observations.checks).length} named checks.`,
-      limitation: 'A real independent reproduction needs another person, a separate setup, and their own recorded comparison.',
+      answer: `Not yet. A second arithmetic code path inside this project ${crosscheck.comparison === 'MATCH' ? 'matched all 11 comparable checks' : 'did not fully match'}, but it does not reimplement schema validation and is not outside confirmation.`,
+      evidence: `Two implementations in this repository compared ${Object.keys(crosscheck.observations.checks).length} named arithmetic and benchmark checks.`,
+      limitation: 'Full schema validation remains primary-only. A real independent reproduction also needs another person, a separate setup, and their own recorded comparison.',
       source: '/data/crosscheck.json', sourceLabel: 'See how the second check was recorded',
     },
     {
