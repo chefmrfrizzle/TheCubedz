@@ -41,7 +41,7 @@ async function verifyRequiredFiles() {
   const required = [
     'index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html',
     '404.html', 'assets/styles.css', 'assets/site.js', 'assets/favicon.svg', 'assets/og-card.png',
-    'data/candidate.json', 'data/result.json', 'data/candidate-000002.json', 'data/result-000002.json', 'data/benchmark-000002-passport.json',
+    'data/candidate.json', 'data/result.json', 'data/candidate-000002.json', 'data/result-000002.json', 'data/benchmark-000002-passport.json', 'data/review-000002.json',
     'data/synthetic-suite.json', 'data/synthetic-suite-result.json', 'data/crosscheck.json', 'data/crosscheck-000002.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/research-program.json', 'data/project-status.json', 'data/site-config.json',
     'site.webmanifest', 'robots.txt', 'llms.txt', 'build-manifest.json', 'README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE',
   ];
@@ -87,8 +87,8 @@ async function verifyHtml(basePath = '') {
 }
 
 async function verifyArtifacts() {
-  const [candidate, result, coordinateCandidate, coordinateResult, passport, benchmark, crosscheck, coordinateCrosscheck, status, graph, agents, roadmap, program] = await Promise.all([
-    json('data/candidate.json'), json('data/result.json'), json('data/candidate-000002.json'), json('data/result-000002.json'), json('data/benchmark-000002-passport.json'),
+  const [candidate, result, coordinateCandidate, coordinateResult, passport, review, benchmark, crosscheck, coordinateCrosscheck, status, graph, agents, roadmap, program] = await Promise.all([
+    json('data/candidate.json'), json('data/result.json'), json('data/candidate-000002.json'), json('data/result-000002.json'), json('data/benchmark-000002-passport.json'), json('data/review-000002.json'),
     json('data/synthetic-suite-result.json'), json('data/crosscheck.json'), json('data/crosscheck-000002.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'), json('data/research-program.json'),
   ]);
   const passed = result.checks.filter((check) => check.status === 'PASS').length;
@@ -111,7 +111,9 @@ async function verifyArtifacts() {
   if (coordinateCrosscheck.comparison !== 'MATCH') fail('Coordinate benchmark separate implementation does not match');
   if (crosscheck.independence.counts_as_external_reproduction !== false) fail('Implementation cross-check is overstated as external reproduction');
   if (program.research_question !== 'Can we shorten the distance to Mars—without changing the traveler?') fail('Public research question differs from the canonical program contract');
-  if (passport.scientific_review !== 'CHANGES_REQUIRED' || passport.review_history.at(-1)?.response_status !== 'ADDRESSED_AWAITING_REREVIEW') fail('Coordinate benchmark review state must preserve changes-required and await re-review');
+  if (passport.scientific_review !== 'CHANGES_REQUIRED' || passport.review_history.at(-1)?.response_status !== 'ADDRESSED_AWAITING_REREVIEW') fail('Published passport no longer matches its frozen approved source');
+  if (review.outcome !== 'APPROVED' || review.approval_scope !== 'REPOSITORY_IMPLEMENTATION_AND_ARTIFACTS' || review.boundaries.external_scientific_reproduction !== false || review.remaining_objections.length !== 0) fail('Published implementation approval is missing, unresolved, or overstated');
+  if (status.coordinateBenchmarkReview !== review.outcome || status.coordinateBenchmarkReviewScope !== review.approval_scope) fail('Project status does not expose the current implementation review record');
   if (program.current_evidence.implemented_checks !== passed + coordinatePassed || program.current_evidence.known_answer_examples !== 2 || program.current_evidence.workflow_cases !== benchmark.case_count) fail('Program evidence counts do not match public artifacts');
   if (program.current_evidence.novel_transportation_candidates !== 0 || program.current_evidence.traveler_safety_evaluations !== 0 || program.current_evidence.outside_reproductions !== 0) fail('Program contract overstates current evidence');
   const labHtml = await text('lab/index.html');
@@ -119,6 +121,8 @@ async function verifyArtifacts() {
   if (!labHtml.includes('Each side asks one plain question')) fail('Answer cube does not explain how to read it');
   if (!labHtml.includes('data-benchmark-ladder') || !labHtml.includes('Same space, different numbers')) fail('Laboratory does not expose the coordinate benchmark ladder');
   if (!labHtml.includes('full schema validation remains primary-only')) fail('Laboratory overstates the independent arithmetic comparison');
+  if (!labHtml.includes('Implementation approval is not an outside scientific reproduction')) fail('Laboratory does not state the approval boundary');
+  if (!labHtml.includes('/data/review-000002.json')) fail('Laboratory does not link the approval record');
   const homeHtml = await text('index.html');
   if (!homeHtml.includes('Can we shorten the distance to Mars')) fail('Homepage does not state the motivating research question');
   if (!homeHtml.includes('No shortcut, device, or route to Mars has been found')) fail('Homepage does not state the current scientific boundary');

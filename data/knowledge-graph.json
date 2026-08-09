@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "snapshot_id": "GRAPH-SNAPSHOT-000002",
+  "snapshot_id": "GRAPH-SNAPSHOT-000003",
   "generated_from": [
     "data/ledger/events.jsonl",
     "candidates/CANDIDATE-000001.json",
@@ -9,6 +9,7 @@
     "artifacts/results/CANDIDATE-000002.result.json",
     "artifacts/reproductions/CANDIDATE-000001.crosscheck.json",
     "artifacts/reproductions/CANDIDATE-000002.crosscheck.json",
+    "artifacts/reviews/REVIEW-000002.json",
     "benchmarks/BENCHMARK-000002.passport.json",
     "docs/SCIENTIFIC_CLAIMS_POLICY.md"
   ],
@@ -26,8 +27,9 @@
     {"id": "CANDIDATE-000002", "type": "Candidate", "label": "Rescaled-coordinate Minkowski benchmark", "status": "DRAFT", "canonical": true, "summary": "The same flat spacetime expressed through one declared constant linear coordinate map.", "href": "/lab/#benchmark-ladder"},
     {"id": "RUN-000002", "type": "Run", "label": "Superseded coordinate-equivalence run", "status": "SUPERSEDED_PROVENANCE_CORRECTED", "canonical": true, "summary": "The original mathematics passed, but its source commit predated the implementation and was corrected by Run 000003.", "href": "/lab/#benchmark-ladder"},
     {"id": "RUN-000003", "type": "Run", "label": "Passport-bound coordinate-equivalence run", "status": "BENCHMARK_VERIFIED", "canonical": true, "summary": "Fourteen checks passed against passport 1.0.1 using exact arithmetic from source commit 038b8e3a9d7f.", "href": "/lab/#benchmark-ladder"},
-    {"id": "CORRECTION-000001", "type": "Correction", "label": "Benchmark 000002 review corrections", "status": "ADDRESSED_AWAITING_REREVIEW", "canonical": true, "summary": "Exact passport binding, honest secondary comparison scope, and source-commit provenance were corrected after Review 000001.", "href": "/lab/#benchmark-ladder"},
-    {"id": "CLAIM-000002", "type": "Claim", "label": "Two submitted component grids describe the same scoped flat geometry", "status": "COMPUTATION_SUPPORTED_REVIEW_CHANGES_ADDRESSED", "canonical": true, "summary": "The mathematics is supported for the passport-bound map; qualified re-review and outside reproduction remain open.", "href": "/lab/#benchmark-ladder"}
+    {"id": "CORRECTION-000001", "type": "Correction", "label": "Benchmark 000002 review corrections", "status": "CLOSED_APPROVED", "canonical": true, "summary": "Exact passport binding, honest secondary comparison scope, and source-commit provenance were corrected after Review 000001 and approved by Review 000002.", "href": "/lab/#benchmark-ladder"},
+    {"id": "CLAIM-000002", "type": "Claim", "label": "Two submitted component grids describe the same scoped flat geometry", "status": "COMPUTATION_SUPPORTED_IMPLEMENTATION_REVIEW_APPROVED", "canonical": true, "summary": "The passport-bound implementation and artifacts passed re-review; outside scientific reproduction remains open.", "href": "/lab/#benchmark-ladder"},
+    {"id": "REVIEW-000002", "type": "Review", "label": "Coordinate benchmark implementation re-review", "status": "APPROVED", "canonical": true, "summary": "Seven requested implementation and provenance corrections were independently verified at PR 6 head 4b2e24d; no remaining objections were reported.", "href": "/data/review-000002.json"}
   ],
   "edges": [
     {"id": "EDGE-000001", "source": "RQ-000001", "target": "HYPOTHESIS-000001", "relationship": "FRAMES", "canonical": true, "summary": "The research question is tested through a methodological hypothesis."},
@@ -46,6 +48,9 @@
     {"id": "EDGE-000014", "source": "RUN-000003", "target": "CANDIDATE-000002", "relationship": "EVALUATES", "canonical": true, "summary": "The corrected run evaluates Candidate 000002 against passport 1.0.1."},
     {"id": "EDGE-000015", "source": "RUN-000003", "target": "VALIDATOR-000001", "relationship": "USES", "canonical": true, "summary": "The corrected run uses validator 0.2.1 from its recorded source commit."},
     {"id": "EDGE-000016", "source": "CLAIM-000002", "target": "RUN-000003", "relationship": "SUPPORTED_BY", "canonical": true, "summary": "The scoped coordinate-equivalence claim is traceable to the passport-bound corrected run."},
-    {"id": "EDGE-000017", "source": "CORRECTION-000001", "target": "RUN-000003", "relationship": "PRODUCED", "canonical": true, "summary": "Addressing Review 000001 produced the corrected canonical run."}
+    {"id": "EDGE-000017", "source": "CORRECTION-000001", "target": "RUN-000003", "relationship": "PRODUCED", "canonical": true, "summary": "Addressing Review 000001 produced the corrected canonical run."},
+    {"id": "EDGE-000018", "source": "REVIEW-000002", "target": "CORRECTION-000001", "relationship": "VERIFIES", "canonical": true, "summary": "The re-review verified every requested implementation and provenance correction."},
+    {"id": "EDGE-000019", "source": "REVIEW-000002", "target": "RUN-000003", "relationship": "APPROVES_IMPLEMENTATION_OF", "canonical": true, "summary": "The approval covers the passport-bound implementation and artifacts represented by Run 000003."},
+    {"id": "EDGE-000020", "source": "CLAIM-000002", "target": "REVIEW-000002", "relationship": "IMPLEMENTATION_REVIEWED_BY", "canonical": true, "summary": "The scoped computational claim is linked to its approved implementation re-review without claiming outside reproduction."}
   ]
 }

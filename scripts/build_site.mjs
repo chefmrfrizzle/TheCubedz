@@ -166,7 +166,7 @@ async function build() {
     contactUrl: process.env.PUBLIC_CONTACT_URL || rawConfig.contactUrl || '',
   };
   const basePath = normalizeBase(process.env.PUBLIC_BASE_PATH || '');
-  const [candidate, result, coordinateCandidate, coordinateResult, benchmark, crosscheck, coordinateCrosscheck, passport, graph, agents, roadmap, program] = await Promise.all([
+  const [candidate, result, coordinateCandidate, coordinateResult, benchmark, crosscheck, coordinateCrosscheck, passport, review, graph, agents, roadmap, program] = await Promise.all([
     readJson('candidates/CANDIDATE-000001.json'),
     readJson('artifacts/results/CANDIDATE-000001.result.json'),
     readJson('candidates/CANDIDATE-000002.json'),
@@ -175,6 +175,7 @@ async function build() {
     readJson('artifacts/reproductions/CANDIDATE-000001.crosscheck.json'),
     readJson('artifacts/reproductions/CANDIDATE-000002.crosscheck.json'),
     readJson('benchmarks/BENCHMARK-000002.passport.json'),
+    readJson('artifacts/reviews/REVIEW-000002.json'),
     readJson('data/knowledge-graph.json'),
     readJson('data/agents.json'),
     readJson('data/roadmap.json'),
@@ -201,6 +202,7 @@ async function build() {
   await copyIfExists('artifacts/reproductions/CANDIDATE-000001.crosscheck.json', 'data/crosscheck.json');
   await copyIfExists('artifacts/reproductions/CANDIDATE-000002.crosscheck.json', 'data/crosscheck-000002.json');
   await copyIfExists('benchmarks/BENCHMARK-000002.passport.json', 'data/benchmark-000002-passport.json');
+  await copyIfExists('artifacts/reviews/REVIEW-000002.json', 'data/review-000002.json');
   await copyIfExists('artifacts/reports/CANDIDATE-000001.beginner.md', 'data/report-beginner.md');
   await copyIfExists('artifacts/reports/CANDIDATE-000001.technical.md', 'data/report-technical.md');
   await copyIfExists('artifacts/reports/CANDIDATE-000002.beginner.md', 'data/report-000002-beginner.md');
@@ -241,7 +243,8 @@ async function build() {
     coordinateBenchmarkId: coordinateCandidate.candidate_id,
     coordinateBenchmarkStatus: coordinateResult.assessment.overall_status,
     coordinateBenchmarkDigest: coordinateResult.scientific_payload_digest,
-    coordinateBenchmarkReview: passport.scientific_review,
+    coordinateBenchmarkReview: review.outcome,
+    coordinateBenchmarkReviewScope: review.approval_scope,
     generatedAt: result.run.recorded_at,
   };
   await writeFile(path.join(distDir, 'data', 'project-status.json'), `${JSON.stringify(status, null, 2)}\n`, 'utf8');
@@ -261,7 +264,7 @@ async function build() {
   await writeFile(path.join(distDir, 'site.webmanifest'), `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
   await writeFile(path.join(distDir, 'robots.txt'), `User-agent: *\nAllow: /\n${config.siteUrl ? `Sitemap: ${config.siteUrl.replace(/\/$/, '')}${basePath}/sitemap.xml\n` : ''}`, 'utf8');
 
-  const llms = `# ${config.title}\n\n> ${config.description}\n\n## Current status\n\n- Public pre-alpha.\n- Candidates 000001 and 000002 are established Minkowski calibration benchmarks.\n- ${result.checks.length + coordinateResult.checks.length} scoped checks are implemented and currently pass.\n- Primary baseline digest: ${result.scientific_payload_digest}\n- Coordinate benchmark digest: ${coordinateResult.scientific_payload_digest}\n- Transportation status: ${result.assessment.transportation_status}.\n- No wormhole, warp device, or transportation shortcut has been demonstrated.\n\n## Core documents\n\n- ${joinUrl(basePath, '/README.md')}\n- ${joinUrl(basePath, '/CONTRIBUTING.md')}\n- ${joinUrl(basePath, '/method/')}\n- ${joinUrl(basePath, '/lab/')}\n- ${joinUrl(basePath, '/graph/')}\n\n## Machine-readable artifacts\n\n- ${joinUrl(basePath, '/data/candidate.json')}\n- ${joinUrl(basePath, '/data/result.json')}\n- ${joinUrl(basePath, '/data/candidate-000002.json')}\n- ${joinUrl(basePath, '/data/result-000002.json')}\n- ${joinUrl(basePath, '/data/benchmark-000002-passport.json')}\n- ${joinUrl(basePath, '/data/knowledge-graph.json')}\n- ${joinUrl(basePath, '/data/agents.json')}\n`;
+  const llms = `# ${config.title}\n\n> ${config.description}\n\n## Current status\n\n- Public pre-alpha.\n- Candidates 000001 and 000002 are established Minkowski calibration benchmarks.\n- ${result.checks.length + coordinateResult.checks.length} scoped checks are implemented and currently pass.\n- Candidate 000002 implementation re-review: ${review.outcome}.\n- External scientific reproductions: 0.\n- Primary baseline digest: ${result.scientific_payload_digest}\n- Coordinate benchmark digest: ${coordinateResult.scientific_payload_digest}\n- Transportation status: ${result.assessment.transportation_status}.\n- No wormhole, warp device, or transportation shortcut has been demonstrated.\n\n## Core documents\n\n- ${joinUrl(basePath, '/README.md')}\n- ${joinUrl(basePath, '/CONTRIBUTING.md')}\n- ${joinUrl(basePath, '/method/')}\n- ${joinUrl(basePath, '/lab/')}\n- ${joinUrl(basePath, '/graph/')}\n\n## Machine-readable artifacts\n\n- ${joinUrl(basePath, '/data/candidate.json')}\n- ${joinUrl(basePath, '/data/result.json')}\n- ${joinUrl(basePath, '/data/candidate-000002.json')}\n- ${joinUrl(basePath, '/data/result-000002.json')}\n- ${joinUrl(basePath, '/data/benchmark-000002-passport.json')}\n- ${joinUrl(basePath, '/data/review-000002.json')}\n- ${joinUrl(basePath, '/data/knowledge-graph.json')}\n- ${joinUrl(basePath, '/data/agents.json')}\n`;
   await writeFile(path.join(distDir, 'llms.txt'), llms, 'utf8');
 
   const notFoundPage = {

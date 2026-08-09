@@ -9,7 +9,7 @@
     "safety": "Keep local matter intact and forces survivable.",
     "physics": "Satisfy the equations, source requirements, energy limits, stability, and cause and effect.",
     "proof": "Let independent teams recover the same result.",
-    "current_position": "Two flat-spacetime calibration tests work; no travel candidate has been evaluated."
+    "current_position": "Two flat-spacetime calibration tests work, and Candidate 000002's implementation re-review is approved; no travel candidate has been evaluated."
   },
   "optimization_targets": ["EFFECTIVE_PATH_LENGTH", "PROPER_TRAVEL_TIME", "EXTERNAL_ELAPSED_TIME"],
   "mechanism_scope": {
@@ -30,7 +30,7 @@
     ]
   },
   "success_gates": [
-    {"id": "GATE-01", "question": "Can the system recover a known flat-spacetime answer?", "status": "PASS", "evidence": ["artifacts/results/CANDIDATE-000001.result.json", "artifacts/reproductions/CANDIDATE-000001.crosscheck.json", "benchmarks/BENCHMARK-000002.passport.json", "artifacts/results/CANDIDATE-000002.result.json", "artifacts/reproductions/CANDIDATE-000002.crosscheck.json"], "downgrade_condition": "Downgrade if either frozen candidate, validator result, or separate implementation no longer reproduces its published result."},
+    {"id": "GATE-01", "question": "Can the system recover a known flat-spacetime answer?", "status": "PASS", "evidence": ["artifacts/results/CANDIDATE-000001.result.json", "artifacts/reproductions/CANDIDATE-000001.crosscheck.json", "benchmarks/BENCHMARK-000002.passport.json", "artifacts/results/CANDIDATE-000002.result.json", "artifacts/reproductions/CANDIDATE-000002.crosscheck.json", "artifacts/reviews/REVIEW-000002.json"], "downgrade_condition": "Downgrade if either frozen candidate, validator result, or separate implementation no longer reproduces its published result."},
     {"id": "GATE-02", "question": "Can the system evaluate a nontrivial spacetime candidate with a declared source?", "status": "NOT_IMPLEMENTED", "evidence": [], "downgrade_condition": "Remain not implemented until a reviewed general or profile-specific solver emits a versioned result."},
     {"id": "GATE-03", "question": "Does the candidate reduce a declared effective path length or travel time?", "status": "NOT_EVALUATED", "evidence": [], "downgrade_condition": "Remain not evaluated until the objective, endpoints, trajectory, observers, and comparison baseline are explicit."},
     {"id": "GATE-04", "question": "Does the required matter or field source satisfy the declared physical limits?", "status": "NOT_IMPLEMENTED", "evidence": [], "downgrade_condition": "Remain not implemented until source reconstruction, conservation, and energy-condition checks exist."},
@@ -66,6 +66,7 @@
     "The current validator recognizes two exact flat-spacetime profiles, including one declared constant linear coordinate map, and is not a general relativity solver.",
     "No traveler-preservation, stability, causality, energy, realizability, or experimental gate has passed for a novel candidate.",
     "The separate implementation in this repository is not an outside reproduction.",
+    "The approved implementation re-review is not an outside scientific reproduction.",
     "The separate arithmetic paths do not reimplement Draft 2020-12 schema validation; schema conformance remains a primary-validator-only check.",
     "Agent proposals, votes, popularity, and generated explanations are not scientific evidence or canonical approval."
   ],

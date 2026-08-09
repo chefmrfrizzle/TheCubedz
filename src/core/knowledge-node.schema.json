@@ -7,7 +7,7 @@
   "required": ["id", "type", "label", "status", "canonical", "summary"],
   "properties": {
     "id": {"type": "string"},
-    "type": {"enum": ["ResearchQuestion", "Hypothesis", "Challenge", "CandidateFamily", "Candidate", "Validator", "Run", "Claim", "ReproductionQueue", "Reproduction", "SearchPolicy", "Source", "Correction"]},
+    "type": {"enum": ["ResearchQuestion", "Hypothesis", "Challenge", "CandidateFamily", "Candidate", "Validator", "Run", "Claim", "ReproductionQueue", "Reproduction", "SearchPolicy", "Source", "Correction", "Review"]},
     "label": {"type": "string"},
     "status": {"type": "string"},
     "canonical": {"type": "boolean"},

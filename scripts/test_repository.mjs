@@ -30,7 +30,7 @@ async function checkRequiredFiles() {
     'README.md', 'CONTRIBUTING.md', 'GOVERNANCE.md', 'SECURITY.md', 'CODE_OF_CONDUCT.md', 'LICENSE', 'NOTICE', 'CHANGELOG.md', 'SUPPORT.md', 'CITATION.cff',
     'docs/SCIENTIFIC_CLAIMS_POLICY.md', 'docs/THREAT_MODEL.md', 'docs/LAUNCH.md', 'docs/SECOND_BRAIN.md', 'docs/AGENT_OPERATING_SYSTEM.md', 'docs/SCALE_ARCHITECTURE.md',
     'candidates/CANDIDATE-000001.json', 'artifacts/results/CANDIDATE-000001.result.json', 'candidates/CANDIDATE-000002.json', 'artifacts/results/CANDIDATE-000002.result.json',
-    'benchmarks/BENCHMARK-000002.passport.json', 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json', 'src/core/benchmark-passport.schema.json', 'data/ledger/events.jsonl', 'data/knowledge-graph.json',
+    'benchmarks/BENCHMARK-000002.passport.json', 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json', 'artifacts/reviews/REVIEW-000002.json', 'src/core/benchmark-passport.schema.json', 'src/core/review-record.schema.json', 'data/ledger/events.jsonl', 'data/knowledge-graph.json',
     'data/research-program.json', 'src/core/research-program.schema.json', 'prompts/MARS_RESEARCH_PROGRAM.md', '.github/ISSUE_TEMPLATE/research-question.yml',
     '.github/workflows/ci.yml', '.github/workflows/pages.yml', '.github/workflows/codeql.yml', '.github/dependabot.yml',
   ];
@@ -79,6 +79,7 @@ async function checkScientificConsistency() {
   const coordinateCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json'), 'utf8'));
   const baselineCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000001.crosscheck.json'), 'utf8'));
   const passport = JSON.parse(await readFile(path.join(root, 'benchmarks/BENCHMARK-000002.passport.json'), 'utf8'));
+  const review = JSON.parse(await readFile(path.join(root, 'artifacts/reviews/REVIEW-000002.json'), 'utf8'));
   const graph = JSON.parse(await readFile(path.join(root, 'data/knowledge-graph.json'), 'utf8'));
   const benchmark = JSON.parse(await readFile(path.join(root, 'artifacts/benchmarks/synthetic-suite-v1.result.json'), 'utf8'));
   const program = JSON.parse(await readFile(path.join(root, 'data/research-program.json'), 'utf8'));
@@ -93,10 +94,16 @@ async function checkScientificConsistency() {
   if (program.current_evidence.known_answer_examples !== 2 || program.current_evidence.implemented_checks !== implementedChecks) fail('Research program benchmark counts do not match canonical artifacts');
   if (coordinateResult.assessment.overall_status !== 'BENCHMARK_VERIFIED' || coordinateResult.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Coordinate benchmark status or transportation boundary changed');
   if (coordinateCrosscheck.comparison !== 'MATCH' || coordinateCrosscheck.independence.counts_as_external_reproduction !== false) fail('Coordinate cross-check mismatch or independence overclaim');
-  if (passport.scientific_review !== 'CHANGES_REQUIRED' || passport.review_history.at(-1)?.response_status !== 'ADDRESSED_AWAITING_REREVIEW' || passport.preregistered_checks.join('|') !== coordinateResult.checks.map((item) => item.check_id).join('|')) fail('Benchmark passport review state or preregistered check order changed');
+  if (passport.scientific_review !== 'CHANGES_REQUIRED' || passport.review_history.at(-1)?.response_status !== 'ADDRESSED_AWAITING_REREVIEW' || passport.preregistered_checks.join('|') !== coordinateResult.checks.map((item) => item.check_id).join('|')) fail('Frozen benchmark passport provenance or preregistered check order changed');
+  if (review.outcome !== 'APPROVED' || review.approval_scope !== 'REPOSITORY_IMPLEMENTATION_AND_ARTIFACTS' || review.subject.passport_id !== passport.passport_id || review.subject.passport_version !== passport.passport_version || review.subject.result_digest !== coordinateResult.scientific_payload_digest || review.remaining_objections.length !== 0) fail('Coordinate implementation approval record is missing, mismatched, or unresolved');
+  if (review.boundaries.external_scientific_reproduction !== false || review.boundaries.novel_physics_claim !== false || review.boundaries.transportation_claim !== false) fail('Coordinate implementation approval overstates its scientific scope');
   if (coordinateCrosscheck.comparison_scope.schema_conformance_crosschecked !== false || coordinateCrosscheck.comparison_scope.excluded_reference_checks.join('|') !== 'schema.candidate.v1') fail('Coordinate cross-check overstates schema validation coverage');
   if (baselineCrosscheck.comparison_scope.schema_conformance_crosschecked !== false || baselineCrosscheck.comparison_scope.excluded_reference_checks.join('|') !== 'schema.candidate.v1') fail('Baseline cross-check overstates schema validation coverage');
   const sourceCommit = coordinateResult.run.source_commit;
+  const reviewedHead = spawnSync('git', ['cat-file', '-e', `${review.subject.head_commit}^{commit}`], { cwd: root });
+  if (reviewedHead.status !== 0) fail('Implementation approval does not reference an available Git commit');
+  const sourcePredatesReview = spawnSync('git', ['merge-base', '--is-ancestor', sourceCommit, review.subject.head_commit], { cwd: root });
+  if (sourcePredatesReview.status !== 0) fail('Coordinate result source commit is not an ancestor of the approved PR head');
   const sourcePaths = [
     'candidates/CANDIDATE-000002.json',
     'benchmarks/BENCHMARK-000002.passport.json',

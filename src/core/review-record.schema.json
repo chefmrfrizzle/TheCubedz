@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/review-record.schema.json",
+  "title": "Independent implementation review record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "review_id", "review_type", "approval_scope", "subject",
+    "outcome", "recorded_at", "reviewer", "verified_items", "remaining_objections",
+    "boundaries", "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "review_id": {"type": "string", "pattern": "^REVIEW-[0-9]{6}$"},
+    "review_type": {"const": "IMPLEMENTATION_REREVIEW"},
+    "approval_scope": {"const": "REPOSITORY_IMPLEMENTATION_AND_ARTIFACTS"},
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pull_request_url", "head_commit", "passport_id", "passport_version",
+        "candidate_id", "prior_review_id", "result_digest"
+      ],
+      "properties": {
+        "pull_request_url": {"type": "string", "format": "uri"},
+        "head_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "passport_id": {"type": "string", "pattern": "^PASSPORT-[0-9]{6}$"},
+        "passport_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "candidate_id": {"type": "string", "pattern": "^CANDIDATE-[0-9]{6}$"},
+        "prior_review_id": {"type": "string", "pattern": "^REVIEW-[0-9]{6}$"},
+        "result_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    },
+    "outcome": {"const": "APPROVED"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "identity_status", "independence_scope"],
+      "properties": {
+        "identity": {"type": "string", "minLength": 1},
+        "identity_status": {"const": "UNRECORDED_IN_SUPPLIED_REVIEW"},
+        "independence_scope": {"const": "INDEPENDENT_REPOSITORY_VERIFICATION"}
+      }
+    },
+    "verified_items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item_id", "statement", "evidence_paths"],
+        "properties": {
+          "item_id": {"type": "string", "pattern": "^VERIFICATION-[0-9]{2}$"},
+          "statement": {"type": "string", "minLength": 1},
+          "evidence_paths": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "remaining_objections": {"type": "array", "maxItems": 0},
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["external_scientific_reproduction", "novel_physics_claim", "transportation_claim"],
+      "properties": {
+        "external_scientific_reproduction": {"const": false},
+        "novel_physics_claim": {"const": false},
+        "transportation_claim": {"const": false}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supplied_by", "recorded_by", "source_description", "license"],
+      "properties": {
+        "supplied_by": {"type": "string", "minLength": 1},
+        "recorded_by": {"type": "string", "minLength": 1},
+        "source_description": {"type": "string", "minLength": 1},
+        "license": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

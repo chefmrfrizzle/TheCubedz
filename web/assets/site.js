@@ -7,6 +7,7 @@ const runtime = {
   coordinateResult: null,
   coordinateCrosscheck: null,
   coordinatePassport: null,
+  coordinateReview: null,
   benchmark: null,
   crosscheck: null,
   graph: null,
@@ -66,7 +67,7 @@ function setAllText(selector, value, scope = document) {
 function statusClass(status = '') {
   const value = status.toUpperCase();
   if (value.includes('UNSUPPORTED') || value.includes('UNRESOLVED') || value.includes('NOT_APPLICABLE')) return 'neutral';
-  if (value.includes('PASS') || value.includes('VERIFIED') || value.includes('COMPLETE') || value.includes('SUPPORTED') || value.includes('LIVE') || value.includes('MATCH')) return 'pass';
+  if (value.includes('PASS') || value.includes('APPROV') || value.includes('VERIFIED') || value.includes('COMPLETE') || value.includes('SUPPORTED') || value.includes('LIVE') || value.includes('MATCH')) return 'pass';
   if (value.includes('FAIL') || value.includes('RETRACT') || value.includes('FALS')) return 'fail';
   if (value.includes('WARN') || value.includes('REVIEW') || value.includes('PARTIAL') || value.includes('GATED') || value.includes('DRAFT')) return 'warning';
   return 'neutral';
@@ -252,13 +253,14 @@ function renderCheck(check, index) {
 async function initializeLab() {
   if (!document.querySelector('[data-page="lab"]')) return;
   try {
-    [runtime.candidate, runtime.result, runtime.coordinateCandidate, runtime.coordinateResult, runtime.coordinateCrosscheck, runtime.coordinatePassport, runtime.benchmark, runtime.crosscheck] = await Promise.all([
+    [runtime.candidate, runtime.result, runtime.coordinateCandidate, runtime.coordinateResult, runtime.coordinateCrosscheck, runtime.coordinatePassport, runtime.coordinateReview, runtime.benchmark, runtime.crosscheck] = await Promise.all([
       getJson('/data/candidate.json'),
       getJson('/data/result.json'),
       getJson('/data/candidate-000002.json'),
       getJson('/data/result-000002.json'),
       getJson('/data/crosscheck-000002.json'),
       getJson('/data/benchmark-000002-passport.json'),
+      getJson('/data/review-000002.json'),
       getJson('/data/synthetic-suite-result.json'),
       getJson('/data/crosscheck.json'),
     ]);
@@ -314,8 +316,8 @@ async function initializeLab() {
 function initializeBenchmarkLadder() {
   const section = document.querySelector('[data-benchmark-ladder]');
   if (!section) return;
-  const { candidate, coordinateCandidate, coordinateResult, coordinateCrosscheck, coordinatePassport } = runtime;
-  if (!candidate || !coordinateCandidate || !coordinateResult || !coordinateCrosscheck || !coordinatePassport) return;
+  const { candidate, coordinateCandidate, coordinateResult, coordinateCrosscheck, coordinatePassport, coordinateReview } = runtime;
+  if (!candidate || !coordinateCandidate || !coordinateResult || !coordinateCrosscheck || !coordinatePassport || !coordinateReview) return;
   const referenceMatrix = section.querySelector('[data-reference-metric]');
   const coordinateMatrix = section.querySelector('[data-coordinate-metric]');
   if (referenceMatrix) referenceMatrix.innerHTML = renderMatrix(candidate.metric.components);
@@ -329,10 +331,9 @@ function initializeBenchmarkLadder() {
   setText('[data-coordinate-fail-count]', failed, section);
   const comparedChecks = coordinateCrosscheck.comparison_scope?.compared_check_count || Object.keys(coordinateCrosscheck.observations.checks).length;
   setText('[data-coordinate-crosscheck]', `${coordinateCrosscheck.comparison === 'MATCH' ? 'MATCHED' : coordinateCrosscheck.comparison} ${comparedChecks}/${comparedChecks} comparable checks; schema excluded`, section);
-  const latestReview = coordinatePassport.review_history?.at(-1);
-  const reviewLabel = latestReview?.response_status === 'ADDRESSED_AWAITING_REREVIEW'
-    ? 'CHANGES ADDRESSED — RE-REVIEW NEEDED'
-    : coordinatePassport.scientific_review.replaceAll('_', ' ');
+  const reviewLabel = coordinateReview.outcome === 'APPROVED'
+    ? 'IMPLEMENTATION RE-REVIEW APPROVED'
+    : coordinateReview.outcome.replaceAll('_', ' ');
   setText('[data-coordinate-review]', reviewLabel, section);
 }
 

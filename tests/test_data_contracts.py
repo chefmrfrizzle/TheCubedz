@@ -21,6 +21,7 @@ def test_knowledge_graph_schema_and_references():
     ids = {node["id"] for node in graph["nodes"]}
     assert len(ids) == len(graph["nodes"])
     assert all(edge["source"] in ids and edge["target"] in ids for edge in graph["edges"])
+    assert next(node for node in graph["nodes"] if node["id"] == "REVIEW-000002")["status"] == "APPROVED"
 
 
 def test_event_ledger_is_valid_and_monotonic():
@@ -54,8 +55,28 @@ def test_second_benchmark_passport_is_valid_and_matches_preregistered_result():
     assert not list(validator.iter_errors(passport))
     result = load(ROOT / "artifacts" / "results" / "CANDIDATE-000002.result.json")
     assert passport["passport_version"] == "1.0.1"
+    # The passport stays byte-identical to the approved source commit. Post-run
+    # approval is recorded separately so provenance is not rewritten in place.
     assert passport["scientific_review"] == "CHANGES_REQUIRED"
     assert passport["review_history"][-1]["response_status"] == "ADDRESSED_AWAITING_REREVIEW"
     assert passport["candidate_id"] == result["candidate"]["candidate_id"]
     assert passport["preregistered_checks"] == [check["check_id"] for check in result["checks"]]
     assert passport["expected_results"]["tolerance"] == "exact rational equality"
+
+
+def test_coordinate_benchmark_implementation_rereview_is_approved_and_bounded():
+    review = load(ROOT / "artifacts" / "reviews" / "REVIEW-000002.json")
+    schema = load(CORE / "review-record.schema.json")
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+    assert not list(validator.iter_errors(review))
+    assert review["outcome"] == "APPROVED"
+    assert review["subject"]["passport_version"] == "1.0.1"
+    assert review["subject"]["head_commit"] == "4b2e24d445f9cacd08cd85cc1a35350951a1553f"
+    assert len(review["verified_items"]) == 7
+    assert review["remaining_objections"] == []
+    assert all((ROOT / evidence_path).is_file() for item in review["verified_items"] for evidence_path in item["evidence_paths"])
+    assert review["boundaries"] == {
+        "external_scientific_reproduction": False,
+        "novel_physics_claim": False,
+        "transportation_claim": False,
+    }
