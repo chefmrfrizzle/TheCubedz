@@ -16,6 +16,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "pytest>=8,<10",
+  "sympy==1.14.0",
 ]
 
 [project.scripts]
