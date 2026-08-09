@@ -106,3 +106,16 @@ def test_internal_clean_clone_reproduction_is_valid_bounded_and_content_addresse
     assert reproduction["independence"]["counts_as_external_reproduction"] is False
     assert reproduction["signature"]["status"] == "UNSIGNED_NO_KEY"
     assert reproduction["conflict_of_interest"]["disclosed"] is True
+
+
+def test_curved_einsteinpy_comparison_is_bounded_and_content_addressed():
+    reproduction = load(ROOT / "artifacts" / "reproductions" / "CANDIDATE-000003.einsteinpy-crosscheck.json")
+    published_digest = reproduction.pop("record_digest")
+    encoded = json.dumps(reproduction, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    assert published_digest == f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+    assert reproduction["overall_status"] == "MATCH"
+    assert reproduction["independence"]["external_reproduction"] is False
+    assert reproduction["independence"]["separate_tensor_library"] is True
+    assert reproduction["signature"]["status"] == "UNSIGNED_NO_KEY"
+    assert reproduction["signature"]["record_digest_is_not_a_signature"] is True
+    assert reproduction["conflict_of_interest"]["declared"] is True

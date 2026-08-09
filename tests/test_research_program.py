@@ -18,8 +18,8 @@ def errors(document):
 def test_research_program_matches_schema_and_preserves_current_counts():
     assert errors(PROGRAM) == []
     assert PROGRAM["current_evidence"] == {
-        "known_answer_examples": 2,
-        "implemented_checks": 26,
+        "known_answer_examples": 3,
+        "implemented_checks": 43,
         "workflow_cases": 100,
         "novel_transportation_candidates": 0,
         "traveler_safety_evaluations": 0,
@@ -47,7 +47,7 @@ def test_research_program_keeps_agents_and_public_inputs_noncanonical():
     assert all(task["canonical_effect"] == "NONE_WITHOUT_HUMAN_REVIEW" for task in PROGRAM["contribution_tasks"])
 
 
-def test_only_the_known_answer_gate_is_currently_passing():
+def test_only_the_established_benchmark_gates_are_currently_passing():
     passed = [gate for gate in PROGRAM["success_gates"] if gate["status"] == "PASS"]
-    assert [gate["id"] for gate in passed] == ["GATE-01"]
+    assert [gate["id"] for gate in passed] == ["GATE-01", "GATE-02"]
     assert all(gate["evidence"] == [] for gate in PROGRAM["success_gates"] if gate["status"] != "PASS")

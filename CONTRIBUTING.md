@@ -13,6 +13,8 @@ Read:
 
 For agent-assisted work, also read [Agent operating system](docs/AGENT_OPERATING_SYSTEM.md).
 
+For a review intended to count as named scientific evidence, follow the [external scientific review protocol](docs/EXTERNAL_REVIEW_PROTOCOL.md). Candidate 000003 has a [ready-to-send bounded review prompt](prompts/CANDIDATE_000003_EXTERNAL_REVIEW.md).
+
 The canonical public question, traveler constraint, success gates, current evidence counts, contribution paths, and security boundaries are in [`data/research-program.json`](data/research-program.json). The ordered prompts for future phases are in [`prompts/MARS_RESEARCH_PROGRAM.md`](prompts/MARS_RESEARCH_PROGRAM.md).
 
 ## Choose one small starting point

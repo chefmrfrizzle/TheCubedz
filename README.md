@@ -27,27 +27,28 @@ Earth → Mars is a motivating benchmark, **not a transportation claim**.
 
 This repository does **not** demonstrate a wormhole, warp device, faster-than-light travel, a route to Mars, or practical spacetime engineering.
 
-Candidates 000001 and 000002 are intentionally ordinary. They describe the same Minkowski flat spacetime using two coordinate grids. Their purpose is to test whether the research instrument can distinguish a changed description from changed physics before the project attempts anything exotic.
+Candidates 000001 and 000002 are intentionally ordinary versions of Minkowski flat spacetime. Candidate 000003 is the established Schwarzschild exterior geometry, restricted to a declared chart outside a spherical non-rotating mass. These are calibration cases, not proposed shortcuts.
 
 ## Current public status
 
-As of **August 8, 2026**, the repository contains:
+As of **August 9, 2026**, the repository contains:
 
 | Component | Implemented state |
 |---|---|
-| Candidate registry | Two established, non-novel Minkowski benchmarks in a versioned JSON schema |
-| Deterministic science core | Exact rational matrix operations plus Cartesian and constant-linear coordinate profiles |
-| Benchmark results | 26 implemented checks pass across two known-answer examples; 0 fail |
-| Scientific fingerprints | Candidate 000001: `sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b`; Candidate 000002: `sha256:73af7803b5ae10a9f8b1269398a126e6da94072b30a7e12da16f3e8f53e012d2` |
+| Candidate registry | Two established flat benchmarks and one established curved Schwarzschild exterior benchmark |
+| Deterministic science core | Exact rational matrix operations plus a restricted symbolic tensor profile with no arbitrary expression evaluation |
+| Benchmark results | 43 implemented checks pass across three known-answer examples; 0 fail |
+| Scientific fingerprints | Candidate 000001: `sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b`; Candidate 000002: `sha256:73af7803b5ae10a9f8b1269398a126e6da94072b30a7e12da16f3e8f53e012d2`; Candidate 000003: `sha256:d2b3f4a2ad15a7ade137e4aaf4166bdefab3ff33a3a2a27e5ca232c5bfb43458` |
 | Reports | Beginner and technical reports derived from the same result object |
 | Second brain | Append-only event ledger plus a versioned evidence-graph projection |
 | Agent contracts | 9 bounded research roles with explicit permissions and prohibitions |
 | Controlled autonomy | Machine-validated task, capability, run, evidence-bundle, and human-promotion contracts |
 | Synthetic benchmark | 100 frozen workflow cases: 23 accepted, 57 rejected, 5 mismatches preserved, and 15 unresolved |
-| Cross-check | Separate standard-library arithmetic paths match 11/11 and 13/13 comparable checks; Draft 2020-12 schema validation remains primary-only, and neither path is an outside reproduction |
+| Cross-check | Separate arithmetic paths match the flat benchmarks; EinsteinPy 0.4.0 matches 8/8 declared curved-benchmark comparisons. Schema validation remains primary-only in secondary paths, and none is an outside reproduction |
 | Internal clean-clone reproduction | Both published digests and a separate SymPy calculation match from remote commit `8684c5e`; conflicts are disclosed, the record is unsigned because no signing key was configured, and it does not count as outside reproduction |
 | Scientific review | `REVIEW-000001` required three implementation corrections; [`REVIEW-000002`](artifacts/reviews/REVIEW-000002.json) independently verified all seven requested items and returned `APPROVED` with no remaining objections |
 | Source provenance | Candidate 000002 records source commit `038b8e3a9d7f`; repository checks verify that commit contains the exact candidate, passport, schemas, validator, and matrix implementation |
+| Curved benchmark provenance | Candidate 000003 records source commit `5a6a5fe4f827`; repository checks bind the candidate, passport, parser, tensor engine, validator, and tests to that tree |
 | Public website | 8 responsive routes, six-face evidence cube, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
 | Automated validation | Scientific, control-contract, benchmark, cross-check, artifact, static-site, link, base-path, and build-fingerprint checks |
 | Independent reproductions | 0 recorded |
@@ -60,6 +61,10 @@ The baseline statement is deliberately narrow:
 The second benchmark is equally narrow:
 
 > The submitted rescaled-coordinate metric exactly matches one declared linear pullback of the canonical Minkowski metric. This verifies a bounded coordinate-equivalence check—not an arbitrary coordinate solver, curved-spacetime solver, or transportation capability.
+
+The third benchmark adds curvature without adding a novel claim:
+
+> The preregistered Schwarzschild exterior metric passed 17 symbolic checks under the declared domain and tensor conventions. This calibrates one established curved known answer—not a general solver, source-design method, safe trajectory, or route to Mars.
 
 ## See the public laboratory locally
 
@@ -92,11 +97,12 @@ npm run dev
 
 Open `http://127.0.0.1:4173`.
 
-### Reproduce both established benchmarks
+### Reproduce all established benchmarks
 
 ```bash
 python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible
-python scripts/research.py verify candidates/CANDIDATE-000002.json --reproducible
+python scripts/research.py verify candidates/CANDIDATE-000002.json --passport benchmarks/BENCHMARK-000002.passport.json --reproducible
+python scripts/research.py verify candidates/CANDIDATE-000003.json --passport benchmarks/BENCHMARK-000003.passport.json --reproducible
 ```
 
 A matching repository run should emit the published scientific payload digest. Re-running the same implementation is useful software verification; it is **not yet independent scientific reproduction**.
@@ -107,9 +113,10 @@ A matching repository run should emit the published scientific payload digest. R
 python scripts/research.py benchmark
 python scripts/independent_crosscheck.py
 python scripts/independent_coordinate_crosscheck.py
+python independent/schwarzschild_einsteinpy_crosscheck.py
 ```
 
-The 100-case suite validates the research workflow, security boundaries, and explicit unresolved states. The separate implementation uses a different exact matrix algorithm, but it shares this repository, environment, and project authorship, so it does not count as an outside reproduction.
+The 100-case suite validates the research workflow, security boundaries, and explicit unresolved states. The separate paths use different matrix algorithms or EinsteinPy, but they share this repository, environment, and project authorship, so they do not count as outside reproduction. See the [external review protocol](docs/EXTERNAL_REVIEW_PROTOCOL.md) and [ready-to-send Candidate 000003 review prompt](prompts/CANDIDATE_000003_EXTERNAL_REVIEW.md).
 
 ## One command before every push
 

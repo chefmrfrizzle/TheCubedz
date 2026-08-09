@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "snapshot_id": "GRAPH-SNAPSHOT-000004",
+  "snapshot_id": "GRAPH-SNAPSHOT-000005",
   "generated_from": [
     "data/ledger/events.jsonl",
     "candidates/CANDIDATE-000001.json",
@@ -12,6 +12,10 @@
     "artifacts/reproductions/INTERNAL-CLEAN-CLONE-000001.json",
     "artifacts/reviews/REVIEW-000002.json",
     "benchmarks/BENCHMARK-000002.passport.json",
+    "candidates/CANDIDATE-000003.json",
+    "benchmarks/BENCHMARK-000003.passport.json",
+    "artifacts/results/CANDIDATE-000003.result.json",
+    "artifacts/reproductions/CANDIDATE-000003.einsteinpy-crosscheck.json",
     "docs/SCIENTIFIC_CLAIMS_POLICY.md"
   ],
   "nodes": [
@@ -31,7 +35,13 @@
     {"id": "CORRECTION-000001", "type": "Correction", "label": "Benchmark 000002 review corrections", "status": "CLOSED_APPROVED", "canonical": true, "summary": "Exact passport binding, honest secondary comparison scope, and source-commit provenance were corrected after Review 000001 and approved by Review 000002.", "href": "/lab/#benchmark-ladder"},
     {"id": "CLAIM-000002", "type": "Claim", "label": "Two submitted component grids describe the same scoped flat geometry", "status": "COMPUTATION_SUPPORTED_IMPLEMENTATION_REVIEW_APPROVED", "canonical": true, "summary": "The passport-bound implementation and artifacts passed re-review; outside scientific reproduction remains open.", "href": "/lab/#benchmark-ladder"},
     {"id": "REVIEW-000002", "type": "Review", "label": "Coordinate benchmark implementation re-review", "status": "APPROVED", "canonical": true, "summary": "Seven requested implementation and provenance corrections were independently verified at PR 6 head 4b2e24d; no remaining objections were reported.", "href": "/data/review-000002.json"},
-    {"id": "REPRODUCTION-INTERNAL-CLEAN-CLONE-000001", "type": "Reproduction", "label": "Internal clean-clone SymPy reproduction", "status": "INTERNAL_MATCH_UNSIGNED", "canonical": true, "summary": "A clean remote clone reproduced both digests and matched through SymPy; operator conflicts are disclosed, no signing key was available, and no outside-reproduction credit is claimed.", "href": "/data/internal-clean-clone-reproduction.json"}
+    {"id": "REPRODUCTION-INTERNAL-CLEAN-CLONE-000001", "type": "Reproduction", "label": "Internal clean-clone SymPy reproduction", "status": "INTERNAL_MATCH_UNSIGNED", "canonical": true, "summary": "A clean remote clone reproduced both digests and matched through SymPy; operator conflicts are disclosed, no signing key was available, and no outside-reproduction credit is claimed.", "href": "/data/internal-clean-clone-reproduction.json"},
+    {"id": "FAMILY-000002", "type": "CandidateFamily", "label": "Established curved-spacetime benchmarks", "status": "ACTIVE", "canonical": true, "summary": "Known curved solutions used to calibrate symbolic tensor calculations before any novel proposal.", "href": "/lab/#curved-benchmark"},
+    {"id": "CANDIDATE-000003", "type": "Candidate", "label": "Schwarzschild exterior benchmark", "status": "DRAFT_REVIEW_REQUESTED", "canonical": true, "summary": "The established exterior vacuum geometry of a spherical non-rotating mass in a restricted curvature-coordinate chart.", "href": "/lab/#curved-benchmark"},
+    {"id": "VALIDATOR-000002", "type": "Validator", "label": "Passport-bound symbolic curved validator", "status": "EXPERIMENTAL", "canonical": true, "summary": "Restricted symbolic parsing and exact SymPy tensor calculations for one preregistered Schwarzschild exterior profile.", "href": "/lab/#curved-benchmark"},
+    {"id": "RUN-000004", "type": "Run", "label": "Schwarzschild exterior symbolic verification", "status": "BENCHMARK_VERIFIED_INTERNAL", "canonical": true, "summary": "Seventeen preregistered checks passed at source commit 5a6a5fe4f827; outside scientific review remains requested.", "href": "/data/result-000003.json"},
+    {"id": "CLAIM-000003", "type": "Claim", "label": "The submitted exterior metric matches the established Schwarzschild vacuum benchmark", "status": "INTERNAL_COMPUTATION_SUPPORTED_REVIEW_REQUESTED", "canonical": true, "summary": "The bounded primary and EinsteinPy paths agree under the declared domain and conventions; this is not a novel-physics or transportation claim.", "href": "/lab/#curved-benchmark"},
+    {"id": "REPRODUCTION-EINSTEINPY-000003", "type": "Reproduction", "label": "Internal EinsteinPy comparison for Candidate 000003", "status": "INTERNAL_MATCH_UNSIGNED", "canonical": true, "summary": "EinsteinPy matches eight declared comparisons. Same owner, machine, credentials, and Codex workflow are disclosed; it is unsigned and not external evidence.", "href": "/data/crosscheck-000003.json"}
   ],
   "edges": [
     {"id": "EDGE-000001", "source": "RQ-000001", "target": "HYPOTHESIS-000001", "relationship": "FRAMES", "canonical": true, "summary": "The research question is tested through a methodological hypothesis."},
@@ -55,6 +65,13 @@
     {"id": "EDGE-000019", "source": "REVIEW-000002", "target": "RUN-000003", "relationship": "APPROVES_IMPLEMENTATION_OF", "canonical": true, "summary": "The approval covers the passport-bound implementation and artifacts represented by Run 000003."},
     {"id": "EDGE-000020", "source": "CLAIM-000002", "target": "REVIEW-000002", "relationship": "IMPLEMENTATION_REVIEWED_BY", "canonical": true, "summary": "The scoped computational claim is linked to its approved implementation re-review without claiming outside reproduction."},
     {"id": "EDGE-000021", "source": "REPRODUCTION-INTERNAL-CLEAN-CLONE-000001", "target": "CANDIDATE-000001", "relationship": "INTERNALLY_REPRODUCES", "canonical": true, "summary": "The clean clone reproduced the frozen baseline digest through the official command and a separate SymPy calculation."},
-    {"id": "EDGE-000022", "source": "REPRODUCTION-INTERNAL-CLEAN-CLONE-000001", "target": "CANDIDATE-000002", "relationship": "INTERNALLY_REPRODUCES", "canonical": true, "summary": "The clean clone reproduced the coordinate benchmark digest through the official command and a separate SymPy calculation."}
+    {"id": "EDGE-000022", "source": "REPRODUCTION-INTERNAL-CLEAN-CLONE-000001", "target": "CANDIDATE-000002", "relationship": "INTERNALLY_REPRODUCES", "canonical": true, "summary": "The clean clone reproduced the coordinate benchmark digest through the official command and a separate SymPy calculation."},
+    {"id": "EDGE-000023", "source": "CANDIDATE-000003", "target": "FAMILY-000002", "relationship": "INSTANCE_OF", "canonical": true, "summary": "Candidate 000003 is the first established curved-spacetime calibration."},
+    {"id": "EDGE-000024", "source": "RUN-000004", "target": "CANDIDATE-000003", "relationship": "EVALUATES", "canonical": true, "summary": "Run 000004 evaluates Candidate 000003 against passport 1.0.0."},
+    {"id": "EDGE-000025", "source": "RUN-000004", "target": "VALIDATOR-000002", "relationship": "USES", "canonical": true, "summary": "The run uses the restricted symbolic curved-spacetime validator."},
+    {"id": "EDGE-000026", "source": "CLAIM-000003", "target": "RUN-000004", "relationship": "INTERNALLY_SUPPORTED_BY", "canonical": true, "summary": "The scoped established-geometry claim is traceable to the canonical result."},
+    {"id": "EDGE-000027", "source": "REPRODUCTION-EINSTEINPY-000003", "target": "CANDIDATE-000003", "relationship": "INTERNALLY_CROSSCHECKS", "canonical": true, "summary": "A separate tensor library matches the declared comparison scope without claiming external independence."},
+    {"id": "EDGE-000028", "source": "REPRODUCTION-QUEUE-000001", "target": "RUN-000004", "relationship": "REQUESTS_REPRODUCTION_OF", "canonical": false, "summary": "A named outside specialist and signed artifact are requested for the curved benchmark."},
+    {"id": "EDGE-000029", "source": "CLAIM-000003", "target": "RQ-000001", "relationship": "CALIBRATES_INSTRUMENT_FOR", "canonical": true, "summary": "The established benchmark expands the instrument but does not answer the Mars research question."}
   ]
 }

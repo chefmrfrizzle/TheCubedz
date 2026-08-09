@@ -9,7 +9,7 @@
     "safety": "Keep local matter intact and forces survivable.",
     "physics": "Satisfy the equations, source requirements, energy limits, stability, and cause and effect.",
     "proof": "Let independent teams recover the same result.",
-    "current_position": "Two flat-spacetime calibration tests work, and Candidate 000002's implementation re-review is approved; no travel candidate has been evaluated."
+    "current_position": "Two flat calibrations and one established curved-spacetime calibration pass; no travel candidate has been evaluated and no outside reproduction is recorded."
   },
   "optimization_targets": ["EFFECTIVE_PATH_LENGTH", "PROPER_TRAVEL_TIME", "EXTERNAL_ELAPSED_TIME"],
   "mechanism_scope": {
@@ -31,7 +31,7 @@
   },
   "success_gates": [
     {"id": "GATE-01", "question": "Can the system recover a known flat-spacetime answer?", "status": "PASS", "evidence": ["artifacts/results/CANDIDATE-000001.result.json", "artifacts/reproductions/CANDIDATE-000001.crosscheck.json", "benchmarks/BENCHMARK-000002.passport.json", "artifacts/results/CANDIDATE-000002.result.json", "artifacts/reproductions/CANDIDATE-000002.crosscheck.json", "artifacts/reproductions/INTERNAL-CLEAN-CLONE-000001.json", "artifacts/reviews/REVIEW-000002.json"], "downgrade_condition": "Downgrade if either frozen candidate, validator result, or separate implementation no longer reproduces its published result."},
-    {"id": "GATE-02", "question": "Can the system evaluate a nontrivial spacetime candidate with a declared source?", "status": "NOT_IMPLEMENTED", "evidence": [], "downgrade_condition": "Remain not implemented until a reviewed general or profile-specific solver emits a versioned result."},
+    {"id": "GATE-02", "question": "Can the system evaluate a nontrivial spacetime candidate with a declared source?", "status": "PASS", "evidence": ["candidates/CANDIDATE-000003.json", "benchmarks/BENCHMARK-000003.passport.json", "artifacts/results/CANDIDATE-000003.result.json", "artifacts/reproductions/CANDIDATE-000003.einsteinpy-crosscheck.json"], "downgrade_condition": "Downgrade if the passport binding, symbolic tensor result, external-vacuum source declaration, domain restrictions, or separate-solver comparison no longer reproduces. This gate covers one established exterior solution, not arbitrary source reconstruction."},
     {"id": "GATE-03", "question": "Does the candidate reduce a declared effective path length or travel time?", "status": "NOT_EVALUATED", "evidence": [], "downgrade_condition": "Remain not evaluated until the objective, endpoints, trajectory, observers, and comparison baseline are explicit."},
     {"id": "GATE-04", "question": "Does the required matter or field source satisfy the declared physical limits?", "status": "NOT_IMPLEMENTED", "evidence": [], "downgrade_condition": "Remain not implemented until source reconstruction, conservation, and energy-condition checks exist."},
     {"id": "GATE-05", "question": "Is the candidate stable and causally consistent under the declared conditions?", "status": "NOT_IMPLEMENTED", "evidence": [], "downgrade_condition": "Remain not implemented until perturbation, horizon, singularity, controllability, and causality checks exist."},
@@ -40,8 +40,8 @@
     {"id": "GATE-08", "question": "Is there a realizable experiment or engineering path?", "status": "NOT_EVALUATED", "evidence": [], "downgrade_condition": "Remain not evaluated until a measurable prediction, uncertainty model, apparatus concept, and material or field requirements exist."}
   ],
   "current_evidence": {
-    "known_answer_examples": 2,
-    "implemented_checks": 26,
+    "known_answer_examples": 3,
+    "implemented_checks": 43,
     "workflow_cases": 100,
     "novel_transportation_candidates": 0,
     "traveler_safety_evaluations": 0,
@@ -63,7 +63,8 @@
   },
   "claim_boundaries": [
     "The program has not found a spacetime shortcut, transportation geometry, or route to Mars.",
-    "The current validator recognizes two exact flat-spacetime profiles, including one declared constant linear coordinate map, and is not a general relativity solver.",
+    "The validators recognize two exact flat-spacetime profiles and one passport-bound Schwarzschild exterior profile; they are not general-purpose relativity solvers.",
+    "Candidate 000003 is an established curved vacuum-exterior calibration, not a novel spacetime or transportation proposal.",
     "No traveler-preservation, stability, causality, energy, realizability, or experimental gate has passed for a novel candidate.",
     "The separate implementation in this repository is not an outside reproduction.",
     "The approved implementation re-review is not an outside scientific reproduction.",

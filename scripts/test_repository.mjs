@@ -29,8 +29,8 @@ async function checkRequiredFiles() {
   const required = [
     'README.md', 'CONTRIBUTING.md', 'GOVERNANCE.md', 'SECURITY.md', 'CODE_OF_CONDUCT.md', 'LICENSE', 'NOTICE', 'CHANGELOG.md', 'SUPPORT.md', 'CITATION.cff',
     'docs/SCIENTIFIC_CLAIMS_POLICY.md', 'docs/THREAT_MODEL.md', 'docs/LAUNCH.md', 'docs/SECOND_BRAIN.md', 'docs/AGENT_OPERATING_SYSTEM.md', 'docs/SCALE_ARCHITECTURE.md',
-    'candidates/CANDIDATE-000001.json', 'artifacts/results/CANDIDATE-000001.result.json', 'candidates/CANDIDATE-000002.json', 'artifacts/results/CANDIDATE-000002.result.json',
-    'benchmarks/BENCHMARK-000002.passport.json', 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json', 'artifacts/reproductions/INTERNAL-CLEAN-CLONE-000001.json', 'artifacts/reviews/REVIEW-000002.json', 'src/core/benchmark-passport.schema.json', 'src/core/reproduction-record.schema.json', 'src/core/review-record.schema.json', 'data/ledger/events.jsonl', 'data/knowledge-graph.json',
+    'candidates/CANDIDATE-000001.json', 'artifacts/results/CANDIDATE-000001.result.json', 'candidates/CANDIDATE-000002.json', 'artifacts/results/CANDIDATE-000002.result.json', 'candidates/CANDIDATE-000003.json', 'artifacts/results/CANDIDATE-000003.result.json',
+    'benchmarks/BENCHMARK-000002.passport.json', 'benchmarks/BENCHMARK-000003.passport.json', 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json', 'artifacts/reproductions/CANDIDATE-000003.einsteinpy-crosscheck.json', 'artifacts/reproductions/INTERNAL-CLEAN-CLONE-000001.json', 'artifacts/reviews/REVIEW-000002.json', 'src/core/benchmark-passport.schema.json', 'src/core/candidate-v2.schema.json', 'src/core/curved-benchmark-passport.schema.json', 'src/core/reproduction-record.schema.json', 'src/core/review-record.schema.json', 'data/ledger/events.jsonl', 'data/knowledge-graph.json',
     'data/research-program.json', 'src/core/research-program.schema.json', 'prompts/MARS_RESEARCH_PROGRAM.md', '.github/ISSUE_TEMPLATE/research-question.yml',
     '.github/workflows/ci.yml', '.github/workflows/pages.yml', '.github/workflows/codeql.yml', '.github/dependabot.yml',
   ];
@@ -76,6 +76,10 @@ async function checkScientificConsistency() {
   const result = JSON.parse(await readFile(path.join(root, 'artifacts/results/CANDIDATE-000001.result.json'), 'utf8'));
   const coordinateCandidate = JSON.parse(await readFile(path.join(root, 'candidates/CANDIDATE-000002.json'), 'utf8'));
   const coordinateResult = JSON.parse(await readFile(path.join(root, 'artifacts/results/CANDIDATE-000002.result.json'), 'utf8'));
+  const curvedCandidate = JSON.parse(await readFile(path.join(root, 'candidates/CANDIDATE-000003.json'), 'utf8'));
+  const curvedResult = JSON.parse(await readFile(path.join(root, 'artifacts/results/CANDIDATE-000003.result.json'), 'utf8'));
+  const curvedPassport = JSON.parse(await readFile(path.join(root, 'benchmarks/BENCHMARK-000003.passport.json'), 'utf8'));
+  const curvedCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000003.einsteinpy-crosscheck.json'), 'utf8'));
   const coordinateCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json'), 'utf8'));
   const baselineCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000001.crosscheck.json'), 'utf8'));
   const cleanCloneReproduction = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/INTERNAL-CLEAN-CLONE-000001.json'), 'utf8'));
@@ -87,14 +91,18 @@ async function checkScientificConsistency() {
   const readme = await readFile(path.join(root, 'README.md'), 'utf8');
   if (candidate.candidate_id !== result.candidate.candidate_id) fail('Candidate and result IDs differ');
   if (coordinateCandidate.candidate_id !== coordinateResult.candidate.candidate_id || passport.candidate_id !== coordinateCandidate.candidate_id) fail('Coordinate benchmark candidate, result, and passport IDs differ');
+  if (curvedCandidate.candidate_id !== curvedResult.candidate.candidate_id || curvedPassport.candidate_id !== curvedCandidate.candidate_id) fail('Curved benchmark candidate, result, and passport IDs differ');
   if (!readme.includes(result.scientific_payload_digest)) fail('README does not publish the exact scientific payload digest');
   if (!readme.includes('Novel physics claims | 0')) fail('README does not explicitly report zero novel physics claims');
   if (result.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Transportation boundary changed');
   if (program.status !== 'OPEN_RESEARCH_QUESTION') fail('Research program is no longer an open question');
-  const implementedChecks = result.checks.length + coordinateResult.checks.length;
-  if (program.current_evidence.known_answer_examples !== 2 || program.current_evidence.implemented_checks !== implementedChecks) fail('Research program benchmark counts do not match canonical artifacts');
+  const implementedChecks = result.checks.length + coordinateResult.checks.length + curvedResult.checks.length;
+  if (program.current_evidence.known_answer_examples !== 3 || program.current_evidence.implemented_checks !== implementedChecks) fail('Research program benchmark counts do not match canonical artifacts');
   if (coordinateResult.assessment.overall_status !== 'BENCHMARK_VERIFIED' || coordinateResult.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Coordinate benchmark status or transportation boundary changed');
   if (coordinateCrosscheck.comparison !== 'MATCH' || coordinateCrosscheck.independence.counts_as_external_reproduction !== false) fail('Coordinate cross-check mismatch or independence overclaim');
+  if (curvedResult.assessment.overall_status !== 'BENCHMARK_VERIFIED' || curvedResult.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL' || curvedResult.checks.length !== 17) fail('Curved benchmark status, check count, or transportation boundary changed');
+  if (curvedPassport.scientific_review !== 'REQUESTED' || curvedPassport.preregistered_checks.join('|') !== curvedResult.checks.map((item) => item.check_id).join('|')) fail('Curved passport review status or preregistered check order changed');
+  if (curvedCrosscheck.overall_status !== 'MATCH' || curvedCrosscheck.independence.external_reproduction !== false || curvedCrosscheck.signature.status !== 'UNSIGNED_NO_KEY' || curvedCrosscheck.conflict_of_interest.declared !== true) fail('Curved EinsteinPy comparison is missing, mismatched, signed inaccurately, or overstated');
   if (passport.scientific_review !== 'CHANGES_REQUIRED' || passport.review_history.at(-1)?.response_status !== 'ADDRESSED_AWAITING_REREVIEW' || passport.preregistered_checks.join('|') !== coordinateResult.checks.map((item) => item.check_id).join('|')) fail('Frozen benchmark passport provenance or preregistered check order changed');
   if (review.outcome !== 'APPROVED' || review.approval_scope !== 'REPOSITORY_IMPLEMENTATION_AND_ARTIFACTS' || review.subject.passport_id !== passport.passport_id || review.subject.passport_version !== passport.passport_version || review.subject.result_digest !== coordinateResult.scientific_payload_digest || review.remaining_objections.length !== 0) fail('Coordinate implementation approval record is missing, mismatched, or unresolved');
   if (review.boundaries.external_scientific_reproduction !== false || review.boundaries.novel_physics_claim !== false || review.boundaries.transportation_claim !== false) fail('Coordinate implementation approval overstates its scientific scope');
@@ -124,6 +132,25 @@ async function checkScientificConsistency() {
     if (unchangedSinceCommit.status !== 0) fail(`Coordinate result source commit does not contain the exact current ${sourcePath}`);
   }
   note(`${sourcePaths.length} coordinate-result source paths verified at ${sourceCommit.slice(0, 12)}`);
+  const curvedSourceCommit = curvedResult.run.source_commit;
+  const curvedSourcePaths = [
+    'candidates/CANDIDATE-000003.json',
+    'benchmarks/BENCHMARK-000003.passport.json',
+    'src/core/candidate-v2.schema.json',
+    'src/core/curved-benchmark-passport.schema.json',
+    'src/research_core/safe_symbolic.py',
+    'src/research_core/symbolic_tensor.py',
+    'src/research_core/curved_pipeline.py',
+    'independent/schwarzschild_einsteinpy_crosscheck.py',
+  ];
+  if (!/^[0-9a-f]{40}$/.test(curvedSourceCommit)) fail('Curved result does not record a concrete source commit');
+  for (const sourcePath of curvedSourcePaths) {
+    const existsAtCommit = spawnSync('git', ['cat-file', '-e', `${curvedSourceCommit}:${sourcePath}`], { cwd: root });
+    if (existsAtCommit.status !== 0) fail(`Curved result source commit does not contain ${sourcePath}`);
+    const unchangedSinceCommit = spawnSync('git', ['diff', '--quiet', curvedSourceCommit, '--', sourcePath], { cwd: root });
+    if (unchangedSinceCommit.status !== 0) fail(`Curved result source commit does not contain the exact current ${sourcePath}`);
+  }
+  note(`${curvedSourcePaths.length} curved-result source paths verified at ${curvedSourceCommit.slice(0, 12)}`);
   if (program.current_evidence.workflow_cases !== benchmark.case_count) fail('Research program workflow count does not match the frozen benchmark');
   if (program.current_evidence.novel_transportation_candidates !== 0 || program.current_evidence.traveler_safety_evaluations !== 0 || program.current_evidence.outside_reproductions !== 0) fail('Research program overstates current evidence');
   if (program.security.public_code_execution !== 'DISABLED' || program.security.agent_authority !== 'PROPOSE_ONLY' || program.security.canonical_promotion !== 'NAMED_HUMAN_ONLY') fail('Research program weakens the public security boundary');

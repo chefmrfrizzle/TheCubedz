@@ -102,8 +102,8 @@
       "additionalProperties": false,
       "required": ["known_answer_examples", "implemented_checks", "workflow_cases", "novel_transportation_candidates", "traveler_safety_evaluations", "outside_reproductions"],
       "properties": {
-        "known_answer_examples": {"const": 2},
-        "implemented_checks": {"const": 26},
+        "known_answer_examples": {"const": 3},
+        "implemented_checks": {"const": 43},
         "workflow_cases": {"const": 100},
         "novel_transportation_candidates": {"const": 0},
         "traveler_safety_evaluations": {"const": 0},

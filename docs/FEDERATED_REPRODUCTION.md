@@ -49,6 +49,8 @@ R0 and R1 improve software confidence. R2 and R3 provide stronger scientific rep
 
 The committed `CANDIDATE-000001.crosscheck.json` record is a separate R2-style implementation path, but it was produced inside the same repository, environment, and project workflow. It is deliberately marked as **not an outside reproduction**, and the public independent-reproduction count remains zero.
 
+Candidate 000003 also has a separate EinsteinPy solver comparison. It shares the project owner, machine, credentials, and Codex workflow, and no signing key was configured. It is therefore recorded as `INTERNAL_ONLY` and `UNSIGNED_NO_KEY`, not as an R3 outside reproduction. Follow the [external scientific review protocol](EXTERNAL_REVIEW_PROTOCOL.md) for the evidence needed to change that status.
+
 ## Future signed bundle
 
 ```text
