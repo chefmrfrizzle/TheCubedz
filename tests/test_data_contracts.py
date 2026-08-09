@@ -65,6 +65,17 @@ def test_second_benchmark_passport_is_valid_and_matches_preregistered_result():
     assert passport["expected_results"]["tolerance"] == "exact rational equality"
 
 
+def test_third_candidate_and_curved_passport_match_their_schemas():
+    candidate = load(ROOT / "candidates" / "CANDIDATE-000003.json")
+    candidate_schema = load(CORE / "candidate-v2.schema.json")
+    passport = load(ROOT / "benchmarks" / "BENCHMARK-000003.passport.json")
+    passport_schema = load(CORE / "curved-benchmark-passport.schema.json")
+    assert not list(Draft202012Validator(candidate_schema, format_checker=FormatChecker()).iter_errors(candidate))
+    assert not list(Draft202012Validator(passport_schema, format_checker=FormatChecker()).iter_errors(passport))
+    assert candidate["candidate_id"] == passport["candidate_id"]
+    assert passport["scientific_review"] == "REQUESTED"
+
+
 def test_coordinate_benchmark_implementation_rereview_is_approved_and_bounded():
     review = load(ROOT / "artifacts" / "reviews" / "REVIEW-000002.json")
     schema = load(CORE / "review-record.schema.json")

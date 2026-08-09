@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Sequence
 
 from .pipeline import load_and_evaluate
+from .curved_pipeline import load_and_evaluate_curved
 from .reporting import beginner_report, technical_report
 from .control import SCHEMAS, load_and_validate_control
 from .synthetic_benchmark import run_suite
@@ -68,7 +69,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0 if result["failed"] == 0 else 1
     candidate_path = args.candidate.resolve()
     passport_path = args.passport.resolve() if args.passport else None
-    candidate, result = load_and_evaluate(candidate_path, reproducible=args.reproducible, passport_path=passport_path)
+    candidate_document = json.loads(candidate_path.read_text(encoding="utf-8"))
+    if candidate_document.get("schema_version") == "2.0.0":
+        if passport_path is None:
+            print("FAIL: curved benchmark profiles require an explicit --passport")
+            return 1
+        candidate, result = load_and_evaluate_curved(candidate_path, passport_path, reproducible=args.reproducible)
+    else:
+        candidate, result = load_and_evaluate(candidate_path, reproducible=args.reproducible, passport_path=passport_path)
     if args.write:
         _write(candidate, result)
     if args.json:

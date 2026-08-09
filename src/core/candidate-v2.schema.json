@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/candidate-v2.schema.json",
+  "title": "Symbolic curved-spacetime benchmark candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "candidate_id", "version", "title", "status", "intended_use",
+    "validation_profile", "coordinates", "coordinate_system", "domain", "conventions",
+    "metric", "parameters", "assumptions", "claims", "falsification", "references", "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "candidate_id": {"type": "string", "pattern": "^CANDIDATE-[0-9]{6}$"},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "title": {"type": "string", "minLength": 3},
+    "status": {"enum": ["DRAFT", "SUBMITTED", "VALIDATED", "REJECTED", "SUPERSEDED", "RETRACTED"]},
+    "intended_use": {"const": "BENCHMARK"},
+    "validation_profile": {"const": "benchmark.schwarzschild_exterior_v1"},
+    "coordinates": {"const": ["t", "r", "theta", "phi"]},
+    "coordinate_system": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "description"],
+      "properties": {"name": {"type": "string"}, "description": {"type": "string"}}
+    },
+    "domain": {
+      "type": "object", "additionalProperties": false,
+      "required": ["parameter_constraints", "coordinate_ranges", "excluded_sets", "chart_coverage"],
+      "properties": {
+        "parameter_constraints": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "coordinate_ranges": {
+          "type": "object", "additionalProperties": false,
+          "required": ["t", "r", "theta", "phi"],
+          "properties": {"t": {"type": "string"}, "r": {"type": "string"}, "theta": {"type": "string"}, "phi": {"type": "string"}}
+        },
+        "excluded_sets": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "chart_coverage": {"type": "string", "minLength": 1}
+      }
+    },
+    "conventions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["metric_signature", "units", "speed_of_light", "gravitational_constant", "cosmological_constant", "riemann_tensor_definition", "ricci_contraction"],
+      "properties": {
+        "metric_signature": {"const": "-+++"},
+        "units": {"const": "geometrized units G = c = 1"},
+        "speed_of_light": {"const": 1},
+        "gravitational_constant": {"const": 1},
+        "cosmological_constant": {"const": 0},
+        "riemann_tensor_definition": {"const": "R^rho_{sigma mu nu} = d_mu Gamma^rho_{nu sigma} - d_nu Gamma^rho_{mu sigma} + Gamma^rho_{mu lambda} Gamma^lambda_{nu sigma} - Gamma^rho_{nu lambda} Gamma^lambda_{mu sigma}"},
+        "ricci_contraction": {"const": "R_{sigma nu} = R^rho_{sigma rho nu}"}
+      }
+    },
+    "metric": {
+      "type": "object", "additionalProperties": false,
+      "required": ["representation", "components"],
+      "properties": {
+        "representation": {"const": "symbolic_matrix"},
+        "components": {
+          "type": "array", "minItems": 4, "maxItems": 4,
+          "items": {
+            "type": "array", "minItems": 4, "maxItems": 4,
+            "items": {"$ref": "#/$defs/component"}
+          }
+        }
+      }
+    },
+    "parameters": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mass"],
+      "properties": {
+        "mass": {
+          "type": "object", "additionalProperties": false,
+          "required": ["symbol", "assumptions", "schwarzschild_radius"],
+          "properties": {
+            "symbol": {"const": "M"},
+            "assumptions": {"const": ["real", "positive"]},
+            "schwarzschild_radius": {"const": "2*M"}
+          }
+        }
+      }
+    },
+    "assumptions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "claims": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["claim_id", "class", "statement"],
+        "properties": {"claim_id": {"type": "string"}, "class": {"const": "HYPOTHESIS"}, "statement": {"type": "string"}}
+      }
+    },
+    "falsification": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "references": {
+      "type": "array", "minItems": 2,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["citation_key", "title", "type", "year", "url"],
+        "properties": {
+          "citation_key": {"type": "string"}, "title": {"type": "string"},
+          "type": {"enum": ["PRIMARY_SOURCE", "REVIEW", "DOCUMENTATION"]},
+          "year": {"type": "integer", "minimum": 1500, "maximum": 2100},
+          "url": {"type": "string", "format": "uri"}
+        }
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["created_by", "created_at", "license"],
+      "properties": {"created_by": {"type": "string"}, "created_at": {"type": "string", "format": "date-time"}, "license": {"type": "string"}}
+    }
+  },
+  "$defs": {
+    "component": {
+      "oneOf": [
+        {"type": "integer"},
+        {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[A-Za-z0-9_+*/(). -]+$"}
+      ]
+    }
+  }
+}

@@ -14,11 +14,13 @@
     "test:science": "python -m pytest",
     "verify:baseline": "python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible",
     "verify:coordinate-benchmark": "python scripts/research.py verify candidates/CANDIDATE-000002.json --passport benchmarks/BENCHMARK-000002.passport.json --reproducible",
+    "verify:curved-benchmark": "python scripts/research.py verify candidates/CANDIDATE-000003.json --passport benchmarks/BENCHMARK-000003.passport.json --reproducible",
     "verify:benchmark": "python scripts/research.py benchmark",
     "verify:crosscheck": "python scripts/independent_crosscheck.py",
     "verify:coordinate-crosscheck": "python scripts/independent_coordinate_crosscheck.py",
     "verify:cleanroom": "python independent/sympy_clean_clone_reproduction.py",
-    "check": "npm run verify:baseline && npm run verify:coordinate-benchmark && npm run verify:benchmark && npm run verify:crosscheck && npm run verify:coordinate-crosscheck && npm run verify:cleanroom && npm run test:science && npm run test:repo && npm run build && npm run test:web",
+    "verify:schwarzschild-crosscheck": "python independent/schwarzschild_einsteinpy_crosscheck.py",
+    "check": "npm run verify:baseline && npm run verify:coordinate-benchmark && npm run verify:curved-benchmark && npm run verify:benchmark && npm run verify:crosscheck && npm run verify:coordinate-crosscheck && npm run verify:cleanroom && npm run verify:schwarzschild-crosscheck && npm run test:science && npm run test:repo && npm run build && npm run test:web",
     "test:repo": "node scripts/test_repository.mjs"
   },
   "license": "Apache-2.0"
