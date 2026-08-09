@@ -201,6 +201,7 @@ async function build() {
   await copyIfExists('benchmarks/synthetic-suite-v1.json', 'data/synthetic-suite.json');
   await copyIfExists('artifacts/reproductions/CANDIDATE-000001.crosscheck.json', 'data/crosscheck.json');
   await copyIfExists('artifacts/reproductions/CANDIDATE-000002.crosscheck.json', 'data/crosscheck-000002.json');
+  await copyIfExists('artifacts/reproductions/INTERNAL-CLEAN-CLONE-000001.json', 'data/internal-clean-clone-reproduction.json');
   await copyIfExists('benchmarks/BENCHMARK-000002.passport.json', 'data/benchmark-000002-passport.json');
   await copyIfExists('artifacts/reviews/REVIEW-000002.json', 'data/review-000002.json');
   await copyIfExists('artifacts/reports/CANDIDATE-000001.beginner.md', 'data/report-beginner.md');

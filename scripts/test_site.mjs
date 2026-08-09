@@ -42,7 +42,7 @@ async function verifyRequiredFiles() {
     'index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html',
     '404.html', 'assets/styles.css', 'assets/site.js', 'assets/favicon.svg', 'assets/og-card.png',
     'data/candidate.json', 'data/result.json', 'data/candidate-000002.json', 'data/result-000002.json', 'data/benchmark-000002-passport.json', 'data/review-000002.json',
-    'data/synthetic-suite.json', 'data/synthetic-suite-result.json', 'data/crosscheck.json', 'data/crosscheck-000002.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/research-program.json', 'data/project-status.json', 'data/site-config.json',
+    'data/synthetic-suite.json', 'data/synthetic-suite-result.json', 'data/crosscheck.json', 'data/crosscheck-000002.json', 'data/internal-clean-clone-reproduction.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/research-program.json', 'data/project-status.json', 'data/site-config.json',
     'site.webmanifest', 'robots.txt', 'llms.txt', 'build-manifest.json', 'README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE',
   ];
   for (const relative of required) if (!(await exists(path.join(dist, relative)))) fail(`Missing required build output: ${relative}`);
@@ -87,9 +87,9 @@ async function verifyHtml(basePath = '') {
 }
 
 async function verifyArtifacts() {
-  const [candidate, result, coordinateCandidate, coordinateResult, passport, review, benchmark, crosscheck, coordinateCrosscheck, status, graph, agents, roadmap, program] = await Promise.all([
+  const [candidate, result, coordinateCandidate, coordinateResult, passport, review, cleanCloneReproduction, benchmark, crosscheck, coordinateCrosscheck, status, graph, agents, roadmap, program] = await Promise.all([
     json('data/candidate.json'), json('data/result.json'), json('data/candidate-000002.json'), json('data/result-000002.json'), json('data/benchmark-000002-passport.json'), json('data/review-000002.json'),
-    json('data/synthetic-suite-result.json'), json('data/crosscheck.json'), json('data/crosscheck-000002.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'), json('data/research-program.json'),
+    json('data/internal-clean-clone-reproduction.json'), json('data/synthetic-suite-result.json'), json('data/crosscheck.json'), json('data/crosscheck-000002.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'), json('data/research-program.json'),
   ]);
   const passed = result.checks.filter((check) => check.status === 'PASS').length;
   const failed = result.checks.filter((check) => check.status === 'FAIL').length;
@@ -113,6 +113,7 @@ async function verifyArtifacts() {
   if (program.research_question !== 'Can we shorten the distance to Mars—without changing the traveler?') fail('Public research question differs from the canonical program contract');
   if (passport.scientific_review !== 'CHANGES_REQUIRED' || passport.review_history.at(-1)?.response_status !== 'ADDRESSED_AWAITING_REREVIEW') fail('Published passport no longer matches its frozen approved source');
   if (review.outcome !== 'APPROVED' || review.approval_scope !== 'REPOSITORY_IMPLEMENTATION_AND_ARTIFACTS' || review.boundaries.external_scientific_reproduction !== false || review.remaining_objections.length !== 0) fail('Published implementation approval is missing, unresolved, or overstated');
+  if (cleanCloneReproduction.comparison !== 'MATCH' || cleanCloneReproduction.independence.counts_as_external_reproduction !== false || cleanCloneReproduction.signature.status !== 'UNSIGNED_NO_KEY') fail('Published clean-clone reproduction is missing or overstated');
   if (status.coordinateBenchmarkReview !== review.outcome || status.coordinateBenchmarkReviewScope !== review.approval_scope) fail('Project status does not expose the current implementation review record');
   if (program.current_evidence.implemented_checks !== passed + coordinatePassed || program.current_evidence.known_answer_examples !== 2 || program.current_evidence.workflow_cases !== benchmark.case_count) fail('Program evidence counts do not match public artifacts');
   if (program.current_evidence.novel_transportation_candidates !== 0 || program.current_evidence.traveler_safety_evaluations !== 0 || program.current_evidence.outside_reproductions !== 0) fail('Program contract overstates current evidence');

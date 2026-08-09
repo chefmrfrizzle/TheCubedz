@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 
@@ -80,3 +81,17 @@ def test_coordinate_benchmark_implementation_rereview_is_approved_and_bounded():
         "novel_physics_claim": False,
         "transportation_claim": False,
     }
+
+
+def test_internal_clean_clone_reproduction_is_valid_bounded_and_content_addressed():
+    reproduction = load(ROOT / "artifacts" / "reproductions" / "INTERNAL-CLEAN-CLONE-000001.json")
+    schema = load(CORE / "reproduction-record.schema.json")
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+    assert not list(validator.iter_errors(reproduction))
+    published_digest = reproduction.pop("record_digest")
+    encoded = json.dumps(reproduction, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    assert published_digest == f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+    assert reproduction["comparison"] == "MATCH"
+    assert reproduction["independence"]["counts_as_external_reproduction"] is False
+    assert reproduction["signature"]["status"] == "UNSIGNED_NO_KEY"
+    assert reproduction["conflict_of_interest"]["disclosed"] is True

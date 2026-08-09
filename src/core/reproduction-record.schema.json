@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/reproduction-record.schema.json",
+  "title": "Clean-clone reproduction record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "reproduction_id", "classification", "repository", "environment",
+    "commands", "implementation", "candidates", "comparison", "conflict_of_interest",
+    "independence", "signature", "limitations", "record_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "reproduction_id": {"type": "string", "pattern": "^REPRODUCTION-[A-Z0-9-]+$"},
+    "classification": {"enum": ["INTERNAL_CLEAN_CLONE_SEPARATE_LIBRARY_REPRODUCTION", "EXTERNAL_REPRODUCTION"]},
+    "repository": {
+      "type": "object", "additionalProperties": false,
+      "required": ["url", "commit", "working_tree_clean"],
+      "properties": {
+        "url": {"type": "string", "format": "uri"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "working_tree_clean": {"const": true}
+      }
+    },
+    "environment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["operating_system", "system", "release", "machine", "python_version", "python_implementation", "sympy_version"],
+      "properties": {
+        "operating_system": {"type": "string"}, "system": {"type": "string"},
+        "release": {"type": "string"}, "machine": {"type": "string"},
+        "python_version": {"type": "string"}, "python_implementation": {"type": "string"},
+        "sympy_version": {"type": "string"}
+      }
+    },
+    "commands": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+    "implementation": {"type": "object"},
+    "candidates": {"type": "array", "minItems": 2, "items": {"type": "object"}},
+    "comparison": {"enum": ["MATCH", "MISMATCH"]},
+    "conflict_of_interest": {
+      "type": "object", "additionalProperties": false,
+      "required": ["disclosed", "operator", "overlaps"],
+      "properties": {
+        "disclosed": {"const": true}, "operator": {"type": "string"},
+        "overlaps": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "independence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["clean_remote_clone", "separate_library", "separate_implementation", "separate_machine", "separate_contributor", "counts_as_external_reproduction", "level"],
+      "properties": {
+        "clean_remote_clone": {"type": "boolean"}, "separate_library": {"type": "boolean"},
+        "separate_implementation": {"type": "boolean"}, "separate_machine": {"type": "boolean"},
+        "separate_contributor": {"type": "boolean"}, "counts_as_external_reproduction": {"type": "boolean"},
+        "level": {"type": "string"}
+      }
+    },
+    "signature": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "content_digest_is_not_a_signature", "reason"],
+      "properties": {
+        "status": {"enum": ["UNSIGNED_NO_KEY", "VERIFIED_GPG", "VERIFIED_SSH"]},
+        "content_digest_is_not_a_signature": {"type": "boolean"},
+        "reason": {"type": "string"}
+      }
+    },
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "record_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"classification": {"const": "EXTERNAL_REPRODUCTION"}}, "required": ["classification"]},
+      "then": {
+        "properties": {
+          "independence": {
+            "properties": {
+              "separate_machine": {"const": true},
+              "separate_contributor": {"const": true},
+              "counts_as_external_reproduction": {"const": true}
+            }
+          },
+          "signature": {"properties": {"status": {"enum": ["VERIFIED_GPG", "VERIFIED_SSH"]}}}
+        }
+      }
+    }
+  ]
+}

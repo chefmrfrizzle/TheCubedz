@@ -45,6 +45,7 @@ As of **August 8, 2026**, the repository contains:
 | Controlled autonomy | Machine-validated task, capability, run, evidence-bundle, and human-promotion contracts |
 | Synthetic benchmark | 100 frozen workflow cases: 23 accepted, 57 rejected, 5 mismatches preserved, and 15 unresolved |
 | Cross-check | Separate standard-library arithmetic paths match 11/11 and 13/13 comparable checks; Draft 2020-12 schema validation remains primary-only, and neither path is an outside reproduction |
+| Internal clean-clone reproduction | Both published digests and a separate SymPy calculation match from remote commit `8684c5e`; conflicts are disclosed, the record is unsigned because no signing key was configured, and it does not count as outside reproduction |
 | Scientific review | `REVIEW-000001` required three implementation corrections; [`REVIEW-000002`](artifacts/reviews/REVIEW-000002.json) independently verified all seven requested items and returned `APPROVED` with no remaining objections |
 | Source provenance | Candidate 000002 records source commit `038b8e3a9d7f`; repository checks verify that commit contains the exact candidate, passport, schemas, validator, and matrix implementation |
 | Public website | 8 responsive routes, six-face evidence cube, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
