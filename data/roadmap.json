@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0.0",
   "phases": [
-    {"id": "PHASE-0", "title": "Integrity foundation", "status": "COMPLETE", "outcome": "Open governance, schemas, claims policy, and a versioned evidence model."},
-    {"id": "PHASE-1", "title": "One reproducible baseline", "status": "COMPLETE", "outcome": "Candidate 000001 is represented, checked with exact arithmetic, cross-checked through a separate implementation path, explained, and fingerprinted."},
-    {"id": "PHASE-2", "title": "Benchmark ladder", "status": "LIVE", "outcome": "Candidate 000002 verifies a passport-bound linear coordinate map. Candidate 000003 verifies one preregistered Schwarzschild exterior profile with symbolic curvature and an internal EinsteinPy comparison. Named outside review and signed external reproduction remain open."},
-    {"id": "PHASE-3", "title": "Public laboratory", "status": "PARTIAL", "outcome": "An artifact-driven evidence cube, candidate registry, result records, graph exploration, challenges, and reproduction workflows."},
-    {"id": "PHASE-4", "title": "Transparent search", "status": "FUTURE", "outcome": "Compare random, evolutionary, Bayesian, and active-learning policies on frozen benchmarks."},
-    {"id": "PHASE-5", "title": "Federated reproduction", "status": "FUTURE", "outcome": "Sandboxed community runners, signed manifests, cross-solver checks, and quality-based reputation."},
-    {"id": "PHASE-6", "title": "Novel research", "status": "GATED", "outcome": "Only after benchmark success: novel candidate generation, expert review, and external replication."}
+    {"id": "PHASE-0", "title": "Evidence-protocol foundation", "status": "COMPLETE", "outcome": "Open governance, schemas, claims policy, versioned artifacts, and three known-answer spacetime calibrations."},
+    {"id": "PHASE-1", "title": "Quiet Compute validation contract", "status": "IMPLEMENTED_DRAFT", "outcome": "Machine-validated measurement, deliberate-submission, matched comparison, guardrail, replication, consensus, and adversarial contracts exist; external domain review and preregistration remain open."},
+    {"id": "PHASE-2", "title": "Controlled acoustic and thermal baseline", "status": "FUTURE", "outcome": "Publish repeated raw sound, spectrum, workload, temperature, energy, water, equipment, and environment traces for one declared system."},
+    {"id": "PHASE-3", "title": "Independent baseline reproduction", "status": "GATED", "outcome": "A separate operator and environment recover the frozen baseline within preregistered tolerances and disclose conflicts of interest."},
+    {"id": "PHASE-4", "title": "One bounded intervention", "status": "GATED", "outcome": "Test one control, airflow, liquid-cooling, power, or thermal-material change without failing workload, thermal, energy, water, reliability, or cost guardrails."},
+    {"id": "PHASE-5", "title": "Secure federated runner", "status": "PARTIAL", "outcome": "Signed admission, immutable-runtime and quota filters, atomic replay claims, diversity allocation, tolerance consensus, and isolation-plan generation exist. Execution remains disabled pending an independently reviewed sandbox adapter."},
+    {"id": "PHASE-6", "title": "Partner-led design and materials search", "status": "GATED", "outcome": "Expand to accelerated simulation, design search, and long-horizon materials hypotheses only after validated baselines, domain review, and physical-test partners exist."}
   ]
 }

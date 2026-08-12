@@ -43,9 +43,9 @@ def test_agent_permissions_are_explicit():
     assert all("promote a scientific claim" in agent["may_not"] for agent in agents if agent["id"] == "AGENT-ORCHESTRATOR")
 
 
-def test_roadmap_gates_novel_research():
+def test_roadmap_gates_partner_led_design_and_materials_search():
     phases = load(ROOT / "data" / "roadmap.json")["phases"]
-    assert phases[-1]["title"] == "Novel research"
+    assert phases[-1]["title"] == "Partner-led design and materials search"
     assert phases[-1]["status"] == "GATED"
 
 

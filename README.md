@@ -1,6 +1,6 @@
 # TheCubedz
 
-> **TheCubedz** is a public, open-source computational experiment for representing spacetime candidates, checking narrowly defined properties, preserving failures, inviting independent challenge, and learning where to investigate next.
+> **TheCubedz** is a public, open-source evidence engine. Its first public challenge is Quiet Compute: measure why compute systems are loud, test one change at a time, and preserve exactly what passed, failed, or remains unknown.
 
 [![Status: public pre-alpha](https://img.shields.io/badge/status-public%20pre--alpha-f5a623)](#current-public-status)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-4c8bf5)](LICENSE)
@@ -9,32 +9,44 @@
 
 ## What this is
 
-Imagine physics as the rulebook for a Rubik's Cube.
+**Data centers are too freaking loud. Let's make them quiet.**
 
-A candidate is one arrangement. A validator checks only the rules it explicitly implements. A result records what passed, what failed, what remains unknown, and exactly how the calculation was produced. Failures stay visible so the project gradually builds a map of explored and unexplored regions.
+The first scientific question is narrower than the campaign line:
 
-Conventional spaceflight asks:
+> Can a declared compute system reduce acoustic output under the same useful workload while satisfying thermal, energy, water, reliability, cost, uncertainty, and independent-reproduction constraints?
 
-> How do we move a vehicle across the distance between Earth and Mars?
+The repository now implements local measurement and deliberate-submission contracts, matched comparison, Ed25519 job admission, worker eligibility, diversity-first replication allocation, tolerance consensus, evidence-quality reputation, and fail-closed isolation plans. See the [backend specification](docs/QUIET_COMPUTE_BACKEND.md) and [network logic](docs/QUIET_COMPUTE_NETWORK_LOGIC.md).
 
-This project asks a different methodological question:
+The method is simple: declare the test before seeing the answer, preserve raw-artifact digests and uncertainty, refuse mismatched workloads, evaluate every guardrail separately, reproduce across genuinely independent systems, and require named human review.
 
-> Can a reproducible computational system search mathematically defined configurations of geometry, matter, fields, and boundary conditions—and record exactly why candidates fail or survive?
+The three existing spacetime candidates remain known-answer calibrations for that evidence protocol. They test the repository's ability to bind a candidate, passport, validator, result, digest, reproduction, and review without presenting a novel discovery.
 
-Earth → Mars is a motivating benchmark, **not a transportation claim**.
+## What currently works
+
+- Local artifacts are strict-schema validated and content-addressed.
+- Interventions fail when useful workload, microphone geometry, ambient conditions, clocks, or any thermal, energy, water, reliability, or cost guardrail fails.
+- Signed jobs are verified against a separate trust store and immutable runtime allowlist.
+- Replay, expiry, revocation, quota, and sandbox-attestation checks fail closed.
+- Replication prioritizes independent operator, organization, OS, hardware, and sensor diversity.
+- Consensus requires every declared tolerance and guardrail; majority voting cannot erase a mismatch.
+- Funding and donated compute carry zero evidence-reputation weight.
+- The planner cannot execute a public job.
 
 ## What this is not
 
-This repository does **not** demonstrate a wormhole, warp device, faster-than-light travel, a route to Mars, or practical spacetime engineering.
+This repository does **not** contain a verified quieter-system result, production telemetry collector, automatic upload path, remote administration service, public distributed-compute executor, paid marketplace, or discovered superconductor.
 
-Candidates 000001 and 000002 are intentionally ordinary versions of Minkowski flat spacetime. Candidate 000003 is the established Schwarzschild exterior geometry, restricted to a declared chart outside a spherical non-rotating mass. These are calibration cases, not proposed shortcuts.
+It also does not demonstrate a wormhole, warp device, faster-than-light travel, route to Mars, or practical spacetime engineering. Candidates 000001 and 000002 are intentionally ordinary versions of Minkowski flat spacetime. Candidate 000003 is the established Schwarzschild exterior geometry. They are calibration cases, not proposed shortcuts.
 
 ## Current public status
 
-As of **August 9, 2026**, the repository contains:
+As of **August 12, 2026**, the repository contains:
 
 | Component | Implemented state |
 |---|---|
+| First public challenge | Quiet Compute validation core implemented; passport remains draft; physical baselines and verified quieter systems remain 0 |
+| Quiet Compute local evidence | Measurement, passport, deliberate-submission, matched-comparison, reproduction, and reputation contracts |
+| Secure compute preparation | Ed25519 admission, external trust store, atomic replay claims, capability filtering, diversity allocation, tolerance consensus, and plan-only isolation; public execution disabled |
 | Candidate registry | Two established flat benchmarks and one established curved Schwarzschild exterior benchmark |
 | Deterministic science core | Exact rational matrix operations plus a restricted symbolic tensor profile with no arbitrary expression evaluation |
 | Benchmark results | 43 implemented checks pass across three known-answer examples; 0 fail |
@@ -49,7 +61,7 @@ As of **August 9, 2026**, the repository contains:
 | Scientific review | `REVIEW-000001` required three implementation corrections; [`REVIEW-000002`](artifacts/reviews/REVIEW-000002.json) independently verified all seven requested items and returned `APPROVED` with no remaining objections |
 | Source provenance | Candidate 000002 records source commit `038b8e3a9d7f`; repository checks verify that commit contains the exact candidate, passport, schemas, validator, and matrix implementation |
 | Curved benchmark provenance | Candidate 000003 records source commit `5a6a5fe4f827`; repository checks bind the candidate, passport, parser, tensor engine, validator, and tests to that tree |
-| Public website | 8 responsive routes, six-face evidence cube, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
+| Public website | 9 responsive routes, Quiet Compute challenge and installer, six-face evidence cube, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
 | Automated validation | Scientific, control-contract, benchmark, cross-check, artifact, static-site, link, base-path, and build-fingerprint checks |
 | Independent reproductions | 0 recorded |
 | Novel physics claims | 0 |

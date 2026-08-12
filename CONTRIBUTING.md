@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping test an unusual scientific hypothesis rigorously.
+Thank you for helping build reproducible evidence for Quiet Compute and the broader open research instrument.
 
 ## Start here
 
@@ -10,12 +10,13 @@ Read:
 2. [Scientific claims policy](docs/SCIENTIFIC_CLAIMS_POLICY.md)
 3. [Architecture](docs/ARCHITECTURE.md)
 4. [Code of Conduct](CODE_OF_CONDUCT.md)
+5. [Quiet Compute backend](docs/QUIET_COMPUTE_BACKEND.md)
 
 For agent-assisted work, also read [Agent operating system](docs/AGENT_OPERATING_SYSTEM.md).
 
 For a review intended to count as named scientific evidence, follow the [external scientific review protocol](docs/EXTERNAL_REVIEW_PROTOCOL.md). Candidate 000003 has a [ready-to-send bounded review prompt](prompts/CANDIDATE_000003_EXTERNAL_REVIEW.md).
 
-The canonical public question, traveler constraint, success gates, current evidence counts, contribution paths, and security boundaries are in [`data/research-program.json`](data/research-program.json). The ordered prompts for future phases are in [`prompts/MARS_RESEARCH_PROGRAM.md`](prompts/MARS_RESEARCH_PROGRAM.md).
+The first public challenge, evidence counts, measurement boundary, and worker-security state are in [`data/quiet-compute-program.json`](data/quiet-compute-program.json). Its ordered build prompts are in [`prompts/QUIET_COMPUTE_BUILD_PROGRAM.md`](prompts/QUIET_COMPUTE_BUILD_PROGRAM.md). The original spacetime research program remains in [`data/research-program.json`](data/research-program.json) as a separate research track and protocol calibration.
 
 ## Choose one small starting point
 
@@ -41,6 +42,9 @@ Do not open a pull request until `npm run check` passes or the PR clearly docume
 
 ## Contribution types
 
+- `quiet-measurement`: a locally sealed baseline or intervention artifact with deliberate submission scope;
+- `quiet-passport`: a reviewed workload, environment, uncertainty, guardrail, replication, and consensus contract;
+- `quiet-reproduction`: a result from an independently declared operator and system;
 - `candidate`: a schema-conforming spacetime/matter/field candidate;
 - `validator`: a deterministic mathematical, numerical, or scientific check;
 - `benchmark`: an established case with expected properties and failure fixtures;

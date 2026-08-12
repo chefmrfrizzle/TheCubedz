@@ -39,19 +39,19 @@ function internalTarget(value, basePath = '') {
 
 async function verifyRequiredFiles() {
   const required = [
-    'index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html',
-    '404.html', 'assets/styles.css', 'assets/site.js', 'assets/favicon.svg', 'assets/og-card.png',
+    'index.html', 'challenge/index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html',
+    '404.html', 'assets/styles.css', 'assets/site.js', 'assets/favicon.svg', 'assets/og-card.png', 'assets/og-card-quiet-compute.png', 'assets/og-card-quiet-compute-v2.png',
     'data/candidate.json', 'data/result.json', 'data/candidate-000002.json', 'data/result-000002.json', 'data/benchmark-000002-passport.json', 'data/review-000002.json',
     'data/candidate-000003.json', 'data/result-000003.json', 'data/benchmark-000003-passport.json', 'data/crosscheck-000003.json',
-    'data/synthetic-suite.json', 'data/synthetic-suite-result.json', 'data/crosscheck.json', 'data/crosscheck-000002.json', 'data/internal-clean-clone-reproduction.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/research-program.json', 'data/project-status.json', 'data/site-config.json',
-    'site.webmanifest', 'robots.txt', 'llms.txt', 'build-manifest.json', 'README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE',
+    'data/synthetic-suite.json', 'data/synthetic-suite-result.json', 'data/crosscheck.json', 'data/crosscheck-000002.json', 'data/internal-clean-clone-reproduction.json', 'data/knowledge-graph.json', 'data/agents.json', 'data/roadmap.json', 'data/research-program.json', 'data/quiet-compute-program.json', 'data/project-status.json', 'data/site-config.json',
+    'site.webmanifest', 'robots.txt', 'llms.txt', 'build-manifest.json', 'README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE', 'docs/QUIET_COMPUTE_NETWORK_LOGIC.md', 'docs/QUIET_COMPUTE_BACKEND.md', 'docs/QUIET_COMPUTE_CONTRIBUTION_TERMS_DRAFT.md', 'templates/quiet-compute/README.md', 'templates/quiet-compute/MEASUREMENT.template.json', 'templates/quiet-compute/PASSPORT-ROUND-0.template.json',
   ];
   for (const relative of required) if (!(await exists(path.join(dist, relative)))) fail(`Missing required build output: ${relative}`);
   note(`${required.length} required release files checked`);
 }
 
 async function verifyHtml(basePath = '') {
-  const htmlFiles = ['index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html', '404.html'];
+  const htmlFiles = ['index.html', 'challenge/index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html', '404.html'];
   const prohibited = [
     /we (?:have )?solved (?:the )?wormhole/i,
     /proves? (?:that )?wormholes? exist/i,
@@ -70,7 +70,7 @@ async function verifyHtml(basePath = '') {
     if (!html.includes('class="site-footer"')) fail(`${relative}: missing shared footer`);
     if (!html.includes('name="viewport"')) fail(`${relative}: missing responsive viewport`);
     if (!html.includes('name="description"')) fail(`${relative}: missing description metadata`);
-    if (!html.includes('no transportation claim')) fail(`${relative}: missing explicit launch boundary`);
+    if (!html.includes('no verified quieter-system claim')) fail(`${relative}: missing explicit launch boundary`);
     for (const pattern of prohibited) if (pattern.test(html)) fail(`${relative}: prohibited claim pattern ${pattern}`);
 
     const urls = [...extractAttributes(html, 'href'), ...extractAttributes(html, 'src')];
@@ -88,10 +88,10 @@ async function verifyHtml(basePath = '') {
 }
 
 async function verifyArtifacts() {
-  const [candidate, result, coordinateCandidate, coordinateResult, passport, review, curvedCandidate, curvedResult, curvedPassport, curvedCrosscheck, cleanCloneReproduction, benchmark, crosscheck, coordinateCrosscheck, status, graph, agents, roadmap, program] = await Promise.all([
+  const [candidate, result, coordinateCandidate, coordinateResult, passport, review, curvedCandidate, curvedResult, curvedPassport, curvedCrosscheck, cleanCloneReproduction, benchmark, crosscheck, coordinateCrosscheck, status, graph, agents, roadmap, program, quietProgram] = await Promise.all([
     json('data/candidate.json'), json('data/result.json'), json('data/candidate-000002.json'), json('data/result-000002.json'), json('data/benchmark-000002-passport.json'), json('data/review-000002.json'),
     json('data/candidate-000003.json'), json('data/result-000003.json'), json('data/benchmark-000003-passport.json'), json('data/crosscheck-000003.json'),
-    json('data/internal-clean-clone-reproduction.json'), json('data/synthetic-suite-result.json'), json('data/crosscheck.json'), json('data/crosscheck-000002.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'), json('data/research-program.json'),
+    json('data/internal-clean-clone-reproduction.json'), json('data/synthetic-suite-result.json'), json('data/crosscheck.json'), json('data/crosscheck-000002.json'), json('data/project-status.json'), json('data/knowledge-graph.json'), json('data/agents.json'), json('data/roadmap.json'), json('data/research-program.json'), json('data/quiet-compute-program.json'),
   ]);
   const passed = result.checks.filter((check) => check.status === 'PASS').length;
   const failed = result.checks.filter((check) => check.status === 'FAIL').length;
@@ -123,6 +123,10 @@ async function verifyArtifacts() {
   if (status.coordinateBenchmarkReview !== review.outcome || status.coordinateBenchmarkReviewScope !== review.approval_scope) fail('Project status does not expose the current implementation review record');
   if (program.current_evidence.implemented_checks !== passed + coordinatePassed + curvedPassed || program.current_evidence.known_answer_examples !== 3 || program.current_evidence.workflow_cases !== benchmark.case_count) fail('Program evidence counts do not match public artifacts');
   if (program.current_evidence.novel_transportation_candidates !== 0 || program.current_evidence.traveler_safety_evaluations !== 0 || program.current_evidence.outside_reproductions !== 0) fail('Program contract overstates current evidence');
+  if (quietProgram.campaign_line !== 'Data centers are too freaking loud.' || quietProgram.response_line !== "Let's make them quiet." || quietProgram.status !== 'VALIDATION_CORE_IMPLEMENTED' || quietProgram.authority !== 'DRAFT_NOT_PREREGISTERED') fail('Quiet Compute public status or campaign contract changed unexpectedly');
+  if (quietProgram.current_evidence.published_acoustic_baselines !== 0 || quietProgram.current_evidence.verified_quieter_systems !== 0 || quietProgram.current_evidence.verified_superconductors !== 0 || quietProgram.current_evidence.public_volunteer_worker_enabled !== false) fail('Quiet Compute program overstates current evidence or worker availability');
+  if (quietProgram.security.public_code_execution !== 'DISABLED' || quietProgram.security.worker_status !== 'ADMISSION_AND_PLANNING_IMPLEMENTED_EXECUTION_DISABLED') fail('Quiet Compute public-compute security boundary changed unexpectedly');
+  if (quietProgram.implementation.measurement_sealing !== 'IMPLEMENTED' || quietProgram.implementation.signed_result_verification !== 'IMPLEMENTED' || quietProgram.implementation.tolerance_consensus !== 'IMPLEMENTED_NO_MAJORITY_OVERRIDE' || quietProgram.implementation.public_job_execution !== 'DISABLED') fail('Quiet Compute implementation inventory is incomplete or enables public execution');
   const labHtml = await text('lab/index.html');
   if (!labHtml.includes('data-evidence-cube') || !labHtml.includes('Turn the cube to see what we know')) fail('Answer cube is missing from the laboratory');
   if (!labHtml.includes('Each side asks one plain question')) fail('Answer cube does not explain how to read it');
@@ -131,13 +135,22 @@ async function verifyArtifacts() {
   if (!labHtml.includes('Implementation approval is not an outside scientific reproduction')) fail('Laboratory does not state the approval boundary');
   if (!labHtml.includes('/data/review-000002.json')) fail('Laboratory does not link the approval record');
   if (!labHtml.includes('data-curved-benchmark') || !labHtml.includes('Known curvature, strict boundaries')) fail('Laboratory does not expose the curved benchmark');
-  if (!labHtml.includes('This does not prove the Mars thesis') || !labHtml.includes('Outside signed reproduction</dt><dd>0')) fail('Laboratory overstates the curved benchmark');
+  if (!labHtml.includes('This does not solve Quiet Compute—or the Mars thesis') || !labHtml.includes('Outside signed reproduction</dt><dd>0')) fail('Laboratory overstates the curved benchmark');
   const homeHtml = await text('index.html');
-  if (!homeHtml.includes('Can we shorten the distance to Mars')) fail('Homepage does not state the motivating research question');
-  if (!homeHtml.includes('No shortcut, device, or route to Mars has been found')) fail('Homepage does not state the current scientific boundary');
-  if (!homeHtml.includes('How people and the system work together')) fail('Homepage does not explain the public research workflow');
+  if (!homeHtml.includes('Data centers are too freaking loud.')) fail('Homepage does not state the first public challenge');
+  if (!homeHtml.includes("Let's make them quiet.") || !homeHtml.includes('Join with your server')) fail('Homepage does not state the response or server-participation path');
+  if (!homeHtml.includes('/assets/og-card-quiet-compute-v2.png')) fail('Homepage does not publish the current Quiet Compute social card');
+  if (!homeHtml.includes('No public acoustic baseline, quieter design, or new superconductor has been verified')) fail('Homepage does not state the current Quiet Compute boundary');
+  if (!homeHtml.includes('How people and computers work together')) fail('Homepage does not explain the public research workflow');
+  const challengeHtml = await text('challenge/index.html');
+  if (!challengeHtml.includes('Data centers are too freaking loud.') || !challengeHtml.includes("Let's make them quiet.") || !challengeHtml.includes('First we listen. Then we test everything.') || !challengeHtml.includes('Superconductors are one branch—not the assumed answer')) fail('Quiet Compute challenge does not distinguish its campaign, participation path, exact test, and long-horizon hypothesis');
+  if (!challengeHtml.includes('id="install-linux-command"') || !challengeHtml.includes('data-copy-target="#install-linux-command"') || !challengeHtml.includes('python3.12 scripts/bootstrap.py')) fail('Quiet Compute challenge does not expose a copyable local installer');
+  if (!challengeHtml.includes('This installs local tools only. It does not enroll a worker or upload data.')) fail('Quiet Compute installer does not state its safety boundary');
+  if (!challengeHtml.includes('/docs/QUIET_COMPUTE_NETWORK_LOGIC.md')) fail('Quiet Compute challenge does not explain the installation and network logic');
+  if (!challengeHtml.includes('Evidence gates—not public deadlines.') || !challengeHtml.includes('Measure the whole system—not just the loudest fan.')) fail('Quiet Compute challenge does not expose the evidence-gate and system-boundary context');
+  if (challengeHtml.includes('NVIDIA Inception')) fail('Quiet Compute participant journey contains an unrelated startup-program promotion');
   const contributeHtml = await text('contribute/index.html');
-  if (!contributeHtml.includes('data-program-gates') || !contributeHtml.includes('Complete Mars program')) fail('Contribution page does not expose the research contract and prompt program');
+  if (!contributeHtml.includes('data-program-gates') || !contributeHtml.includes('Quiet Compute build program') || !contributeHtml.includes('id="server-participant"') || !contributeHtml.includes('NO REMOTE ACCESS') || !contributeHtml.includes('/docs/QUIET_COMPUTE_NETWORK_LOGIC.md') || !contributeHtml.includes('/docs/QUIET_COMPUTE_BACKEND.md') || !contributeHtml.includes('/docs/QUIET_COMPUTE_CONTRIBUTION_TERMS_DRAFT.md') || !contributeHtml.includes('ADMISSION + PLANNING IMPLEMENTED · EXECUTION DISABLED')) fail('Contribution page does not expose server participation, contributor terms, security boundaries, backend state, network logic, research contract, and Quiet Compute prompt program');
   const allHtml = (await Promise.all(['index.html','lab/index.html','graph/index.html'].map(text))).join('\n');
   if (!allHtml.includes(result.scientific_payload_digest)) fail('Scientific digest is not visible on public release pages');
   note(`${result.checks.length + coordinateResult.checks.length + curvedResult.checks.length} scientific result checks reconciled with public status`);

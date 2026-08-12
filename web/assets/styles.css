@@ -179,6 +179,15 @@ p { margin-top: 0; }
 .hero-copy .status-line { margin-bottom: 3rem; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 .hero-copy .microcopy { margin-top: 1rem; max-width: 60ch; }
+.quick-install { max-width: 760px; margin-top: 1.15rem; padding: 1rem; border: 1px solid rgba(100,233,228,.24); border-radius: 10px; background: rgba(5,18,25,.72); }
+.quick-install-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.7rem; }
+.quick-install-heading span { color: var(--text); font-weight: 800; }
+.quick-install-heading strong { padding: 0.28rem 0.5rem; border: 1px solid rgba(184,241,109,.35); border-radius: 999px; color: var(--lime); font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.07em; white-space: nowrap; }
+.quick-install code { display: block; overflow-x: auto; padding: 0.75rem 0.85rem; border: 1px solid var(--line); border-radius: 7px; background: var(--bg-deep); color: var(--cyan-strong); font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.55; white-space: nowrap; }
+.quick-install-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 0.75rem; }
+.quick-install-actions .button { min-height: 38px; padding: 0.55rem 0.75rem; font-size: 0.7rem; }
+.quick-install-actions > a:not(.button) { color: var(--cyan-strong); font-size: 0.78rem; }
+.quick-install p { margin: 0.75rem 0 0; color: var(--quiet); font-size: 0.72rem; }
 .hero-visual {
   position: relative;
   isolation: isolate;
@@ -222,6 +231,55 @@ p { margin-top: 0; }
 .visual-caption strong + span { margin-top: 0.75rem; }
 .visual-caption strong { font-size: 0.95rem; }
 
+.challenge-visual {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 74% 20%, rgba(184, 241, 109, 0.09), transparent 17rem),
+    radial-gradient(circle at 28% 82%, rgba(100, 233, 228, 0.1), transparent 20rem),
+    linear-gradient(rgba(100,233,228,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100,233,228,.045) 1px, transparent 1px),
+    #071114;
+  background-size: auto, auto, 42px 42px, 42px 42px, auto;
+}
+.challenge-console {
+  width: calc(100% - 3rem);
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  background: rgba(3, 7, 8, 0.82);
+  box-shadow: 0 28px 80px rgba(0,0,0,.3);
+}
+.challenge-console-head, .challenge-console-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--line);
+}
+.challenge-console-head span, .challenge-console-grid span {
+  color: var(--quiet);
+  font-family: var(--font-mono);
+  font-size: .63rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.challenge-console-head strong { color: var(--cyan); font-size: .8rem; }
+.challenge-question {
+  padding: clamp(1.5rem, 4vw, 2.5rem) 1.2rem;
+  border-bottom: 1px solid var(--line);
+  font-size: clamp(1.35rem, 2.8vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -.025em;
+}
+.challenge-console-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.challenge-console-grid > div { min-height: 92px; padding: 1rem 1.2rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.challenge-console-grid > div:nth-child(even) { border-right: 0; }
+.challenge-console-grid strong { display: block; margin-top: .45rem; font-size: .88rem; }
+.challenge-console-foot { justify-content: flex-start; border: 0; color: var(--muted); font-size: .78rem; }
+
 .status-band { border-block: 1px solid var(--line); background: var(--bg-deep); }
 .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
 .metric { min-height: 118px; display: flex; flex-direction: column; justify-content: center; padding: 1.5rem; border-right: 1px solid var(--line); }
@@ -260,6 +318,7 @@ p { margin-top: 0; }
 .benchmark-card > div:last-child { border-bottom: 0; }
 .benchmark-card span { color: var(--quiet); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .source-grid { grid-template-columns: repeat(4, 1fr); }
+.quiet-source-grid { grid-template-columns: repeat(3, 1fr); }
 .source-card { min-height: 210px; display: flex; flex-direction: column; gap: 0.8rem; padding: 1.4rem; border: 0; border-radius: 0; color: var(--text); text-decoration: none; background: var(--surface); }
 .source-card span:last-child { color: var(--muted); font-size: 0.9rem; }
 .source-card:hover { background: var(--surface-2); }
@@ -514,6 +573,8 @@ p { margin-top: 0; }
   .header-actions .button { display: none; }
   .hero { min-height: auto; grid-template-columns: 1fr; padding-top: 5rem; }
   .hero-visual { min-height: 500px; }
+  .page-hero { grid-template-columns: 1fr; }
+  .page-status { max-width: none; }
   .source-grid, .contribution-grid, .reuse-grid { grid-template-columns: repeat(2, 1fr); }
   .agent-grid, .gates-grid { grid-template-columns: repeat(2, 1fr); }
   .loop-track { grid-template-columns: repeat(3, 1fr); }
@@ -529,6 +590,9 @@ p { margin-top: 0; }
   .hero { gap: 2rem; }
   .hero-copy .status-line { margin-bottom: 2rem; }
   .hero-visual { min-height: 430px; border-radius: 18px; }
+  .challenge-console { width: calc(100% - 1.5rem); }
+  .challenge-console-head { align-items: flex-start; flex-direction: column; }
+  .challenge-question { font-size: 1.35rem; }
   .state-cube { width: 115px; height: 115px; }
   .visual-caption { right: 1rem; bottom: 1rem; left: 1rem; }
   .metric-grid { grid-template-columns: repeat(2, 1fr); }
@@ -577,12 +641,15 @@ p { margin-top: 0; }
   .site-nav { inset-block-start: 64px; }
   .identity-copy strong { font-size: 0.7rem; }
   .hero-actions .button { width: 100%; }
+  .quick-install-actions .button { width: 100%; }
   .metric-grid { grid-template-columns: 1fr; }
   .metric { border-left: 1px solid var(--line); }
   .graph-controls { grid-template-columns: 1fr; }
   .graph-list { grid-template-columns: 1fr; }
   .graph-canvas-wrap, .graph-canvas { min-height: 420px; height: 420px; }
   .scope-tag { white-space: normal; }
+  .challenge-console-grid { grid-template-columns: 1fr; }
+  .challenge-console-grid > div, .challenge-console-grid > div:nth-child(even) { min-height: 72px; border-right: 0; }
   .evidence-cube { width: 160px; height: 160px; }
   .cube-face-front { transform: translateZ(80px); }
   .cube-face-back { transform: rotateY(180deg) translateZ(80px); }
