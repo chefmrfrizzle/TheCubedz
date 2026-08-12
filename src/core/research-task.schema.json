@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/research-task.schema.json",
+  "title": "Bounded research task",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "title", "classification", "authority_tier", "objective", "inputs", "required_gates", "created_by", "created_at", "human_promotion_required"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "task_id": {"type": "string", "pattern": "^TASK-[0-9]{6}$"},
+    "title": {"type": "string", "minLength": 3, "maxLength": 160},
+    "classification": {"enum": ["SOFTWARE", "LITERATURE", "CANDIDATE", "VALIDATION", "REPRODUCTION", "FALSIFICATION", "EXPLANATION", "SEARCH", "SECURITY", "RELEASE"]},
+    "authority_tier": {"enum": ["WORKING", "PRODUCT_ONLY"]},
+    "objective": {"type": "string", "minLength": 10, "maxLength": 2000},
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "read_only"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1, "maxLength": 500},
+          "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "read_only": {"const": true}
+        }
+      }
+    },
+    "required_gates": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["TESTS", "SCIENTIFIC_REVIEW", "SKEPTIC_REVIEW", "SECURITY_REVIEW", "REPRODUCTION", "ACCESSIBILITY", "HUMAN_PROMOTION"]}
+    },
+    "created_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {
+        "type": {"enum": ["HUMAN", "SYSTEM"]},
+        "id": {"type": "string", "minLength": 1, "maxLength": 120}
+      }
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "human_promotion_required": {"const": true}
+  }
+}

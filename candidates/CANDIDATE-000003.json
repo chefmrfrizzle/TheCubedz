@@ -1,0 +1,66 @@
+{
+  "schema_version": "2.0.0",
+  "candidate_id": "CANDIDATE-000003",
+  "version": "1.0.0",
+  "title": "Schwarzschild exterior in curvature coordinates",
+  "status": "DRAFT",
+  "intended_use": "BENCHMARK",
+  "validation_profile": "benchmark.schwarzschild_exterior_v1",
+  "coordinates": ["t", "r", "theta", "phi"],
+  "coordinate_system": {
+    "name": "Schwarzschild curvature coordinates",
+    "description": "A static spherical chart restricted to the exterior region r > 2M in geometrized units."
+  },
+  "domain": {
+    "parameter_constraints": ["M > 0"],
+    "coordinate_ranges": {"t": "all real", "r": "r > 2*M", "theta": "0 < theta < pi", "phi": "0 <= phi < 2*pi"},
+    "excluded_sets": [
+      "r = 0 curvature singularity",
+      "r = 2*M Schwarzschild-coordinate horizon boundary",
+      "theta = 0 and theta = pi spherical-coordinate axis degeneracy"
+    ],
+    "chart_coverage": "Exterior curvature-coordinate patch only; no claim about a horizon-penetrating or maximal extension."
+  },
+  "conventions": {
+    "metric_signature": "-+++",
+    "units": "geometrized units G = c = 1",
+    "speed_of_light": 1,
+    "gravitational_constant": 1,
+    "cosmological_constant": 0,
+    "riemann_tensor_definition": "R^rho_{sigma mu nu} = d_mu Gamma^rho_{nu sigma} - d_nu Gamma^rho_{mu sigma} + Gamma^rho_{mu lambda} Gamma^lambda_{nu sigma} - Gamma^rho_{nu lambda} Gamma^lambda_{mu sigma}",
+    "ricci_contraction": "R_{sigma nu} = R^rho_{sigma rho nu}"
+  },
+  "metric": {
+    "representation": "symbolic_matrix",
+    "components": [
+      ["-(1 - 2*M/r)", 0, 0, 0],
+      [0, "1/(1 - 2*M/r)", 0, 0],
+      [0, 0, "r**2", 0],
+      [0, 0, 0, "r**2*sin(theta)**2"]
+    ]
+  },
+  "parameters": {"mass": {"symbol": "M", "assumptions": ["real", "positive"], "schwarzschild_radius": "2*M"}},
+  "assumptions": [
+    "The benchmark is classical general relativity in four dimensions with zero cosmological constant.",
+    "The evaluated chart is restricted to the static exterior domain r > 2M.",
+    "The source mass lies outside the evaluated vacuum domain; T_mu_nu is zero throughout the submitted chart.",
+    "This established solution is a tensor-engine calibration benchmark, not a transportation proposal or novel geometry."
+  ],
+  "claims": [
+    {"claim_id": "CLAIM-C000003-SCHWARZSCHILD-EXTERIOR", "class": "HYPOTHESIS", "statement": "Within the declared exterior domain, the submitted metric is the Schwarzschild vacuum solution under the declared tensor conventions."}
+  ],
+  "falsification": [
+    "Reject if the metric differs from the preregistered Schwarzschild exterior components.",
+    "Reject if the candidate admits r <= 2M or M <= 0 inside the evaluated chart.",
+    "Reject if any preregistered Christoffel or representative Riemann component differs after symbolic simplification.",
+    "Reject vacuum status if any Ricci, Ricci-scalar, or Einstein-tensor component is nonzero.",
+    "Reject the curvature invariant if the Kretschmann scalar is not exactly 48*M**2/r**6.",
+    "Downgrade comparison status if the separate EinsteinPy solver path does not match."
+  ],
+  "references": [
+    {"citation_key": "schwarzschild_1916", "title": "On the Gravitational Field of a Mass Point According to Einstein's Theory", "type": "PRIMARY_SOURCE", "year": 1916, "url": "https://ui.adsabs.harvard.edu/abs/1916SPAW.......189S/abstract"},
+    {"citation_key": "tong_2019_gr", "title": "Lectures on General Relativity", "type": "REVIEW", "year": 2019, "url": "https://www.damtp.cam.ac.uk/user/tong/gr.html"},
+    {"citation_key": "einsteinpy_0_4_symbolic", "title": "EinsteinPy symbolic module documentation", "type": "DOCUMENTATION", "year": 2021, "url": "https://docs.einsteinpy.org/en/stable/api/symbolic/symbolic_index.html"}
+  ],
+  "provenance": {"created_by": "ChefMrFrizzle", "created_at": "2026-08-09T00:00:00Z", "license": "Apache-2.0"}
+}

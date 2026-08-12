@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping test an unusual scientific hypothesis rigorously.
+Thank you for helping build reproducible evidence for Quiet Compute and the broader open research instrument.
 
 ## Start here
 
@@ -10,8 +10,22 @@ Read:
 2. [Scientific claims policy](docs/SCIENTIFIC_CLAIMS_POLICY.md)
 3. [Architecture](docs/ARCHITECTURE.md)
 4. [Code of Conduct](CODE_OF_CONDUCT.md)
+5. [Quiet Compute backend](docs/QUIET_COMPUTE_BACKEND.md)
 
 For agent-assisted work, also read [Agent operating system](docs/AGENT_OPERATING_SYSTEM.md).
+
+For a review intended to count as named scientific evidence, follow the [external scientific review protocol](docs/EXTERNAL_REVIEW_PROTOCOL.md). Candidate 000003 has a [ready-to-send bounded review prompt](prompts/CANDIDATE_000003_EXTERNAL_REVIEW.md).
+
+The first public challenge, evidence counts, measurement boundary, and worker-security state are in [`data/quiet-compute-program.json`](data/quiet-compute-program.json). Its ordered build prompts are in [`prompts/QUIET_COMPUTE_BUILD_PROGRAM.md`](prompts/QUIET_COMPUTE_BUILD_PROGRAM.md). The original spacetime research program remains in [`data/research-program.json`](data/research-program.json) as a separate research track and protocol calibration.
+
+## Choose one small starting point
+
+- [Ask a bounded research question](https://github.com/chefmrfrizzle/TheCubedz/issues/new?template=research-question.yml) when one part of the program is still vague.
+- [Draft a candidate](https://github.com/chefmrfrizzle/TheCubedz/issues/new?template=candidate.yml) when you can declare exact inputs, assumptions, claims, and failure conditions.
+- [Challenge a claim](https://github.com/chefmrfrizzle/TheCubedz/issues/new?template=challenge.yml) when you have a counterexample, missing limit, convention error, or hidden assumption.
+- [Report a reproduction](https://github.com/chefmrfrizzle/TheCubedz/issues/new?template=reproduction.yml) when you ran a named result in a separately declared environment or implementation.
+
+Every issue is working memory. It has no canonical scientific effect until a named human reviewer approves evidence through the protected pull-request process.
 
 ## Local setup
 
@@ -28,6 +42,9 @@ Do not open a pull request until `npm run check` passes or the PR clearly docume
 
 ## Contribution types
 
+- `quiet-measurement`: a locally sealed baseline or intervention artifact with deliberate submission scope;
+- `quiet-passport`: a reviewed workload, environment, uncertainty, guardrail, replication, and consensus contract;
+- `quiet-reproduction`: a result from an independently declared operator and system;
 - `candidate`: a schema-conforming spacetime/matter/field candidate;
 - `validator`: a deterministic mathematical, numerical, or scientific check;
 - `benchmark`: an established case with expected properties and failure fixtures;

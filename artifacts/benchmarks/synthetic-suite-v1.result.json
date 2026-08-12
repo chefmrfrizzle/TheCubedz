@@ -1,0 +1,823 @@
+{
+  "schema_version": "1.0.0",
+  "suite_id": "SYNTHETIC-WORKFLOW-V1",
+  "suite_version": "1.0.0",
+  "suite_sha256": "sha256:37d2b69fef2a3f10c684fc652e1811bc18f4c57d319b6df6cb173d5d9d85a435",
+  "evaluator": {
+    "name": "thecubedz-synthetic-workflow-evaluator",
+    "version": "1.0.0"
+  },
+  "case_count": 100,
+  "passed": 100,
+  "failed": 0,
+  "outcomes": {
+    "ACCEPT": 23,
+    "REJECT": 57,
+    "UNRESOLVED": 15,
+    "MISMATCH": 5
+  },
+  "results": [
+    {
+      "case_id": "SYN-001",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Canonical Candidate 000001",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-002",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "JSON object keys reordered",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-003",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Insignificant whitespace changed",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-004",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Equivalent rational sign representation",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-005",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Explicit positive numeric signs",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-006",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Unknown top-level field",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-007",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Missing candidate identifier",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-008",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Invalid candidate identifier format",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-009",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Unsupported schema version",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-010",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Missing coordinate declaration",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-011",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Duplicate coordinate name",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-012",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Wrong coordinate count",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-013",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Missing metric tensor",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-014",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Metric has three rows",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-015",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Metric has five rows",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-016",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Ragged metric row",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-017",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Non-numeric metric entry",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-018",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Non-finite metric entry",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-019",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Boolean where a number is required",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-020",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Empty assumptions disclosure",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-021",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Unknown validation profile",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-022",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Invalid status vocabulary",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-023",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Duplicate JSON key during ingestion",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-024",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "UTF-8 explanatory metadata",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-025",
+      "block": "SCHEMA_REPRESENTATION",
+      "title": "Executable content embedded as candidate field",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-026",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Canonical signature -+++",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-027",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Opposite signature profile not implemented",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-028",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Declared signature disagrees with metric",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-029",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Symmetric off-diagonal profile not implemented",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-030",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Unmatched off-diagonal entry",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-031",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Euclidean non-spacetime profile",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-032",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Correct Minkowski inverse",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-033",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Incorrect expected inverse",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-034",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Matrix product differs from identity",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-035",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Determinant exactly -1",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-036",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Incorrect determinant expectation",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-037",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Singular metric",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-038",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Two timelike directions",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-039",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "No timelike direction",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-040",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Consistent coordinate transformation",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-041",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Coordinate labels permuted without transformation",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-042",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Dimensionless units with dimensional parameters",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-043",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Declared natural units",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-044",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Mixed incompatible units",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-045",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Declared domain boundary",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-046",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Evaluation outside declared domain",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-047",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Flatness implication for exact constant baseline",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-048",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "General flatness claim outside profile",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-049",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Mathematical pass used to claim stability",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-050",
+      "block": "ALGEBRA_CONVENTIONS",
+      "title": "Mathematical pass used to claim realizability",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-051",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Exact value on tolerance boundary",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-052",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Value one unit inside tolerance",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-053",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Value one unit outside tolerance",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-054",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Absolute and relative tolerance conflict",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-055",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "NaN solver output",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-056",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Positive infinity output",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-057",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Negative infinity output",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-058",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Signed zero normalization",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-059",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Catastrophic cancellation signal",
+      "expected": "MISMATCH",
+      "observed": "MISMATCH",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-060",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Ill-conditioned matrix",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-061",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Low-resolution run",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-062",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Medium-resolution run",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-063",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Convergent resolution sequence",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-064",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Divergent resolution sequence",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-065",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Oscillating resolution sequence",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-066",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Solver timeout",
+      "expected": "UNRESOLVED",
+      "observed": "UNRESOLVED",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-067",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Memory quota exceeded",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-068",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Output quota exceeded",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-069",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Nondeterministic output with fixed seed",
+      "expected": "MISMATCH",
+      "observed": "MISMATCH",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-070",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Declared stochastic seed distribution",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-071",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Hidden network call attempt",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-072",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Filesystem traversal attempt",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-073",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Subprocess outside allowlist",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-074",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Dependency mutation during run",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-075",
+      "block": "NUMERICAL_ADVERSARIAL",
+      "title": "Result text exceeds numeric payload scope",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-076",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Clean rerun of same implementation",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-077",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Separate environment same implementation",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-078",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Separate implementation same method",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-079",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Separate solver and implementation",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-080",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Missing source commit",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-081",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Dirty tree not disclosed",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-082",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Missing dependency versions",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-083",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Candidate input hash mismatch",
+      "expected": "MISMATCH",
+      "observed": "MISMATCH",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-084",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Validator version mismatch",
+      "expected": "MISMATCH",
+      "observed": "MISMATCH",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-085",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Scientific payload digest mismatch",
+      "expected": "MISMATCH",
+      "observed": "MISMATCH",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-086",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Presentation-only difference",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-087",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Missing stdout or stderr record",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-088",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Missing independence declaration",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-089",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Agent approves its own candidate",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-090",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Orchestrator expands its permissions",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-091",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Public user changes canonical status",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-092",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Popularity attempts physics promotion",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-093",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Explanation changes source number",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-094",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Citation without source location",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-095",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Unverified generated citation",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-096",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Correction deletes superseded history",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-097",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Correction preserves prior result and link",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-098",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Required security review absent",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-099",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "Required reproduction gate absent",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "status": "PASS"
+    },
+    {
+      "case_id": "SYN-100",
+      "block": "PROVENANCE_GOVERNANCE",
+      "title": "All gates pass with human decision",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "PASS"
+    }
+  ],
+  "scientific_scope": "Workflow-control benchmark only; no physical geometry, stability, causality, experiment, or engineering conclusion.",
+  "result_digest": "sha256:a1c4a93009efe80102d8a72764cdbdda0cbaf85e931c63813756bd4cb5cbdf3f"
+}

@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 
@@ -21,6 +22,7 @@ def test_knowledge_graph_schema_and_references():
     ids = {node["id"] for node in graph["nodes"]}
     assert len(ids) == len(graph["nodes"])
     assert all(edge["source"] in ids and edge["target"] in ids for edge in graph["edges"])
+    assert next(node for node in graph["nodes"] if node["id"] == "REVIEW-000002")["status"] == "APPROVED"
 
 
 def test_event_ledger_is_valid_and_monotonic():
@@ -41,7 +43,79 @@ def test_agent_permissions_are_explicit():
     assert all("promote a scientific claim" in agent["may_not"] for agent in agents if agent["id"] == "AGENT-ORCHESTRATOR")
 
 
-def test_roadmap_gates_novel_research():
+def test_roadmap_gates_partner_led_design_and_materials_search():
     phases = load(ROOT / "data" / "roadmap.json")["phases"]
-    assert phases[-1]["title"] == "Novel research"
+    assert phases[-1]["title"] == "Partner-led design and materials search"
     assert phases[-1]["status"] == "GATED"
+
+
+def test_second_benchmark_passport_is_valid_and_matches_preregistered_result():
+    passport = load(ROOT / "benchmarks" / "BENCHMARK-000002.passport.json")
+    schema = load(CORE / "benchmark-passport.schema.json")
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+    assert not list(validator.iter_errors(passport))
+    result = load(ROOT / "artifacts" / "results" / "CANDIDATE-000002.result.json")
+    assert passport["passport_version"] == "1.0.1"
+    # The passport stays byte-identical to the approved source commit. Post-run
+    # approval is recorded separately so provenance is not rewritten in place.
+    assert passport["scientific_review"] == "CHANGES_REQUIRED"
+    assert passport["review_history"][-1]["response_status"] == "ADDRESSED_AWAITING_REREVIEW"
+    assert passport["candidate_id"] == result["candidate"]["candidate_id"]
+    assert passport["preregistered_checks"] == [check["check_id"] for check in result["checks"]]
+    assert passport["expected_results"]["tolerance"] == "exact rational equality"
+
+
+def test_third_candidate_and_curved_passport_match_their_schemas():
+    candidate = load(ROOT / "candidates" / "CANDIDATE-000003.json")
+    candidate_schema = load(CORE / "candidate-v2.schema.json")
+    passport = load(ROOT / "benchmarks" / "BENCHMARK-000003.passport.json")
+    passport_schema = load(CORE / "curved-benchmark-passport.schema.json")
+    assert not list(Draft202012Validator(candidate_schema, format_checker=FormatChecker()).iter_errors(candidate))
+    assert not list(Draft202012Validator(passport_schema, format_checker=FormatChecker()).iter_errors(passport))
+    assert candidate["candidate_id"] == passport["candidate_id"]
+    assert passport["scientific_review"] == "REQUESTED"
+
+
+def test_coordinate_benchmark_implementation_rereview_is_approved_and_bounded():
+    review = load(ROOT / "artifacts" / "reviews" / "REVIEW-000002.json")
+    schema = load(CORE / "review-record.schema.json")
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+    assert not list(validator.iter_errors(review))
+    assert review["outcome"] == "APPROVED"
+    assert review["subject"]["passport_version"] == "1.0.1"
+    assert review["subject"]["head_commit"] == "4b2e24d445f9cacd08cd85cc1a35350951a1553f"
+    assert len(review["verified_items"]) == 7
+    assert review["remaining_objections"] == []
+    assert all((ROOT / evidence_path).is_file() for item in review["verified_items"] for evidence_path in item["evidence_paths"])
+    assert review["boundaries"] == {
+        "external_scientific_reproduction": False,
+        "novel_physics_claim": False,
+        "transportation_claim": False,
+    }
+
+
+def test_internal_clean_clone_reproduction_is_valid_bounded_and_content_addressed():
+    reproduction = load(ROOT / "artifacts" / "reproductions" / "INTERNAL-CLEAN-CLONE-000001.json")
+    schema = load(CORE / "reproduction-record.schema.json")
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+    assert not list(validator.iter_errors(reproduction))
+    published_digest = reproduction.pop("record_digest")
+    encoded = json.dumps(reproduction, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    assert published_digest == f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+    assert reproduction["comparison"] == "MATCH"
+    assert reproduction["independence"]["counts_as_external_reproduction"] is False
+    assert reproduction["signature"]["status"] == "UNSIGNED_NO_KEY"
+    assert reproduction["conflict_of_interest"]["disclosed"] is True
+
+
+def test_curved_einsteinpy_comparison_is_bounded_and_content_addressed():
+    reproduction = load(ROOT / "artifacts" / "reproductions" / "CANDIDATE-000003.einsteinpy-crosscheck.json")
+    published_digest = reproduction.pop("record_digest")
+    encoded = json.dumps(reproduction, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    assert published_digest == f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+    assert reproduction["overall_status"] == "MATCH"
+    assert reproduction["independence"]["external_reproduction"] is False
+    assert reproduction["independence"]["separate_tensor_library"] is True
+    assert reproduction["signature"]["status"] == "UNSIGNED_NO_KEY"
+    assert reproduction["signature"]["record_digest_is_not_a_signature"] is True
+    assert reproduction["conflict_of_interest"]["declared"] is True

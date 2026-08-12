@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/schemas/model-card.schema.json",
+  "$id": "https://thecubedz.vercel.app/schemas/model-card.schema.json",
   "title": "Search or explanation model card",
   "type": "object",
   "additionalProperties": false,

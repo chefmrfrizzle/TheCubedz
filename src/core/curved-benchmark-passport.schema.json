@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/curved-benchmark-passport.schema.json",
+  "title": "Curved-spacetime benchmark passport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "passport_id", "passport_version", "benchmark_id", "candidate_id",
+    "title", "classification", "capability_added", "scientific_review", "domain",
+    "conventions", "expected_results", "preregistered_checks", "negative_cases",
+    "unsupported_properties", "references", "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "passport_id": {"const": "PASSPORT-000003"},
+    "passport_version": {"const": "1.0.0"},
+    "benchmark_id": {"const": "BENCHMARK-000003"},
+    "candidate_id": {"const": "CANDIDATE-000003"},
+    "title": {"type": "string"},
+    "classification": {"const": "ESTABLISHED_NON_NOVEL_CURVED_GEOMETRY"},
+    "capability_added": {"type": "string", "minLength": 10},
+    "scientific_review": {"const": "REQUESTED"},
+    "domain": {"type": "object"},
+    "conventions": {"type": "object"},
+    "expected_results": {
+      "type": "object", "additionalProperties": false,
+      "required": ["coordinates", "metric", "inverse_metric", "metric_determinant", "nonzero_christoffel", "representative_riemann", "ricci_tensor", "ricci_scalar", "einstein_tensor", "kretschmann_scalar", "stress_energy", "tolerance"],
+      "properties": {
+        "coordinates": {"const": ["t", "r", "theta", "phi"]},
+        "metric": {"$ref": "#/$defs/matrix"},
+        "inverse_metric": {"$ref": "#/$defs/matrix"},
+        "metric_determinant": {"type": "string"},
+        "nonzero_christoffel": {"type": "object", "additionalProperties": {"type": "string"}},
+        "representative_riemann": {"type": "object", "additionalProperties": {"type": "string"}},
+        "ricci_tensor": {"$ref": "#/$defs/matrix"},
+        "ricci_scalar": {"type": ["integer", "string"]},
+        "einstein_tensor": {"$ref": "#/$defs/matrix"},
+        "kretschmann_scalar": {"type": "string"},
+        "stress_energy": {"const": "all zero in the exterior vacuum domain"},
+        "tolerance": {"const": "exact symbolic equality after simplification"}
+      }
+    },
+    "preregistered_checks": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "negative_cases": {
+      "type": "array", "minItems": 1,
+      "items": {"type": "object", "additionalProperties": false, "required": ["case", "expected_failure"], "properties": {"case": {"type": "string"}, "expected_failure": {"type": "string"}}}
+    },
+    "unsupported_properties": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "references": {"type": "array", "minItems": 2, "items": {"type": "object"}},
+    "provenance": {"type": "object"}
+  },
+  "$defs": {
+    "component": {"type": ["integer", "string"]},
+    "matrix": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/component"}}}
+  }
+}

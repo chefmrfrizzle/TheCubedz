@@ -4,6 +4,20 @@ title: "reproduction: "
 labels: []
 body:
   - type: input
+    id: identity
+    attributes:
+      label: Contributor name and stable identity
+      description: Full name plus an institutional profile, ORCID, or equivalent public research record when available.
+    validations:
+      required: true
+  - type: textarea
+    id: qualification
+    attributes:
+      label: Relevant qualification and affiliation
+      description: State the experience that qualifies the scientific scope you are reviewing. GitHub identity alone is not a qualification.
+    validations:
+      required: true
+  - type: input
     id: target
     attributes:
       label: Candidate and result ID
@@ -37,6 +51,13 @@ body:
     validations:
       required: true
   - type: textarea
+    id: conflicts
+    attributes:
+      label: Conflict-of-interest declaration
+      description: Disclose collaboration, compensation, shared code, shared machine or credentials, and AI assistance. Write none if none.
+    validations:
+      required: true
+  - type: textarea
     id: commands
     attributes:
       label: Exact commands
@@ -61,6 +82,13 @@ body:
     id: discrepancies
     attributes:
       label: Differences, warnings, and artifact links
+    validations:
+      required: true
+  - type: textarea
+    id: signature
+    attributes:
+      label: Signature and verification command
+      description: Link the signed artifact and detached GPG, SSH, or Sigstore signature. A sha256 digest alone is not a signature.
     validations:
       required: true
   - type: checkboxes

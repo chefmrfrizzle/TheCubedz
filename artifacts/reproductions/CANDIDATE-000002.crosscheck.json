@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0.0",
+  "reproduction_id": "REPRODUCTION-C000002-INDEPENDENT-PATH-001",
+  "candidate_id": "CANDIDATE-000002",
+  "source_result_id": "RESULT-CANDIDATE-000002-73AF7803B5AE",
+  "source_scientific_payload_digest": "sha256:73af7803b5ae10a9f8b1269398a126e6da94072b30a7e12da16f3e8f53e012d2",
+  "candidate_file_sha256": "sha256:54a195e7a596d67ff1f588be96db417d12d89e354abf0839c5dcc51ab587ff4b",
+  "source_candidate_payload_sha256": "sha256:d80416efff1f74a63104f4f56d003b9b2e844f34976893349645726917351bd4",
+  "passport_file_sha256": "sha256:ac0f4fb623fce97ff857d5be8662b4b3509c8315381b70b85eace51ff7bcafd0",
+  "validation_contract_sha256": "sha256:e79125b196019405e244106ecb5000087f37b18910a36c1fcd389bd45958ae76",
+  "implementation": {
+    "name": "standard-library-leibniz-coordinate-pullback-crosscheck",
+    "version": "1.2.0",
+    "shared_research_core_code": false,
+    "method": "Independent Leibniz determinant, cofactor inverse, transpose, exact passport comparison, and matrix multiplication using fractions.Fraction; input file hashes normalize UTF-8 line endings to LF"
+  },
+  "independence": {
+    "separate_environment": false,
+    "separate_implementation": true,
+    "separate_solver": false,
+    "separate_contributor": false,
+    "level": "R2_IMPLEMENTATION_PATH_ONLY",
+    "counts_as_external_reproduction": false
+  },
+  "comparison_scope": {
+    "reference_check_count": 14,
+    "compared_check_count": 13,
+    "compared_reference_checks": [
+      "metric.dimension",
+      "metric.symmetry",
+      "metric.determinant",
+      "metric.inverse",
+      "coordinate_map.coordinates",
+      "coordinate_map.jacobian",
+      "coordinate_map.pullback",
+      "minkowski.signature",
+      "minkowski.cosmological_constant",
+      "minkowski.constant_components",
+      "minkowski.connection",
+      "minkowski.curvature",
+      "minkowski.vacuum_source"
+    ],
+    "excluded_reference_checks": [
+      "schema.candidate.v1"
+    ],
+    "schema_conformance_crosschecked": false,
+    "exclusion_reason": "This standard-library arithmetic path does not implement JSON Schema Draft 2020-12; schema.candidate.v1 remains a primary-validator-only check."
+  },
+  "observations": {
+    "metric_determinant": -14400,
+    "metric_inverse": [
+      [
+        "-1/4",
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        "1/9",
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        "1/16",
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        "1/25"
+      ]
+    ],
+    "jacobian": [
+      [
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        4,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        5
+      ]
+    ],
+    "jacobian_determinant": 120,
+    "pullback": [
+      [
+        -4,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        9,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        16,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        25
+      ]
+    ],
+    "checks": {
+      "metric.dimension": "PASS",
+      "metric.symmetry": "PASS",
+      "metric.determinant": "PASS",
+      "metric.inverse": "PASS",
+      "coordinate_map.coordinates": "PASS",
+      "coordinate_map.jacobian": "PASS",
+      "coordinate_map.pullback": "PASS",
+      "minkowski.signature": "PASS",
+      "minkowski.cosmological_constant": "PASS",
+      "minkowski.constant_components": "PASS",
+      "minkowski.connection": "PASS",
+      "minkowski.curvature": "PASS",
+      "minkowski.vacuum_source": "PASS"
+    }
+  },
+  "comparison": "MATCH",
+  "discrepancies": [],
+  "limitations": [
+    "This is a separate arithmetic implementation path created in the same repository and environment.",
+    "It does not implement or claim an independent Draft 2020-12 schema validation.",
+    "It is not an outside reproduction and does not increase the public independent-reproduction count.",
+    "It checks only the preregistered constant linear coordinate map for an established flat-spacetime benchmark."
+  ],
+  "record_digest": "sha256:859e891bb826054e4748b6168cbbbe824152eef29051eac3bda2169883036b74"
+}

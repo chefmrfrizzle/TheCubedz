@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/quiet-compute-passport.schema.json",
+  "title": "Quiet Compute preregistered comparison passport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "passport_id", "version", "challenge_id", "status", "boundary", "matched_workload", "matched_environment", "acoustic", "guardrails", "replication", "consensus", "review", "passport_digest"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "passport_id": {"type": "string", "pattern": "^QC-PASSPORT-[0-9]{6}$"},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "challenge_id": {"const": "CHALLENGE-QUIET-000001"},
+    "status": {"enum": ["DRAFT", "PREREGISTERED", "RETIRED"]},
+    "boundary": {"enum": ["SERVER", "RACK", "ROOM", "COOLING_PLANT", "PROPERTY_LINE"]},
+    "matched_workload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exact_fields", "max_relative_throughput_difference", "max_relative_latency_difference", "max_relative_duration_difference"],
+      "properties": {
+        "exact_fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["workload_id", "version", "input_digest", "command_digest", "throughput.unit", "service_target.metric", "service_target.target", "service_target.unit"]}
+        },
+        "max_relative_throughput_difference": {"type": "number", "minimum": 0, "maximum": 1},
+        "max_relative_latency_difference": {"type": "number", "minimum": 0, "maximum": 1},
+        "max_relative_duration_difference": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "matched_environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["require_same_microphone_position", "require_same_microphone_orientation", "max_microphone_distance_difference_m", "max_background_difference_db", "max_absolute_sensor_clock_offset_ms"],
+      "properties": {
+        "require_same_microphone_position": {"const": true},
+        "require_same_microphone_orientation": {"const": true},
+        "max_microphone_distance_difference_m": {"type": "number", "minimum": 0, "maximum": 100},
+        "max_background_difference_db": {"type": "number", "minimum": 0, "maximum": 100},
+        "max_absolute_sensor_clock_offset_ms": {"type": "number", "minimum": 0, "maximum": 60000}
+      }
+    },
+    "acoustic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_improvement_db", "confidence_multiplier", "minimum_background_separation_db"],
+      "properties": {
+        "minimum_improvement_db": {"type": "number", "minimum": 0, "maximum": 100},
+        "confidence_multiplier": {"type": "number", "minimum": 0, "maximum": 10},
+        "minimum_background_separation_db": {"type": "number", "minimum": 0, "maximum": 30}
+      }
+    },
+    "guardrails": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maximum_component_temperature_c", "maximum_relative_energy_increase", "maximum_relative_water_increase", "allow_unknown_water", "maximum_errors", "maximum_throttling_seconds", "maximum_relative_cost_increase", "allow_unknown_cost"],
+      "properties": {
+        "maximum_component_temperature_c": {"type": "number", "minimum": -100, "maximum": 300},
+        "maximum_relative_energy_increase": {"type": "number", "minimum": 0, "maximum": 10},
+        "maximum_relative_water_increase": {"type": "number", "minimum": 0, "maximum": 10},
+        "allow_unknown_water": {"type": "boolean"},
+        "maximum_errors": {"type": "integer", "minimum": 0},
+        "maximum_throttling_seconds": {"type": "number", "minimum": 0},
+        "maximum_relative_cost_increase": {"type": "number", "minimum": 0, "maximum": 10},
+        "allow_unknown_cost": {"type": "boolean"}
+      }
+    },
+    "replication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_results", "minimum_independent_operators", "minimum_independence_groups", "minimum_os_families", "minimum_hardware_families"],
+      "properties": {
+        "minimum_results": {"type": "integer", "minimum": 2, "maximum": 1000},
+        "minimum_independent_operators": {"type": "integer", "minimum": 2, "maximum": 1000},
+        "minimum_independence_groups": {"type": "integer", "minimum": 2, "maximum": 1000},
+        "minimum_os_families": {"type": "integer", "minimum": 1, "maximum": 20},
+        "minimum_hardware_families": {"type": "integer", "minimum": 1, "maximum": 1000}
+      }
+    },
+    "consensus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["require_every_guardrail_pass", "metric_tolerances"],
+      "properties": {
+        "require_every_guardrail_pass": {"const": true},
+        "metric_tolerances": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["acoustic_improvement_db", "energy_relative_change", "component_max_c"],
+          "properties": {
+            "acoustic_improvement_db": {"type": "number", "minimum": 0, "maximum": 100},
+            "energy_relative_change": {"type": "number", "minimum": 0, "maximum": 10},
+            "component_max_c": {"type": "number", "minimum": 0, "maximum": 100}
+          }
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_by", "created_at", "human_promotion_required"],
+      "properties": {
+        "created_by": {"type": "string", "minLength": 2, "maxLength": 120},
+        "created_at": {"type": "string", "format": "date-time"},
+        "human_promotion_required": {"const": true}
+      }
+    },
+    "passport_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

@@ -6,9 +6,28 @@ All notable changes are documented here. The project uses semantic prerelease ve
 
 ### Planned
 
-- Independent implementation of Candidate 000001.
 - First outside reproduction record.
 - Benchmark-design review for Candidate 000002.
+
+## [0.2.0-alpha.1] - 2026-08-07
+
+### Added
+
+- A falsifiable thesis and controlled-autonomy research program.
+- Machine-validated task, capability, run, evidence, and human-promotion contracts.
+- A 100-case synthetic workflow benchmark specification and runner.
+- A separately implemented exact baseline cross-check and reproduction passport.
+- An accessible six-face evidence cube driven by committed artifacts.
+- Supply-chain provenance guidance, pinned workflow actions, and static-site attestations.
+
+### Changed
+
+- Public package, citation, notice, and site metadata now use the TheCubedz brand.
+- The complete science-test command is cross-platform.
+
+### Scientific boundary
+
+This release expands and tests the research instrument. It does not add a novel physics, transportation, stability, causality, experimental, or engineering claim.
 
 ## [0.1.0-alpha.1] - 2026-08-07
 

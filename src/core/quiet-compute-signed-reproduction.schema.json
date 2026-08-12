@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/quiet-compute-signed-reproduction.schema.json",
+  "title": "Signed Quiet Compute reproduction envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "algorithm", "worker_id", "result", "signature"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "algorithm": {"const": "Ed25519"},
+    "worker_id": {"type": "string", "pattern": "^QC-WORKER-[0-9]{6}$"},
+    "result": {"type": "object"},
+    "signature": {"type": "string", "pattern": "^[A-Za-z0-9+/]{86}==$"}
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/quiet-compute-reproduction.schema.json",
+  "title": "Quiet Compute independent reproduction result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "result_id", "job_id", "measurement_id", "input_digest", "passport_id", "operator_id", "independence_group", "worker_id", "os_family", "hardware_family", "comparison_status", "guardrails_all_pass", "metrics", "provenance_complete", "result_digest"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "result_id": {"type": "string", "pattern": "^QC-REPRO-[0-9]{6}$"},
+    "job_id": {"type": "string", "pattern": "^QC-JOB-[0-9]{6}$"},
+    "measurement_id": {"type": "string", "pattern": "^QC-MEAS-[0-9]{6}$"},
+    "input_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "passport_id": {"type": "string", "pattern": "^QC-PASSPORT-[0-9]{6}$"},
+    "operator_id": {"type": "string", "minLength": 3, "maxLength": 120},
+    "independence_group": {"type": "string", "minLength": 3, "maxLength": 120},
+    "worker_id": {"type": "string", "pattern": "^QC-WORKER-[0-9]{6}$"},
+    "os_family": {"enum": ["LINUX", "WINDOWS", "MACOS", "OTHER"]},
+    "hardware_family": {"type": "string", "minLength": 2, "maxLength": 120},
+    "comparison_status": {"enum": ["PASS", "FAIL", "MISMATCH"]},
+    "guardrails_all_pass": {"type": "boolean"},
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["acoustic_improvement_db", "energy_relative_change", "component_max_c"],
+      "properties": {
+        "acoustic_improvement_db": {"type": "number"},
+        "energy_relative_change": {"type": "number"},
+        "component_max_c": {"type": "number"}
+      }
+    },
+    "provenance_complete": {"type": "boolean"},
+    "result_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

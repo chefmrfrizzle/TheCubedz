@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0.0",
+  "passport_id": "PASSPORT-000002",
+  "passport_version": "1.0.1",
+  "benchmark_id": "BENCHMARK-000002",
+  "candidate_id": "CANDIDATE-000002",
+  "title": "Exact linear coordinate equivalence for Minkowski spacetime",
+  "classification": "ESTABLISHED_NON_NOVEL_GEOMETRY",
+  "capability_added": "Verify one declared constant linear coordinate transformation by exact pullback arithmetic instead of matching only one component matrix.",
+  "scientific_review": "CHANGES_REQUIRED",
+  "domain": {
+    "coordinates": ["tau", "xi", "eta", "zeta"],
+    "coordinate_ranges": "All four coordinates range over the real numbers.",
+    "excluded_boundaries": []
+  },
+  "source_model": {
+    "cosmological_constant": 0,
+    "stress_energy": "T_mu_nu = 0",
+    "interpretation": "The same empty, flat Minkowski spacetime as Candidate 000001, expressed using different constant coordinate scales."
+  },
+  "expected_results": {
+    "from_coordinates": ["tau", "xi", "eta", "zeta"],
+    "to_coordinates": ["t", "x", "y", "z"],
+    "reference_metric": [[-1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]],
+    "jacobian": [[2, 0, 0, 0], [0, 3, 0, 0], [0, 0, 4, 0], [0, 0, 0, 5]],
+    "submitted_metric": [[-4, 0, 0, 0], [0, 9, 0, 0], [0, 0, 16, 0], [0, 0, 0, 25]],
+    "submitted_determinant": -14400,
+    "submitted_inverse": [["-1/4", 0, 0, 0], [0, "1/9", 0, 0], [0, 0, "1/16", 0], [0, 0, 0, "1/25"]],
+    "metric_signature": "-+++",
+    "coordinate_relation": "g_submitted = J^T g_reference J",
+    "connection": "all zero",
+    "curvature": "all zero",
+    "stress_energy": "all zero",
+    "tolerance": "exact rational equality"
+  },
+  "preregistered_checks": [
+    "schema.candidate.v1",
+    "metric.dimension",
+    "metric.symmetry",
+    "metric.determinant",
+    "metric.inverse",
+    "coordinate_map.coordinates",
+    "coordinate_map.jacobian",
+    "coordinate_map.pullback",
+    "minkowski.signature",
+    "minkowski.cosmological_constant",
+    "minkowski.constant_components",
+    "minkowski.connection",
+    "minkowski.curvature",
+    "minkowski.vacuum_source"
+  ],
+  "negative_cases": [
+    {"case": "Submitted metric does not equal the declared pullback.", "expected_failure": "coordinate_map.pullback"},
+    {"case": "Declared Jacobian is singular.", "expected_failure": "coordinate_map.jacobian"},
+    {"case": "From-coordinate list differs from the candidate coordinates.", "expected_failure": "coordinate_map.coordinates"},
+    {"case": "Metric signature is declared as +---.", "expected_failure": "minkowski.signature"},
+    {"case": "Cosmological constant is nonzero.", "expected_failure": "minkowski.cosmological_constant"},
+    {"case": "A non-diagonal Jacobian has determinant 120 and produces the same metric but differs from the preregistered pure rescaling.", "expected_failure": "coordinate_map.jacobian"},
+    {"case": "All top-level candidate fields exist but the nested coordinate relation is invalid.", "expected_failure": "schema.candidate.v1"}
+  ],
+  "unsupported_properties": [
+    "Nonlinear or position-dependent coordinate transformations",
+    "Symbolic tensor calculus",
+    "General solutions of Einstein's equations",
+    "Geodesic integration or travel-time optimization",
+    "Stability, causality, energy-condition, traveler-safety, and engineering conclusions",
+    "Any novel geometry or transportation claim"
+  ],
+  "references": [
+    {
+      "title": "Lecture Notes on General Relativity",
+      "url": "https://arxiv.org/abs/gr-qc/9712019",
+      "purpose": "Authoritative graduate-level reference for metrics, tensors, coordinate transformations, and Minkowski spacetime."
+    },
+    {
+      "title": "Coordinates — Einstein Online",
+      "url": "https://www.einstein-online.info/en/explandict/coordinates/",
+      "purpose": "Plain-language authoritative explanation of spacetime coordinate descriptions."
+    }
+  ],
+  "review_history": [
+    {
+      "review_id": "REVIEW-000001",
+      "outcome": "CHANGES_REQUIRED",
+      "reviewed_at": "2026-08-08T00:00:00Z",
+      "reviewer": "independent reviewer; identity not recorded in the supplied review",
+      "summary": "Mathematics and physics confirmed; validator-to-passport binding, secondary-path schema labeling, and source-commit provenance required correction.",
+      "required_corrections": [
+        "Compare the complete preregistered coordinate map and expected values exactly.",
+        "Do not label a required-field subset check as full Draft 2020-12 schema validation.",
+        "Regenerate the canonical result from a commit containing the exact evaluated implementation."
+      ],
+      "response_status": "ADDRESSED_AWAITING_REREVIEW"
+    }
+  ],
+  "provenance": {
+    "implementation_authorized_by": "ChefMrFrizzle",
+    "implemented_by": "ChefMrFrizzle with Codex",
+    "created_at": "2026-08-08T00:00:00Z",
+    "updated_at": "2026-08-08T00:00:00Z",
+    "license": "Apache-2.0",
+    "human_scientific_review_required": true
+  }
+}

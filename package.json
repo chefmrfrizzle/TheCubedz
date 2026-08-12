@@ -1,8 +1,8 @@
 {
-  "name": "open-spacetime-research",
-  "version": "0.1.0-alpha.1",
+  "name": "thecubedz",
+  "version": "0.2.0-alpha.1",
   "private": true,
-  "description": "Build and validate the public static surface for an open computational spacetime research experiment.",
+  "description": "Build and validate the public Quiet Compute challenge and open evidence engine.",
   "type": "module",
   "engines": {
     "node": ">=20.9"
@@ -10,10 +10,18 @@
   "scripts": {
     "dev": "npm run build && node scripts/serve_site.mjs",
     "build": "node scripts/build_site.mjs",
+    "preflight:production": "node scripts/production_preflight.mjs",
     "test:web": "node scripts/test_site.mjs",
-    "test:science": "PYTHONPATH=src pytest",
+    "test:science": "python -m pytest",
     "verify:baseline": "python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible",
-    "check": "npm run verify:baseline && npm run test:science && npm run test:repo && npm run build && npm run test:web",
+    "verify:coordinate-benchmark": "python scripts/research.py verify candidates/CANDIDATE-000002.json --passport benchmarks/BENCHMARK-000002.passport.json --reproducible",
+    "verify:curved-benchmark": "python scripts/research.py verify candidates/CANDIDATE-000003.json --passport benchmarks/BENCHMARK-000003.passport.json --reproducible",
+    "verify:benchmark": "python scripts/research.py benchmark",
+    "verify:crosscheck": "python scripts/independent_crosscheck.py",
+    "verify:coordinate-crosscheck": "python scripts/independent_coordinate_crosscheck.py",
+    "verify:cleanroom": "python independent/sympy_clean_clone_reproduction.py",
+    "verify:schwarzschild-crosscheck": "python independent/schwarzschild_einsteinpy_crosscheck.py",
+    "check": "npm run verify:baseline && npm run verify:coordinate-benchmark && npm run verify:curved-benchmark && npm run verify:benchmark && npm run verify:crosscheck && npm run verify:coordinate-crosscheck && npm run verify:cleanroom && npm run verify:schwarzschild-crosscheck && npm run test:science && npm run test:repo && npm run build && npm run test:web",
     "test:repo": "node scripts/test_repository.mjs"
   },
   "license": "Apache-2.0"

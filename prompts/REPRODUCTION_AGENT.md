@@ -34,7 +34,7 @@ Do not call repeated execution of the same code “independent scientific reprod
 ```bash
 python -m pip install --no-build-isolation -e '.[dev]'
 python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible
-PYTHONPATH=src pytest
+python -m pytest
 ```
 
 ## Required output

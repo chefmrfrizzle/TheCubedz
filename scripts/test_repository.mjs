@@ -29,11 +29,28 @@ async function checkRequiredFiles() {
   const required = [
     'README.md', 'CONTRIBUTING.md', 'GOVERNANCE.md', 'SECURITY.md', 'CODE_OF_CONDUCT.md', 'LICENSE', 'NOTICE', 'CHANGELOG.md', 'SUPPORT.md', 'CITATION.cff',
     'docs/SCIENTIFIC_CLAIMS_POLICY.md', 'docs/THREAT_MODEL.md', 'docs/LAUNCH.md', 'docs/SECOND_BRAIN.md', 'docs/AGENT_OPERATING_SYSTEM.md', 'docs/SCALE_ARCHITECTURE.md',
-    'candidates/CANDIDATE-000001.json', 'artifacts/results/CANDIDATE-000001.result.json', 'data/ledger/events.jsonl', 'data/knowledge-graph.json',
+    'candidates/CANDIDATE-000001.json', 'artifacts/results/CANDIDATE-000001.result.json', 'candidates/CANDIDATE-000002.json', 'artifacts/results/CANDIDATE-000002.result.json', 'candidates/CANDIDATE-000003.json', 'artifacts/results/CANDIDATE-000003.result.json',
+    'benchmarks/BENCHMARK-000002.passport.json', 'benchmarks/BENCHMARK-000003.passport.json', 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json', 'artifacts/reproductions/CANDIDATE-000003.einsteinpy-crosscheck.json', 'artifacts/reproductions/INTERNAL-CLEAN-CLONE-000001.json', 'artifacts/reviews/REVIEW-000002.json', 'src/core/benchmark-passport.schema.json', 'src/core/candidate-v2.schema.json', 'src/core/curved-benchmark-passport.schema.json', 'src/core/reproduction-record.schema.json', 'src/core/review-record.schema.json', 'data/ledger/events.jsonl', 'data/knowledge-graph.json',
+    'data/research-program.json', 'data/quiet-compute-program.json', 'src/core/research-program.schema.json', 'src/core/quiet-compute-program.schema.json', 'src/core/quiet-compute-measurement.schema.json', 'src/core/quiet-compute-passport.schema.json', 'src/core/quiet-compute-submission.schema.json', 'src/core/quiet-compute-job-manifest.schema.json', 'src/core/quiet-compute-signed-job.schema.json', 'src/core/quiet-compute-trust-store.schema.json', 'src/core/quiet-compute-worker.schema.json', 'src/core/quiet-compute-reproduction.schema.json', 'src/core/quiet-compute-signed-reproduction.schema.json', 'src/core/quiet-compute-reputation-event.schema.json', 'src/research_core/quiet_compute.py', 'templates/quiet-compute/README.md', 'templates/quiet-compute/MEASUREMENT.template.json', 'templates/quiet-compute/PASSPORT-ROUND-0.template.json', 'prompts/MARS_RESEARCH_PROGRAM.md', 'prompts/QUIET_COMPUTE_BUILD_PROGRAM.md', 'prompts/PRODUCTION_INTEGRATION_PROGRAM.md', 'scripts/bootstrap.py', 'scripts/production_preflight.mjs', 'docs/QUIET_COMPUTE_NETWORK_LOGIC.md', 'docs/QUIET_COMPUTE_BACKEND.md', 'docs/QUIET_COMPUTE_CONTRIBUTION_TERMS_DRAFT.md', 'docs/PRODUCTION_INTEGRATION_PLAN.md', '.github/ISSUE_TEMPLATE/research-question.yml',
     '.github/workflows/ci.yml', '.github/workflows/pages.yml', '.github/workflows/codeql.yml', '.github/dependabot.yml',
   ];
   for (const item of required) if (!(await exists(path.join(root, item)))) fail(`Missing repository contract file: ${item}`);
   note(`${required.length} repository contract files checked`);
+}
+
+async function checkBootstrapDryRun() {
+  const localPython = path.join(root, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
+  const python = await exists(localPython) ? localPython : (process.platform === 'win32' ? 'python' : 'python3');
+  const completed = spawnSync(python, ['scripts/bootstrap.py', '--dry-run'], { cwd: root, encoding: 'utf8' });
+  if (completed.status !== 0) {
+    fail(`Local bootstrap dry run failed: ${(completed.stderr || completed.stdout).trim()}`);
+    return;
+  }
+  if (!completed.stdout.includes('Dry run complete') || !completed.stdout.includes('research_core.cli benchmark')) {
+    fail('Local bootstrap dry run does not expose its no-change boundary and smoke test');
+    return;
+  }
+  note('Local bootstrap command dry-run checked');
 }
 
 async function checkJsonAndJsonl(files) {
@@ -72,12 +89,91 @@ async function checkMarkdownLinks(files) {
 async function checkScientificConsistency() {
   const candidate = JSON.parse(await readFile(path.join(root, 'candidates/CANDIDATE-000001.json'), 'utf8'));
   const result = JSON.parse(await readFile(path.join(root, 'artifacts/results/CANDIDATE-000001.result.json'), 'utf8'));
+  const coordinateCandidate = JSON.parse(await readFile(path.join(root, 'candidates/CANDIDATE-000002.json'), 'utf8'));
+  const coordinateResult = JSON.parse(await readFile(path.join(root, 'artifacts/results/CANDIDATE-000002.result.json'), 'utf8'));
+  const curvedCandidate = JSON.parse(await readFile(path.join(root, 'candidates/CANDIDATE-000003.json'), 'utf8'));
+  const curvedResult = JSON.parse(await readFile(path.join(root, 'artifacts/results/CANDIDATE-000003.result.json'), 'utf8'));
+  const curvedPassport = JSON.parse(await readFile(path.join(root, 'benchmarks/BENCHMARK-000003.passport.json'), 'utf8'));
+  const curvedCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000003.einsteinpy-crosscheck.json'), 'utf8'));
+  const coordinateCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json'), 'utf8'));
+  const baselineCrosscheck = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/CANDIDATE-000001.crosscheck.json'), 'utf8'));
+  const cleanCloneReproduction = JSON.parse(await readFile(path.join(root, 'artifacts/reproductions/INTERNAL-CLEAN-CLONE-000001.json'), 'utf8'));
+  const passport = JSON.parse(await readFile(path.join(root, 'benchmarks/BENCHMARK-000002.passport.json'), 'utf8'));
+  const review = JSON.parse(await readFile(path.join(root, 'artifacts/reviews/REVIEW-000002.json'), 'utf8'));
   const graph = JSON.parse(await readFile(path.join(root, 'data/knowledge-graph.json'), 'utf8'));
+  const benchmark = JSON.parse(await readFile(path.join(root, 'artifacts/benchmarks/synthetic-suite-v1.result.json'), 'utf8'));
+  const program = JSON.parse(await readFile(path.join(root, 'data/research-program.json'), 'utf8'));
+  const quietProgram = JSON.parse(await readFile(path.join(root, 'data/quiet-compute-program.json'), 'utf8'));
   const readme = await readFile(path.join(root, 'README.md'), 'utf8');
   if (candidate.candidate_id !== result.candidate.candidate_id) fail('Candidate and result IDs differ');
+  if (coordinateCandidate.candidate_id !== coordinateResult.candidate.candidate_id || passport.candidate_id !== coordinateCandidate.candidate_id) fail('Coordinate benchmark candidate, result, and passport IDs differ');
+  if (curvedCandidate.candidate_id !== curvedResult.candidate.candidate_id || curvedPassport.candidate_id !== curvedCandidate.candidate_id) fail('Curved benchmark candidate, result, and passport IDs differ');
   if (!readme.includes(result.scientific_payload_digest)) fail('README does not publish the exact scientific payload digest');
   if (!readme.includes('Novel physics claims | 0')) fail('README does not explicitly report zero novel physics claims');
   if (result.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Transportation boundary changed');
+  if (program.status !== 'OPEN_RESEARCH_QUESTION') fail('Research program is no longer an open question');
+  if (quietProgram.campaign_line !== 'Data centers are too freaking loud.' || quietProgram.response_line !== "Let's make them quiet." || quietProgram.status !== 'VALIDATION_CORE_IMPLEMENTED' || quietProgram.authority !== 'DRAFT_NOT_PREREGISTERED') fail('Quiet Compute public status or campaign contract changed unexpectedly');
+  if (quietProgram.current_evidence.published_acoustic_baselines !== 0 || quietProgram.current_evidence.verified_quieter_systems !== 0 || quietProgram.current_evidence.verified_superconductors !== 0 || quietProgram.current_evidence.public_volunteer_worker_enabled !== false) fail('Quiet Compute program overstates current evidence or worker availability');
+  if (quietProgram.security.public_code_execution !== 'DISABLED' || quietProgram.security.worker_status !== 'ADMISSION_AND_PLANNING_IMPLEMENTED_EXECUTION_DISABLED') fail('Quiet Compute public-compute security boundary changed unexpectedly');
+  if (quietProgram.implementation.measurement_sealing !== 'IMPLEMENTED' || quietProgram.implementation.signed_result_verification !== 'IMPLEMENTED' || quietProgram.implementation.tolerance_consensus !== 'IMPLEMENTED_NO_MAJORITY_OVERRIDE' || quietProgram.implementation.public_job_execution !== 'DISABLED') fail('Quiet Compute implementation inventory is incomplete or enables public execution');
+  const implementedChecks = result.checks.length + coordinateResult.checks.length + curvedResult.checks.length;
+  if (program.current_evidence.known_answer_examples !== 3 || program.current_evidence.implemented_checks !== implementedChecks) fail('Research program benchmark counts do not match canonical artifacts');
+  if (coordinateResult.assessment.overall_status !== 'BENCHMARK_VERIFIED' || coordinateResult.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Coordinate benchmark status or transportation boundary changed');
+  if (coordinateCrosscheck.comparison !== 'MATCH' || coordinateCrosscheck.independence.counts_as_external_reproduction !== false) fail('Coordinate cross-check mismatch or independence overclaim');
+  if (curvedResult.assessment.overall_status !== 'BENCHMARK_VERIFIED' || curvedResult.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL' || curvedResult.checks.length !== 17) fail('Curved benchmark status, check count, or transportation boundary changed');
+  if (curvedPassport.scientific_review !== 'REQUESTED' || curvedPassport.preregistered_checks.join('|') !== curvedResult.checks.map((item) => item.check_id).join('|')) fail('Curved passport review status or preregistered check order changed');
+  if (curvedCrosscheck.overall_status !== 'MATCH' || curvedCrosscheck.independence.external_reproduction !== false || curvedCrosscheck.signature.status !== 'UNSIGNED_NO_KEY' || curvedCrosscheck.conflict_of_interest.declared !== true) fail('Curved EinsteinPy comparison is missing, mismatched, signed inaccurately, or overstated');
+  if (passport.scientific_review !== 'CHANGES_REQUIRED' || passport.review_history.at(-1)?.response_status !== 'ADDRESSED_AWAITING_REREVIEW' || passport.preregistered_checks.join('|') !== coordinateResult.checks.map((item) => item.check_id).join('|')) fail('Frozen benchmark passport provenance or preregistered check order changed');
+  if (review.outcome !== 'APPROVED' || review.approval_scope !== 'REPOSITORY_IMPLEMENTATION_AND_ARTIFACTS' || review.subject.passport_id !== passport.passport_id || review.subject.passport_version !== passport.passport_version || review.subject.result_digest !== coordinateResult.scientific_payload_digest || review.remaining_objections.length !== 0) fail('Coordinate implementation approval record is missing, mismatched, or unresolved');
+  if (review.boundaries.external_scientific_reproduction !== false || review.boundaries.novel_physics_claim !== false || review.boundaries.transportation_claim !== false) fail('Coordinate implementation approval overstates its scientific scope');
+  if (cleanCloneReproduction.comparison !== 'MATCH' || cleanCloneReproduction.independence.clean_remote_clone !== true || cleanCloneReproduction.independence.separate_library !== true || cleanCloneReproduction.independence.counts_as_external_reproduction !== false) fail('Internal clean-clone reproduction is missing, mismatched, or overstated');
+  if (cleanCloneReproduction.signature.status !== 'UNSIGNED_NO_KEY' || cleanCloneReproduction.signature.content_digest_is_not_a_signature !== true || cleanCloneReproduction.conflict_of_interest.disclosed !== true) fail('Internal reproduction signature or conflict disclosure is inaccurate');
+  if (coordinateCrosscheck.comparison_scope.schema_conformance_crosschecked !== false || coordinateCrosscheck.comparison_scope.excluded_reference_checks.join('|') !== 'schema.candidate.v1') fail('Coordinate cross-check overstates schema validation coverage');
+  if (baselineCrosscheck.comparison_scope.schema_conformance_crosschecked !== false || baselineCrosscheck.comparison_scope.excluded_reference_checks.join('|') !== 'schema.candidate.v1') fail('Baseline cross-check overstates schema validation coverage');
+  const sourceCommit = coordinateResult.run.source_commit;
+  const reviewedHead = spawnSync('git', ['cat-file', '-e', `${review.subject.head_commit}^{commit}`], { cwd: root });
+  if (reviewedHead.status !== 0) fail('Implementation approval does not reference an available Git commit');
+  const sourcePredatesReview = spawnSync('git', ['merge-base', '--is-ancestor', sourceCommit, review.subject.head_commit], { cwd: root });
+  if (sourcePredatesReview.status !== 0) fail('Coordinate result source commit is not an ancestor of the approved PR head');
+  const sourcePaths = [
+    'candidates/CANDIDATE-000002.json',
+    'benchmarks/BENCHMARK-000002.passport.json',
+    'src/core/candidate.schema.json',
+    'src/core/benchmark-passport.schema.json',
+    'src/research_core/pipeline.py',
+    'src/research_core/matrix.py',
+    'src/research_core/schema_validation.py',
+  ];
+  if (!/^[0-9a-f]{40}$/.test(sourceCommit)) fail('Coordinate result does not record a concrete source commit');
+  for (const sourcePath of sourcePaths) {
+    const existsAtCommit = spawnSync('git', ['cat-file', '-e', `${sourceCommit}:${sourcePath}`], { cwd: root });
+    if (existsAtCommit.status !== 0) fail(`Coordinate result source commit does not contain ${sourcePath}`);
+    const unchangedSinceCommit = spawnSync('git', ['diff', '--quiet', sourceCommit, '--', sourcePath], { cwd: root });
+    if (unchangedSinceCommit.status !== 0) fail(`Coordinate result source commit does not contain the exact current ${sourcePath}`);
+  }
+  note(`${sourcePaths.length} coordinate-result source paths verified at ${sourceCommit.slice(0, 12)}`);
+  const curvedSourceCommit = curvedResult.run.source_commit;
+  const curvedSourcePaths = [
+    'candidates/CANDIDATE-000003.json',
+    'benchmarks/BENCHMARK-000003.passport.json',
+    'src/core/candidate-v2.schema.json',
+    'src/core/curved-benchmark-passport.schema.json',
+    'src/research_core/safe_symbolic.py',
+    'src/research_core/symbolic_tensor.py',
+    'src/research_core/curved_pipeline.py',
+    'independent/schwarzschild_einsteinpy_crosscheck.py',
+  ];
+  if (!/^[0-9a-f]{40}$/.test(curvedSourceCommit)) fail('Curved result does not record a concrete source commit');
+  for (const sourcePath of curvedSourcePaths) {
+    const existsAtCommit = spawnSync('git', ['cat-file', '-e', `${curvedSourceCommit}:${sourcePath}`], { cwd: root });
+    if (existsAtCommit.status !== 0) fail(`Curved result source commit does not contain ${sourcePath}`);
+    const unchangedSinceCommit = spawnSync('git', ['diff', '--quiet', curvedSourceCommit, '--', sourcePath], { cwd: root });
+    if (unchangedSinceCommit.status !== 0) fail(`Curved result source commit does not contain the exact current ${sourcePath}`);
+  }
+  note(`${curvedSourcePaths.length} curved-result source paths verified at ${curvedSourceCommit.slice(0, 12)}`);
+  if (program.current_evidence.workflow_cases !== benchmark.case_count) fail('Research program workflow count does not match the frozen benchmark');
+  if (program.current_evidence.novel_transportation_candidates !== 0 || program.current_evidence.traveler_safety_evaluations !== 0 || program.current_evidence.outside_reproductions !== 0) fail('Research program overstates current evidence');
+  if (program.security.public_code_execution !== 'DISABLED' || program.security.agent_authority !== 'PROPOSE_ONLY' || program.security.canonical_promotion !== 'NAMED_HUMAN_ONLY') fail('Research program weakens the public security boundary');
   const nodeIds = new Set(graph.nodes.map((node) => node.id));
   for (const edge of graph.edges) {
     if (!nodeIds.has(edge.source)) fail(`Graph edge ${edge.id} has missing source ${edge.source}`);
@@ -120,7 +216,9 @@ async function checkWorkflowSafety() {
     if (body.includes('pull_request_target:')) fail(`${name} uses pull_request_target and needs a dedicated threat review`);
     if (!body.includes('permissions:')) fail(`${name} does not declare permissions explicitly`);
     if (/permissions:\s*write-all/.test(body)) fail(`${name} grants write-all permissions`);
-    if (/uses:\s*actions\/checkout@(?!v6)/.test(body)) fail(`${name} does not use the reviewed checkout major version`);
+    const mutableActions = [...body.matchAll(/uses:\s*([^\s#]+)@([^\s#]+)/g)]
+      .filter(([, action, reference]) => !action.startsWith('./') && !/^[0-9a-f]{40}$/.test(reference));
+    if (mutableActions.length) fail(`${name} uses mutable action references: ${mutableActions.map(([, action, reference]) => `${action}@${reference}`).join(', ')}`);
   }
   note(`${files.length} workflow files checked for high-risk trigger/permission patterns`);
 }
@@ -136,6 +234,7 @@ async function checkLicenseAndLockfile() {
 async function main() {
   const files = await walk(root);
   await checkRequiredFiles();
+  await checkBootstrapDryRun();
   await checkJsonAndJsonl(files);
   await checkMarkdownLinks(files);
   await checkScientificConsistency();

@@ -50,7 +50,7 @@ The browser-side matrix cross-check is convenience output. It cannot change cano
 
 **Threat:** A dependency or GitHub Action is compromised.
 
-**Controls:** Minimal runtime dependencies, committed lockfile, Dependabot, CodeQL, least-privilege workflow permissions, and future pinning of high-impact actions to reviewed commit SHAs.
+**Controls:** Minimal runtime dependencies, committed lockfile, Dependabot, CodeQL, least-privilege workflow permissions, high-impact actions pinned to reviewed full commit SHAs, and build provenance attestations for the Pages artifact.
 
 ### Workflow-secret exposure
 

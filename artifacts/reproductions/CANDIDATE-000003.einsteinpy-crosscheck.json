@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "REPRODUCTION-CANDIDATE-000003-EINSTEINPY-INTERNAL",
+  "classification": "INTERNAL_SEPARATE_SOLVER_COMPARISON",
+  "independence": {
+    "external_reproduction": false,
+    "same_project_owner": true,
+    "same_machine": true,
+    "same_git_credentials": true,
+    "separate_tensor_library": true,
+    "statement": "This is a useful implementation comparison, not independent scientific evidence or outside peer review."
+  },
+  "conflict_of_interest": {
+    "declared": true,
+    "contributors": [
+      "ChefMrFrizzle",
+      "OpenAI Codex"
+    ],
+    "details": "The repository owner requested the work and Codex implemented both repository paths in the same workspace."
+  },
+  "environment": {
+    "operating_system": "Windows-10-10.0.19045-SP0",
+    "system": "Windows",
+    "release": "10",
+    "machine": "AMD64",
+    "python": "3.12.13",
+    "python_implementation": "CPython",
+    "sympy": "1.14.0",
+    "einsteinpy": "0.4.0",
+    "git_commit": "5a6a5fe4f82770b971fbf0f1ca691cc254876775"
+  },
+  "commands": [
+    "python independent/schwarzschild_einsteinpy_crosscheck.py",
+    "python scripts/research.py verify candidates/CANDIDATE-000003.json --passport benchmarks/BENCHMARK-000003.passport.json --reproducible"
+  ],
+  "inputs": {
+    "candidate": "candidates/CANDIDATE-000003.json",
+    "candidate_sha256": "sha256:0437c86a532e8d87976f7e4c5e7e4598f0cd9762e2908307e42db48fa1d437bc",
+    "passport": "benchmarks/BENCHMARK-000003.passport.json",
+    "passport_contract_sha256": "sha256:d8f983d51a22fbb9dd36912da31d5593843c4e9cdb5f45fdbeb6309e1df01e21"
+  },
+  "solver": {
+    "name": "EinsteinPy symbolic module",
+    "version": "0.4.0",
+    "calculation": "EinsteinPy constructs the connection and curvature tensors; an explicit full diagonal contraction computes the Kretschmann scalar.",
+    "schema_conformance_crosschecked": false
+  },
+  "comparison_scope": {
+    "compared": [
+      "passport_contract_bound",
+      "metric_exact",
+      "christoffel_complete",
+      "riemann_representatives",
+      "ricci_zero",
+      "ricci_scalar_zero",
+      "einstein_zero",
+      "kretschmann_exact"
+    ],
+    "excluded": [
+      "JSON Schema conformance",
+      "external reproducibility",
+      "novel geometry",
+      "geodesics",
+      "engineering feasibility"
+    ]
+  },
+  "observations": {
+    "checks": {
+      "passport_contract_bound": "PASS",
+      "metric_exact": "PASS",
+      "christoffel_complete": "PASS",
+      "riemann_representatives": "PASS",
+      "ricci_zero": "PASS",
+      "ricci_scalar_zero": "PASS",
+      "einstein_zero": "PASS",
+      "kretschmann_exact": "PASS"
+    },
+    "kretschmann_scalar": "48*M**2/r**6",
+    "ricci_tensor": [
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "einstein_tensor": [
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      [
+        "0",
+        "0",
+        "0",
+        "0"
+      ]
+    ]
+  },
+  "overall_status": "MATCH",
+  "signature": {
+    "status": "UNSIGNED_NO_KEY",
+    "record_digest_is_not_a_signature": true,
+    "required_for_signed_status": "An identified reproducer must sign the canonical record digest with a verifiable SSH, GPG, or Sigstore identity."
+  },
+  "record_digest": "sha256:664384c640a028c79d4e198b66cfb55bea2e3183a66b61e2d56c744c1405ef33"
+}

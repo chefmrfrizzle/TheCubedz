@@ -6,6 +6,7 @@ from research_core.pipeline import evaluate
 
 ROOT = Path(__file__).resolve().parents[1]
 CANDIDATE = json.loads((ROOT / "candidates" / "CANDIDATE-000001.json").read_text())
+COORDINATE_CANDIDATE = json.loads((ROOT / "candidates" / "CANDIDATE-000002.json").read_text())
 
 
 def test_baseline_has_twelve_passing_checks():
@@ -14,6 +15,8 @@ def test_baseline_has_twelve_passing_checks():
     assert len(result["checks"]) == 12
     assert all(check["status"] == "PASS" for check in result["checks"])
     assert result["assessment"]["transportation_status"] == "NOT_A_TRANSPORTATION_PROPOSAL"
+    assert result["validator"]["version"] == "0.2.0"
+    assert result["scientific_payload_digest"] == "sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b"
 
 
 def test_scientific_digest_is_deterministic_and_excludes_runtime():
@@ -29,3 +32,80 @@ def test_invalid_matrix_fails():
     result = evaluate(invalid, reproducible=True, source_commit="TEST")
     assert result["assessment"]["overall_status"] == "VALIDATION_FAILED"
     assert any(check["check_id"] == "metric.symmetry" and check["status"] == "FAIL" for check in result["checks"])
+
+
+def test_rescaled_coordinate_benchmark_has_fourteen_passing_checks():
+    result = evaluate(COORDINATE_CANDIDATE, reproducible=True, source_commit="TEST")
+    assert result["assessment"]["overall_status"] == "BENCHMARK_VERIFIED"
+    assert len(result["checks"]) == 14
+    assert all(check["status"] == "PASS" for check in result["checks"])
+    assert next(check for check in result["checks"] if check["check_id"] == "metric.determinant")["observed"] == -14400
+    jacobian_observation = next(check for check in result["checks"] if check["check_id"] == "coordinate_map.jacobian")["observed"]
+    assert jacobian_observation["determinant"] == 120
+    assert jacobian_observation["jacobian"] == [[2, 0, 0, 0], [0, 3, 0, 0], [0, 0, 4, 0], [0, 0, 0, 5]]
+    assert result["assessment"]["transportation_status"] == "NOT_A_TRANSPORTATION_PROPOSAL"
+    assert result["validator"]["version"] == "0.2.1"
+
+
+def test_rescaled_coordinate_benchmark_digest_is_deterministic():
+    first = evaluate(COORDINATE_CANDIDATE, reproducible=True, source_commit="ONE")
+    second = evaluate(COORDINATE_CANDIDATE, reproducible=True, source_commit="TWO")
+    assert first["scientific_payload_digest"] == second["scientific_payload_digest"]
+
+
+def test_rescaled_coordinate_benchmark_rejects_wrong_pullback():
+    invalid = json.loads(json.dumps(COORDINATE_CANDIDATE))
+    invalid["metric"]["components"][3][3] = 24
+    result = evaluate(invalid, reproducible=True, source_commit="TEST")
+    assert result["assessment"]["overall_status"] == "VALIDATION_FAILED"
+    assert next(check for check in result["checks"] if check["check_id"] == "coordinate_map.pullback")["status"] == "FAIL"
+
+
+def test_rescaled_coordinate_benchmark_rejects_singular_jacobian():
+    invalid = json.loads(json.dumps(COORDINATE_CANDIDATE))
+    invalid["parameters"]["coordinate_map"]["jacobian"][3][3] = 0
+    result = evaluate(invalid, reproducible=True, source_commit="TEST")
+    assert next(check for check in result["checks"] if check["check_id"] == "coordinate_map.jacobian")["status"] == "FAIL"
+    assert next(check for check in result["checks"] if check["check_id"] == "coordinate_map.pullback")["status"] == "FAIL"
+
+
+def test_rescaled_coordinate_benchmark_rejects_convention_and_coordinate_mismatches():
+    invalid = json.loads(json.dumps(COORDINATE_CANDIDATE))
+    invalid["parameters"]["coordinate_map"]["from_coordinates"][0] = "wrong"
+    invalid["conventions"]["metric_signature"] = "+---"
+    invalid["conventions"]["cosmological_constant"] = 1
+    result = evaluate(invalid, reproducible=True, source_commit="TEST")
+    statuses = {check["check_id"]: check["status"] for check in result["checks"]}
+    assert statuses["coordinate_map.coordinates"] == "FAIL"
+    assert statuses["minkowski.signature"] == "FAIL"
+    assert statuses["minkowski.cosmological_constant"] == "FAIL"
+
+
+def test_reviewer_counterexample_with_same_metric_and_determinant_is_rejected():
+    invalid = json.loads(json.dumps(COORDINATE_CANDIDATE))
+    invalid["parameters"]["coordinate_map"]["jacobian"] = [
+        [4.25, 5.625, 0, 0],
+        [3.75, 6.375, 0, 0],
+        [0, 0, 4, 0],
+        [0, 0, 0, 5],
+    ]
+    result = evaluate(invalid, reproducible=True, source_commit="TEST")
+    statuses = {check["check_id"]: check["status"] for check in result["checks"]}
+    assert result["assessment"]["overall_status"] == "VALIDATION_FAILED"
+    assert statuses["coordinate_map.jacobian"] == "FAIL"
+
+
+def test_invalid_nested_coordinate_relation_fails_full_schema_validation():
+    invalid = json.loads(json.dumps(COORDINATE_CANDIDATE))
+    invalid["parameters"]["coordinate_map"]["relation"] = "not the registered tensor relation"
+    result = evaluate(invalid, reproducible=True, source_commit="TEST")
+    schema_check = next(check for check in result["checks"] if check["check_id"] == "schema.candidate.v1")
+    assert schema_check["status"] == "FAIL"
+
+
+def test_coordinate_result_identifies_the_bound_passport_contract():
+    result = evaluate(COORDINATE_CANDIDATE, reproducible=True, source_commit="TEST")
+    binding = result["validator"]["benchmark_passport"]
+    assert binding["passport_id"] == "PASSPORT-000002"
+    assert binding["passport_version"] == "1.0.1"
+    assert binding["validation_contract_sha256"].startswith("sha256:")

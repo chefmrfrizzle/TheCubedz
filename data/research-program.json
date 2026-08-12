@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "program_id": "PROGRAM-000001",
+  "title": "Earth-to-Mars effective-distance research program",
+  "research_question": "Can we shorten the distance to Mars—without changing the traveler?",
+  "status": "OPEN_RESEARCH_QUESTION",
+  "public_summary": {
+    "goal": "Reduce the effective Earth-to-Mars journey.",
+    "safety": "Keep local matter intact and forces survivable.",
+    "physics": "Satisfy the equations, source requirements, energy limits, stability, and cause and effect.",
+    "proof": "Let independent teams recover the same result.",
+    "current_position": "Two flat calibrations and one established curved-spacetime calibration pass; no travel candidate has been evaluated and no outside reproduction is recorded."
+  },
+  "optimization_targets": ["EFFECTIVE_PATH_LENGTH", "PROPER_TRAVEL_TIME", "EXTERNAL_ELAPSED_TIME"],
+  "mechanism_scope": {
+    "allowed": ["SPACETIME_GEOMETRY", "MATTER_SOURCE", "FIELD_SOURCE", "BOUNDARY_CONDITIONS", "TRAJECTORY"],
+    "excluded_shortcuts": ["ALTER_TRAVELER_TO_FAKE_DISTANCE", "IGNORE_CAUSALITY", "IGNORE_SOURCE_REQUIREMENTS", "TREAT_SIMULATION_AS_EXPERIMENT", "TREAT_AGENT_TEXT_AS_EVIDENCE"],
+    "plain_language": "The search may change the proposed geometry, fields, matter source, boundary conditions, or path. It may not pretend the route became shorter by redefining or transforming the traveler."
+  },
+  "traveler_constraint": {
+    "requirement": "REQUIRED_NOT_VERIFIED",
+    "plain_language": "A useful result must not depend on turning the traveler into a different material state. It must bound the local conditions experienced by the vehicle and people inside.",
+    "does_not_mean": "This does not require every molecule to remain frozen in time. It means the proposed shortcut cannot rely on destructive transformation, unbounded forces, or an undefined traveler model.",
+    "dimensions": [
+      {"id": "NO_REQUIRED_TRANSFORMATION", "label": "No required transformation", "status": "NOT_IMPLEMENTED", "description": "The mechanism must not create the apparent shortcut by changing the traveler into a different material state."},
+      {"id": "TIDAL_ACCELERATION", "label": "Tidal forces", "status": "NOT_IMPLEMENTED", "description": "Relative acceleration across the vehicle and body must stay within a declared survivable bound."},
+      {"id": "PROPER_ACCELERATION", "label": "Felt acceleration", "status": "NOT_IMPLEMENTED", "description": "Acceleration experienced along the path must stay within a declared survivable bound."},
+      {"id": "RADIATION_AND_FIELDS", "label": "Radiation and field exposure", "status": "NOT_IMPLEMENTED", "description": "Required fields and radiation exposure must be calculated and compared with declared limits."},
+      {"id": "CAUSAL_INTEGRITY", "label": "Cause and effect", "status": "NOT_IMPLEMENTED", "description": "The route must be checked for horizons, closed causal curves, chronology problems, and loss of controllability."}
+    ]
+  },
+  "success_gates": [
+    {"id": "GATE-01", "question": "Can the system recover a known flat-spacetime answer?", "status": "PASS", "evidence": ["artifacts/results/CANDIDATE-000001.result.json", "artifacts/reproductions/CANDIDATE-000001.crosscheck.json", "benchmarks/BENCHMARK-000002.passport.json", "artifacts/results/CANDIDATE-000002.result.json", "artifacts/reproductions/CANDIDATE-000002.crosscheck.json", "artifacts/reproductions/INTERNAL-CLEAN-CLONE-000001.json", "artifacts/reviews/REVIEW-000002.json"], "downgrade_condition": "Downgrade if either frozen candidate, validator result, or separate implementation no longer reproduces its published result."},
+    {"id": "GATE-02", "question": "Can the system evaluate a nontrivial spacetime candidate with a declared source?", "status": "PASS", "evidence": ["candidates/CANDIDATE-000003.json", "benchmarks/BENCHMARK-000003.passport.json", "artifacts/results/CANDIDATE-000003.result.json", "artifacts/reproductions/CANDIDATE-000003.einsteinpy-crosscheck.json"], "downgrade_condition": "Downgrade if the passport binding, symbolic tensor result, external-vacuum source declaration, domain restrictions, or separate-solver comparison no longer reproduces. This gate covers one established exterior solution, not arbitrary source reconstruction."},
+    {"id": "GATE-03", "question": "Does the candidate reduce a declared effective path length or travel time?", "status": "NOT_EVALUATED", "evidence": [], "downgrade_condition": "Remain not evaluated until the objective, endpoints, trajectory, observers, and comparison baseline are explicit."},
+    {"id": "GATE-04", "question": "Does the required matter or field source satisfy the declared physical limits?", "status": "NOT_IMPLEMENTED", "evidence": [], "downgrade_condition": "Remain not implemented until source reconstruction, conservation, and energy-condition checks exist."},
+    {"id": "GATE-05", "question": "Is the candidate stable and causally consistent under the declared conditions?", "status": "NOT_IMPLEMENTED", "evidence": [], "downgrade_condition": "Remain not implemented until perturbation, horizon, singularity, controllability, and causality checks exist."},
+    {"id": "GATE-06", "question": "Can a declared traveler remain within survivable local limits?", "status": "NOT_IMPLEMENTED", "evidence": [], "downgrade_condition": "Remain not implemented until a traveler model and quantitative tidal, acceleration, field, and radiation bounds exist."},
+    {"id": "GATE-07", "question": "Can an outside team recover the same scientific result independently?", "status": "NOT_EVALUATED", "evidence": [], "downgrade_condition": "Remain not evaluated until a separate contributor and environment publish a reviewed reproduction passport."},
+    {"id": "GATE-08", "question": "Is there a realizable experiment or engineering path?", "status": "NOT_EVALUATED", "evidence": [], "downgrade_condition": "Remain not evaluated until a measurable prediction, uncertainty model, apparatus concept, and material or field requirements exist."}
+  ],
+  "current_evidence": {
+    "known_answer_examples": 3,
+    "implemented_checks": 43,
+    "workflow_cases": 100,
+    "novel_transportation_candidates": 0,
+    "traveler_safety_evaluations": 0,
+    "outside_reproductions": 0
+  },
+  "contribution_tasks": [
+    {"id": "CONTRIBUTION-01", "title": "Ask one precise research question", "plain_language": "Turn one unclear part of the mission into a bounded question with a possible failure condition.", "status": "AVAILABLE", "submission_path": ".github/ISSUE_TEMPLATE/research-question.yml", "canonical_effect": "NONE_WITHOUT_HUMAN_REVIEW"},
+    {"id": "CONTRIBUTION-02", "title": "Draft one candidate", "plain_language": "Write one exact geometry, its assumptions, source expectations, claims, and ways it could fail.", "status": "AVAILABLE", "submission_path": ".github/ISSUE_TEMPLATE/candidate.yml", "canonical_effect": "NONE_WITHOUT_HUMAN_REVIEW"},
+    {"id": "CONTRIBUTION-03", "title": "Challenge one claim", "plain_language": "Identify a hidden assumption, bad equation, missing limit, convention error, or counterexample.", "status": "AVAILABLE", "submission_path": ".github/ISSUE_TEMPLATE/challenge.yml", "canonical_effect": "NONE_WITHOUT_HUMAN_REVIEW"},
+    {"id": "CONTRIBUTION-04", "title": "Repeat one result", "plain_language": "Run a declared result separately and publish the environment, commands, digest, and every difference.", "status": "AVAILABLE", "submission_path": ".github/ISSUE_TEMPLATE/reproduction.yml", "canonical_effect": "NONE_WITHOUT_HUMAN_REVIEW"},
+    {"id": "CONTRIBUTION-05", "title": "Build one bounded check", "plain_language": "Add one deterministic validator with tests, limitations, negative cases, and a reproducible command.", "status": "GUIDANCE_ONLY", "submission_path": "CONTRIBUTING.md", "canonical_effect": "NONE_WITHOUT_HUMAN_REVIEW"},
+    {"id": "CONTRIBUTION-06", "title": "Explain one result", "plain_language": "Make one artifact understandable without changing its status, limitations, or source evidence.", "status": "GUIDANCE_ONLY", "submission_path": "CONTRIBUTING.md", "canonical_effect": "NONE_WITHOUT_HUMAN_REVIEW"}
+  ],
+  "security": {
+    "public_input_mode": "REPOSITORY_REVIEW_ONLY",
+    "public_code_execution": "DISABLED",
+    "canonical_promotion": "NAMED_HUMAN_ONLY",
+    "agent_authority": "PROPOSE_ONLY"
+  },
+  "claim_boundaries": [
+    "The program has not found a spacetime shortcut, transportation geometry, or route to Mars.",
+    "The validators recognize two exact flat-spacetime profiles and one passport-bound Schwarzschild exterior profile; they are not general-purpose relativity solvers.",
+    "Candidate 000003 is an established curved vacuum-exterior calibration, not a novel spacetime or transportation proposal.",
+    "No traveler-preservation, stability, causality, energy, realizability, or experimental gate has passed for a novel candidate.",
+    "The separate implementation in this repository is not an outside reproduction.",
+    "The approved implementation re-review is not an outside scientific reproduction.",
+    "The separate arithmetic paths do not reimplement Draft 2020-12 schema validation; schema conformance remains a primary-validator-only check.",
+    "Agent proposals, votes, popularity, and generated explanations are not scientific evidence or canonical approval."
+  ],
+  "provenance": {
+    "created_by": "ChefMrFrizzle",
+    "created_at": "2026-08-07T17:00:00Z",
+    "license": "Apache-2.0",
+    "human_review_required": true
+  }
+}

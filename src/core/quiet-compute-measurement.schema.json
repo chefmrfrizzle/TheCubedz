@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/quiet-compute-measurement.schema.json",
+  "title": "Quiet Compute local measurement artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "measurement_id", "challenge_id", "kind", "passport_id", "baseline_measurement_id", "operator", "system", "workload", "environment", "sensors", "observations", "raw_artifacts", "provenance", "publication", "measurement_digest"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "measurement_id": {"type": "string", "pattern": "^QC-MEAS-[0-9]{6}$"},
+    "challenge_id": {"const": "CHALLENGE-QUIET-000001"},
+    "kind": {"enum": ["BASELINE", "INTERVENTION"]},
+    "passport_id": {"type": "string", "pattern": "^QC-PASSPORT-[0-9]{6}$"},
+    "baseline_measurement_id": {"type": ["string", "null"], "pattern": "^QC-MEAS-[0-9]{6}$"},
+    "operator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operator_id", "independence_group", "conflict_of_interest"],
+      "properties": {
+        "operator_id": {"type": "string", "minLength": 3, "maxLength": 120},
+        "independence_group": {"type": "string", "minLength": 3, "maxLength": 120},
+        "conflict_of_interest": {"type": "string", "minLength": 2, "maxLength": 1000}
+      }
+    },
+    "system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["system_id", "hardware_family", "cpu", "accelerators", "memory_gb", "os", "cooling"],
+      "properties": {
+        "system_id": {"type": "string", "minLength": 3, "maxLength": 120},
+        "hardware_family": {"type": "string", "minLength": 2, "maxLength": 120},
+        "cpu": {"type": "string", "minLength": 2, "maxLength": 200},
+        "accelerators": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 200}},
+        "memory_gb": {"type": "number", "exclusiveMinimum": 0, "maximum": 1048576},
+        "os": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["family", "version", "architecture"],
+          "properties": {
+            "family": {"enum": ["LINUX", "WINDOWS", "MACOS", "OTHER"]},
+            "version": {"type": "string", "minLength": 1, "maxLength": 120},
+            "architecture": {"type": "string", "minLength": 1, "maxLength": 80}
+          }
+        },
+        "cooling": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["primary_path", "fan_control", "facility_boundary"],
+          "properties": {
+            "primary_path": {"enum": ["AIR", "DIRECT_LIQUID", "IMMERSION", "HYBRID", "OTHER"]},
+            "fan_control": {"type": "string", "minLength": 1, "maxLength": 240},
+            "facility_boundary": {"type": "string", "minLength": 3, "maxLength": 500}
+          }
+        }
+      }
+    },
+    "workload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workload_id", "version", "input_digest", "command_digest", "duration_seconds", "throughput", "latency_ms", "service_target"],
+      "properties": {
+        "workload_id": {"type": "string", "minLength": 3, "maxLength": 160},
+        "version": {"type": "string", "minLength": 1, "maxLength": 80},
+        "input_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "command_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "duration_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 604800},
+        "throughput": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "unit"],
+          "properties": {
+            "value": {"type": "number", "exclusiveMinimum": 0},
+            "unit": {"type": "string", "minLength": 1, "maxLength": 80}
+          }
+        },
+        "latency_ms": {"type": "number", "minimum": 0},
+        "service_target": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["metric", "target", "unit"],
+          "properties": {
+            "metric": {"type": "string", "minLength": 1, "maxLength": 120},
+            "target": {"type": "number"},
+            "unit": {"type": "string", "minLength": 1, "maxLength": 80}
+          }
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["boundary", "description", "microphone", "background_dba"],
+      "properties": {
+        "boundary": {"enum": ["SERVER", "RACK", "ROOM", "COOLING_PLANT", "PROPERTY_LINE"]},
+        "description": {"type": "string", "minLength": 10, "maxLength": 2000},
+        "microphone": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["distance_m", "position", "orientation"],
+          "properties": {
+            "distance_m": {"type": "number", "exclusiveMinimum": 0, "maximum": 1000},
+            "position": {"type": "string", "minLength": 3, "maxLength": 500},
+            "orientation": {"type": "string", "minLength": 3, "maxLength": 500}
+          }
+        },
+        "background_dba": {"type": "number", "minimum": 0, "maximum": 200}
+      }
+    },
+    "sensors": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+          "required": ["sensor_id", "type", "model", "calibration_id", "calibrated_at", "sampling_hz", "clock_offset_ms"],
+        "properties": {
+          "sensor_id": {"type": "string", "minLength": 2, "maxLength": 120},
+          "type": {"enum": ["ACOUSTIC", "TEMPERATURE", "POWER", "WATER", "OTHER"]},
+          "model": {"type": "string", "minLength": 2, "maxLength": 200},
+          "calibration_id": {"type": "string", "minLength": 2, "maxLength": 200},
+          "calibrated_at": {"type": "string", "format": "date-time"},
+          "sampling_hz": {"type": "number", "exclusiveMinimum": 0},
+          "clock_offset_ms": {"type": "number", "minimum": -60000, "maximum": 60000}
+        }
+      }
+    },
+    "observations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["acoustic", "thermal", "energy", "water", "reliability", "cost"],
+      "properties": {
+        "acoustic": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["dba_leq", "uncertainty_db", "spectrum_digest", "clipping_detected"],
+          "properties": {
+            "dba_leq": {"type": "number", "minimum": 0, "maximum": 200},
+            "uncertainty_db": {"type": "number", "minimum": 0, "maximum": 30},
+            "spectrum_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+            "clipping_detected": {"type": "boolean"}
+          }
+        },
+        "thermal": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["inlet_c", "outlet_c", "component_max_c", "uncertainty_c"],
+          "properties": {
+            "inlet_c": {"type": "number", "minimum": -100, "maximum": 300},
+            "outlet_c": {"type": "number", "minimum": -100, "maximum": 300},
+            "component_max_c": {"type": "number", "minimum": -100, "maximum": 300},
+            "uncertainty_c": {"type": "number", "minimum": 0, "maximum": 50}
+          }
+        },
+        "energy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["joules", "uncertainty_percent"],
+          "properties": {
+            "joules": {"type": "number", "exclusiveMinimum": 0},
+            "uncertainty_percent": {"type": "number", "minimum": 0, "maximum": 100}
+          }
+        },
+        "water": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "liters"],
+          "properties": {
+            "status": {"enum": ["MEASURED", "NOT_APPLICABLE", "UNKNOWN"]},
+            "liters": {"type": ["number", "null"], "minimum": 0}
+          }
+        },
+        "reliability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["completed", "errors", "throttling_seconds"],
+          "properties": {
+            "completed": {"type": "boolean"},
+            "errors": {"type": "integer", "minimum": 0},
+            "throttling_seconds": {"type": "number", "minimum": 0}
+          }
+        },
+        "cost": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "usd"],
+          "properties": {
+            "status": {"enum": ["MEASURED", "NOT_APPLICABLE", "UNKNOWN"]},
+            "usd": {"type": ["number", "null"], "minimum": 0}
+          }
+        }
+      }
+    },
+    "raw_artifacts": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "media_type", "sha256", "bytes"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^[A-Za-z0-9._/-]+$", "maxLength": 500},
+          "media_type": {"type": "string", "minLength": 3, "maxLength": 120},
+          "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "bytes": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_commit", "software_version", "commands", "recorded_at"],
+      "properties": {
+        "source_commit": {"type": "string", "pattern": "^(?:[0-9a-f]{40}|UNAVAILABLE)$"},
+        "software_version": {"type": "string", "minLength": 1, "maxLength": 120},
+        "commands": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1, "maxLength": 1000}},
+        "recorded_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "contains_personal_data", "contains_secrets", "commercial_use"],
+      "properties": {
+        "scope": {"enum": ["PUBLIC_AGGREGATE", "PUBLIC_RAW_ARTIFACTS", "PRIVATE_REVIEW_ONLY"]},
+        "contains_personal_data": {"const": false},
+        "contains_secrets": {"const": false},
+        "commercial_use": {"enum": ["ALLOWED", "NOT_ALLOWED", "SEPARATE_AGREEMENT_REQUIRED"]}
+      }
+    },
+    "measurement_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

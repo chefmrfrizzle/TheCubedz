@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0.0",
+  "candidate_id": "CANDIDATE-000002",
+  "version": "1.0.0",
+  "title": "Minkowski spacetime in rescaled inertial coordinates",
+  "status": "DRAFT",
+  "intended_use": "BENCHMARK",
+  "validation_profile": "benchmark.minkowski_linear_rescaled_v1",
+  "coordinates": ["tau", "xi", "eta", "zeta"],
+  "coordinate_system": {
+    "name": "Linearly rescaled inertial coordinates",
+    "description": "A four-dimensional chart related to the canonical Cartesian chart by t = 2 tau, x = 3 xi, y = 4 eta, and z = 5 zeta."
+  },
+  "conventions": {
+    "metric_signature": "-+++",
+    "units": "dimensionless rescaled geometrized natural units",
+    "speed_of_light": 1,
+    "cosmological_constant": 0
+  },
+  "metric": {
+    "representation": "matrix",
+    "components": [
+      [-4, 0, 0, 0],
+      [0, 9, 0, 0],
+      [0, 0, 16, 0],
+      [0, 0, 0, 25]
+    ]
+  },
+  "parameters": {
+    "coordinate_map": {
+      "from_coordinates": ["tau", "xi", "eta", "zeta"],
+      "to_coordinates": ["t", "x", "y", "z"],
+      "jacobian": [
+        [2, 0, 0, 0],
+        [0, 3, 0, 0],
+        [0, 0, 4, 0],
+        [0, 0, 0, 5]
+      ],
+      "relation": "g_submitted = J^T g_reference J"
+    }
+  },
+  "assumptions": [
+    "The declared Jacobian is constant, exact, invertible, and maps the submitted chart to the canonical Cartesian Minkowski chart.",
+    "The submitted metric is the exact pullback J^T diag(-1, 1, 1, 1) J.",
+    "The cosmological constant is zero for this benchmark profile.",
+    "This is a coordinate-equivalence and reproducibility benchmark, not a transportation proposal or a new spacetime."
+  ],
+  "claims": [
+    {
+      "claim_id": "CLAIM-C000002-EQUIVALENCE",
+      "class": "HYPOTHESIS",
+      "statement": "The submitted metric is exactly the canonical Minkowski metric expressed in the declared rescaled inertial coordinates."
+    }
+  ],
+  "falsification": [
+    "Reject the benchmark if the coordinate lists, metric, or Jacobian are not four-dimensional and mutually consistent.",
+    "Reject coordinate equivalence if the Jacobian is singular or J^T diag(-1, 1, 1, 1) J does not exactly equal the submitted metric.",
+    "Reject the flatness implication if any submitted component or Jacobian entry is not a supported exact numeric constant.",
+    "Downgrade reproducibility if the separate implementation path does not recover the same check outcomes."
+  ],
+  "references": [
+    {
+      "citation_key": "carroll_1997_gr_notes",
+      "title": "Lecture Notes on General Relativity",
+      "type": "REVIEW",
+      "year": 1997,
+      "url": "https://arxiv.org/abs/gr-qc/9712019"
+    }
+  ],
+  "provenance": {
+    "created_by": "ChefMrFrizzle",
+    "created_at": "2026-08-08T00:00:00Z",
+    "license": "Apache-2.0"
+  }
+}

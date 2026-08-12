@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/promotion-decision.schema.json",
+  "title": "Human promotion decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "decision_id", "task_id", "bundle_digest", "decision", "reviewed_by", "proposed_by", "rationale", "decided_at"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "decision_id": {"type": "string", "pattern": "^DECISION-[0-9]{6}$"},
+    "task_id": {"type": "string", "pattern": "^TASK-[0-9]{6}$"},
+    "bundle_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "decision": {"enum": ["APPROVE", "APPROVE_WITH_CONDITIONS", "REJECT", "REQUEST_CHANGES"]},
+    "reviewed_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {"type": {"const": "HUMAN"}, "id": {"type": "string", "minLength": 1, "maxLength": 120}}
+    },
+    "proposed_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {"type": {"enum": ["HUMAN", "AGENT", "SYSTEM"]}, "id": {"type": "string", "minLength": 1, "maxLength": 120}}
+    },
+    "rationale": {"type": "string", "minLength": 10, "maxLength": 4000},
+    "decided_at": {"type": "string", "format": "date-time"}
+  }
+}

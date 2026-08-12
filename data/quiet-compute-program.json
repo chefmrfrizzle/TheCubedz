@@ -1,0 +1,157 @@
+{
+  "schema_version": "0.1.0",
+  "challenge_id": "CHALLENGE-QUIET-000001",
+  "title": "Quiet Compute",
+  "campaign_line": "Data centers are too freaking loud.",
+  "response_line": "Let's make them quiet.",
+  "research_question": "Can a declared compute system reduce acoustic output under the same useful workload while satisfying thermal, energy, water, reliability, cost, uncertainty, and independent-reproduction constraints?",
+  "status": "VALIDATION_CORE_IMPLEMENTED",
+  "authority": "DRAFT_NOT_PREREGISTERED",
+  "scope": {
+    "version_0_1_boundary": "One declared server or rack under a repeatable compute workload in a documented acoustic and thermal environment.",
+    "future_boundaries": [
+      "ROOM",
+      "COOLING_PLANT",
+      "PROPERTY_LINE",
+      "COMMUNITY_EXPOSURE"
+    ],
+    "excluded_claims": [
+      "ALL_DATA_CENTERS_HAVE_THE_SAME_NOISE_PROFILE",
+      "SUPERCONDUCTORS_ARE_THE_PREDETERMINED_SOLUTION",
+      "SIMULATION_IS_PHYSICAL_VALIDATION",
+      "QUIETER_WITH_REDUCED_USEFUL_COMPUTE_COUNTS_AS_SUCCESS",
+      "NVIDIA_PARTNERSHIP_OR_ENDORSEMENT_EXISTS"
+    ]
+  },
+  "outcomes": {
+    "primary": [
+      "A_WEIGHTED_ACOUSTIC_LEVEL",
+      "FREQUENCY_SPECTRUM"
+    ],
+    "matched_condition": "USEFUL_COMPUTE_WORKLOAD_AND_SERVICE_TARGET",
+    "guardrails": [
+      "THERMAL",
+      "ENERGY",
+      "WATER",
+      "RELIABILITY",
+      "COST"
+    ],
+    "evidence_requirements": [
+      "DECLARED_SYSTEM_BOUNDARY",
+      "CALIBRATED_MEASUREMENT",
+      "RAW_TRACE_PRESERVATION",
+      "UNCERTAINTY",
+      "PREREGISTERED_COMPARISON",
+      "INDEPENDENT_REPRODUCTION"
+    ]
+  },
+  "implementation": {
+    "measurement_sealing": "IMPLEMENTED",
+    "deliberate_submission": "IMPLEMENTED",
+    "matched_comparison": "IMPLEMENTED",
+    "signed_job_admission": "IMPLEMENTED",
+    "persistent_replay_claim": "IMPLEMENTED_LOCAL_ATOMIC",
+    "worker_eligibility": "IMPLEMENTED",
+    "isolation_planning": "IMPLEMENTED_PLAN_ONLY",
+    "replication_allocation": "IMPLEMENTED",
+    "signed_result_verification": "IMPLEMENTED",
+    "tolerance_consensus": "IMPLEMENTED_NO_MAJORITY_OVERRIDE",
+    "evidence_reputation": "IMPLEMENTED_NON_PURCHASABLE",
+    "public_job_execution": "DISABLED"
+  },
+  "hypothesis_tracks": [
+    {
+      "id": "H1-CONTROL",
+      "title": "Fan and pump control",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "H2-AIRFLOW",
+      "title": "Airflow and containment",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "H3-LIQUID",
+      "title": "Direct liquid cooling",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "H4-THERMAL-MATERIALS",
+      "title": "Thermal and dielectric materials",
+      "status": "PROPOSED"
+    },
+    {
+      "id": "H5-SUPERCONDUCTIVITY",
+      "title": "Superconducting power components",
+      "status": "LONG_HORIZON_PARTNER_GATED"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "QC-G0",
+      "title": "Measurement contract",
+      "status": "IMPLEMENTED_DRAFT",
+      "exit_evidence": "Machine-validated measurement, passport, deliberate-submission, comparison, and adversarial-test contracts exist; external domain review and preregistration remain required."
+    },
+    {
+      "id": "QC-G1",
+      "title": "Controlled baseline",
+      "status": "NOT_STARTED",
+      "exit_evidence": "Repeated acoustic, workload, thermal, energy, and environment traces for one declared system."
+    },
+    {
+      "id": "QC-G2",
+      "title": "Independent baseline reproduction",
+      "status": "NOT_STARTED",
+      "exit_evidence": "A separate operator recovers the baseline within preregistered tolerance."
+    },
+    {
+      "id": "QC-G3",
+      "title": "One bounded intervention",
+      "status": "NOT_STARTED",
+      "exit_evidence": "One control, airflow, liquid-cooling, or thermal-material change improves acoustics without failing a guardrail."
+    },
+    {
+      "id": "QC-G4",
+      "title": "Secure distributed runner",
+      "status": "POLICY_CORE_IMPLEMENTED_EXECUTION_DISABLED",
+      "exit_evidence": "Ed25519 admission, capability filtering, diversity allocation, tolerance consensus, replay checks, and fail-closed isolation plans exist; execution remains disabled pending an independently reviewed sandbox adapter."
+    },
+    {
+      "id": "QC-G5",
+      "title": "Partner-led materials search",
+      "status": "GATED",
+      "exit_evidence": "A domain expert, experimental partner, validated solver stack, and unique licensed dataset exist."
+    }
+  ],
+  "current_evidence": {
+    "published_acoustic_baselines": 0,
+    "verified_quieter_systems": 0,
+    "verified_superconductors": 0,
+    "hardware_or_laboratory_partners": 0,
+    "external_quiet_compute_reproductions": 0,
+    "public_volunteer_worker_enabled": false
+  },
+  "security": {
+    "public_code_execution": "DISABLED",
+    "worker_status": "ADMISSION_AND_PLANNING_IMPLEMENTED_EXECUTION_DISABLED",
+    "minimum_controls": [
+      "PROJECT_SIGNED_JOB_MANIFEST",
+      "DECLARATIVE_OPERATIONS_ONLY",
+      "ROOTLESS_ISOLATION",
+      "READ_ONLY_INPUTS",
+      "NETWORK_DENY_DURING_COMPUTE",
+      "CPU_GPU_MEMORY_DISK_TIME_LIMITS",
+      "CONTRIBUTOR_PAUSE_AND_REMOVE",
+      "SIGNED_RESULT_PROVENANCE",
+      "UNRELATED_HOST_REPLICATION",
+      "HUMAN_PROMOTION_ONLY"
+    ]
+  },
+  "provenance": {
+    "created_by": "ChefMrFrizzle",
+    "created_at": "2026-08-12",
+    "license": "Apache-2.0",
+    "human_review_required": true
+  }
+}

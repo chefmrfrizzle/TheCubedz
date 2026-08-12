@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/quiet-compute-signed-job.schema.json",
+  "title": "Signed Quiet Compute job envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "algorithm", "key_id", "manifest", "signature"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "algorithm": {"const": "Ed25519"},
+    "key_id": {"type": "string", "pattern": "^QC-KEY-[A-Za-z0-9_-]{3,80}$"},
+    "manifest": {"type": "object"},
+    "signature": {"type": "string", "pattern": "^[A-Za-z0-9+/]{86}==$"}
+  }
+}

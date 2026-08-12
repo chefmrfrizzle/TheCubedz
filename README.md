@@ -1,6 +1,6 @@
 # TheCubedz
 
-> **TheCubedz** is a public, open-source computational experiment for representing spacetime candidates, checking narrowly defined properties, preserving failures, inviting independent challenge, and learning where to investigate next.
+> **TheCubedz** is a public, open-source evidence engine. Its first public challenge is Quiet Compute: measure why compute systems are loud, test one change at a time, and preserve exactly what passed, failed, or remains unknown.
 
 [![Status: public pre-alpha](https://img.shields.io/badge/status-public%20pre--alpha-f5a623)](#current-public-status)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-4c8bf5)](LICENSE)
@@ -9,47 +9,74 @@
 
 ## What this is
 
-Imagine physics as the rulebook for a Rubik's Cube.
+**Data centers are too freaking loud. Let's make them quiet.**
 
-A candidate is one arrangement. A validator checks only the rules it explicitly implements. A result records what passed, what failed, what remains unknown, and exactly how the calculation was produced. Failures stay visible so the project gradually builds a map of explored and unexplored regions.
+The first scientific question is narrower than the campaign line:
 
-Conventional spaceflight asks:
+> Can a declared compute system reduce acoustic output under the same useful workload while satisfying thermal, energy, water, reliability, cost, uncertainty, and independent-reproduction constraints?
 
-> How do we move a vehicle across the distance between Earth and Mars?
+The repository now implements local measurement and deliberate-submission contracts, matched comparison, Ed25519 job admission, worker eligibility, diversity-first replication allocation, tolerance consensus, evidence-quality reputation, and fail-closed isolation plans. See the [backend specification](docs/QUIET_COMPUTE_BACKEND.md) and [network logic](docs/QUIET_COMPUTE_NETWORK_LOGIC.md).
 
-This project asks a different methodological question:
+The method is simple: declare the test before seeing the answer, preserve raw-artifact digests and uncertainty, refuse mismatched workloads, evaluate every guardrail separately, reproduce across genuinely independent systems, and require named human review.
 
-> Can a reproducible computational system search mathematically defined configurations of geometry, matter, fields, and boundary conditions—and record exactly why candidates fail or survive?
+The three existing spacetime candidates remain known-answer calibrations for that evidence protocol. They test the repository's ability to bind a candidate, passport, validator, result, digest, reproduction, and review without presenting a novel discovery.
 
-Earth → Mars is a motivating benchmark, **not a transportation claim**.
+## What currently works
+
+- Local artifacts are strict-schema validated and content-addressed.
+- Interventions fail when useful workload, microphone geometry, ambient conditions, clocks, or any thermal, energy, water, reliability, or cost guardrail fails.
+- Signed jobs are verified against a separate trust store and immutable runtime allowlist.
+- Replay, expiry, revocation, quota, and sandbox-attestation checks fail closed.
+- Replication prioritizes independent operator, organization, OS, hardware, and sensor diversity.
+- Consensus requires every declared tolerance and guardrail; majority voting cannot erase a mismatch.
+- Funding and donated compute carry zero evidence-reputation weight.
+- The planner cannot execute a public job.
 
 ## What this is not
 
-This repository does **not** demonstrate a wormhole, warp device, faster-than-light travel, a route to Mars, or practical spacetime engineering.
+This repository does **not** contain a verified quieter-system result, production telemetry collector, automatic upload path, remote administration service, public distributed-compute executor, paid marketplace, or discovered superconductor.
 
-Candidate 000001 is intentionally ordinary: the Minkowski Cartesian flat-spacetime baseline. Its purpose is to test the research instrument before the project attempts anything exotic.
+It also does not demonstrate a wormhole, warp device, faster-than-light travel, route to Mars, or practical spacetime engineering. Candidates 000001 and 000002 are intentionally ordinary versions of Minkowski flat spacetime. Candidate 000003 is the established Schwarzschild exterior geometry. They are calibration cases, not proposed shortcuts.
 
 ## Current public status
 
-As of **August 7, 2026**, the repository contains:
+As of **August 12, 2026**, the repository contains:
 
 | Component | Implemented state |
 |---|---|
-| Candidate registry | Candidate 000001 in a versioned JSON schema |
-| Deterministic science core | Exact rational matrix operations and one scoped Minkowski validation profile |
-| Baseline result | 12 implemented checks pass; 0 fail |
-| Scientific fingerprint | `sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b` |
+| First public challenge | Quiet Compute validation core implemented; passport remains draft; physical baselines and verified quieter systems remain 0 |
+| Quiet Compute local evidence | Measurement, passport, deliberate-submission, matched-comparison, reproduction, and reputation contracts |
+| Secure compute preparation | Ed25519 admission, external trust store, atomic replay claims, capability filtering, diversity allocation, tolerance consensus, and plan-only isolation; public execution disabled |
+| Candidate registry | Two established flat benchmarks and one established curved Schwarzschild exterior benchmark |
+| Deterministic science core | Exact rational matrix operations plus a restricted symbolic tensor profile with no arbitrary expression evaluation |
+| Benchmark results | 43 implemented checks pass across three known-answer examples; 0 fail |
+| Scientific fingerprints | Candidate 000001: `sha256:91b67470ddfade1770e76793fef54d2f3812ad41f726bda16a3246fb2b428b4b`; Candidate 000002: `sha256:73af7803b5ae10a9f8b1269398a126e6da94072b30a7e12da16f3e8f53e012d2`; Candidate 000003: `sha256:d2b3f4a2ad15a7ade137e4aaf4166bdefab3ff33a3a2a27e5ca232c5bfb43458` |
 | Reports | Beginner and technical reports derived from the same result object |
 | Second brain | Append-only event ledger plus a versioned evidence-graph projection |
 | Agent contracts | 9 bounded research roles with explicit permissions and prohibitions |
-| Public website | 8 responsive routes, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
-| Automated validation | Python tests, artifact reconciliation, static-site link checks, base-path deployment checks, and build fingerprints |
+| Controlled autonomy | Machine-validated task, capability, run, evidence-bundle, and human-promotion contracts |
+| Synthetic benchmark | 100 frozen workflow cases: 23 accepted, 57 rejected, 5 mismatches preserved, and 15 unresolved |
+| Cross-check | Separate arithmetic paths match the flat benchmarks; EinsteinPy 0.4.0 matches 8/8 declared curved-benchmark comparisons. Schema validation remains primary-only in secondary paths, and none is an outside reproduction |
+| Internal clean-clone reproduction | Both published digests and a separate SymPy calculation match from remote commit `8684c5e`; conflicts are disclosed, the record is unsigned because no signing key was configured, and it does not count as outside reproduction |
+| Scientific review | `REVIEW-000001` required three implementation corrections; [`REVIEW-000002`](artifacts/reviews/REVIEW-000002.json) independently verified all seven requested items and returned `APPROVED` with no remaining objections |
+| Source provenance | Candidate 000002 records source commit `038b8e3a9d7f`; repository checks verify that commit contains the exact candidate, passport, schemas, validator, and matrix implementation |
+| Curved benchmark provenance | Candidate 000003 records source commit `5a6a5fe4f827`; repository checks bind the candidate, passport, parser, tensor engine, validator, and tests to that tree |
+| Public website | 9 responsive routes, Quiet Compute challenge and installer, six-face evidence cube, interactive lab, evidence graph, learning layer, roadmap, and contribution paths |
+| Automated validation | Scientific, control-contract, benchmark, cross-check, artifact, static-site, link, base-path, and build-fingerprint checks |
 | Independent reproductions | 0 recorded |
 | Novel physics claims | 0 |
 
 The baseline statement is deliberately narrow:
 
 > The exact submitted Minkowski Cartesian benchmark passed every implemented V0 check. This verifies the baseline pipeline—not a general relativity solver or transportation capability.
+
+The second benchmark is equally narrow:
+
+> The submitted rescaled-coordinate metric exactly matches one declared linear pullback of the canonical Minkowski metric. This verifies a bounded coordinate-equivalence check—not an arbitrary coordinate solver, curved-spacetime solver, or transportation capability.
+
+The third benchmark adds curvature without adding a novel claim:
+
+> The preregistered Schwarzschild exterior metric passed 17 symbolic checks under the declared domain and tensor conventions. This calibrates one established curved known answer—not a general solver, source-design method, safe trajectory, or route to Mars.
 
 ## See the public laboratory locally
 
@@ -82,13 +109,26 @@ npm run dev
 
 Open `http://127.0.0.1:4173`.
 
-### Reproduce Candidate 000001
+### Reproduce all established benchmarks
 
 ```bash
 python scripts/research.py verify candidates/CANDIDATE-000001.json --reproducible
+python scripts/research.py verify candidates/CANDIDATE-000002.json --passport benchmarks/BENCHMARK-000002.passport.json --reproducible
+python scripts/research.py verify candidates/CANDIDATE-000003.json --passport benchmarks/BENCHMARK-000003.passport.json --reproducible
 ```
 
 A matching repository run should emit the published scientific payload digest. Re-running the same implementation is useful software verification; it is **not yet independent scientific reproduction**.
+
+### Run the frozen workflow benchmark and separate implementation path
+
+```bash
+python scripts/research.py benchmark
+python scripts/independent_crosscheck.py
+python scripts/independent_coordinate_crosscheck.py
+python independent/schwarzschild_einsteinpy_crosscheck.py
+```
+
+The 100-case suite validates the research workflow, security boundaries, and explicit unresolved states. The separate paths use different matrix algorithms or EinsteinPy, but they share this repository, environment, and project authorship, so they do not count as outside reproduction. See the [external review protocol](docs/EXTERNAL_REVIEW_PROTOCOL.md) and [ready-to-send Candidate 000003 review prompt](prompts/CANDIDATE_000003_EXTERNAL_REVIEW.md).
 
 ## One command before every push
 
@@ -315,6 +355,15 @@ The roadmap preserves ambitious ideas without presenting them as implemented:
 - portable forks of the candidate → validator → artifact → graph → search loop for other scientific domains.
 
 See [docs/INNOVATION_BLUEPRINT.md](docs/INNOVATION_BLUEPRINT.md).
+
+The next controlled-autonomy milestone is specified in:
+
+- [Thesis and research program](docs/THESIS_AND_RESEARCH_PROGRAM.md)
+- [Controlled autonomy blueprint](docs/CONTROLLED_AUTONOMY_BLUEPRINT.md)
+- [Synthetic benchmark v1: 100 workflow cases](docs/SYNTHETIC_BENCHMARK_100.md)
+- [Security standards baseline](docs/SECURITY_STANDARDS_BASELINE.md)
+- [GitHub security settings record](docs/GITHUB_SECURITY_SETTINGS.md)
+- [Step-by-step controlled autonomy build prompts](prompts/CONTROLLED_AUTONOMY_BUILD_PROGRAM.md)
 
 ## Contribution paths
 
