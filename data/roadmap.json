@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "phases": [
-    {"id": "PHASE-0", "title": "Evidence-protocol foundation", "status": "COMPLETE", "outcome": "Open governance, schemas, claims policy, versioned artifacts, and three known-answer spacetime calibrations."},
+    {"id": "PHASE-0", "title": "Evidence-protocol foundation", "status": "COMPLETE", "outcome": "Open governance, schemas, claims policy, versioned artifacts, and three archived known-answer software calibrations."},
     {"id": "PHASE-1", "title": "Quiet Compute validation contract", "status": "IMPLEMENTED_DRAFT", "outcome": "Machine-validated measurement, deliberate-submission, matched comparison, guardrail, replication, consensus, and adversarial contracts exist; external domain review and preregistration remain open."},
     {"id": "PHASE-2", "title": "Controlled acoustic and thermal baseline", "status": "FUTURE", "outcome": "Publish repeated raw sound, spectrum, workload, temperature, energy, water, equipment, and environment traces for one declared system."},
     {"id": "PHASE-3", "title": "Independent baseline reproduction", "status": "GATED", "outcome": "A separate operator and environment recover the frozen baseline within preregistered tolerances and disclose conflicts of interest."},

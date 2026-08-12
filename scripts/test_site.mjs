@@ -39,7 +39,7 @@ function internalTarget(value, basePath = '') {
 
 async function verifyRequiredFiles() {
   const required = [
-    'index.html', 'challenge/index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html',
+    'index.html', 'challenge/index.html', 'lab/index.html', 'calibrations/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html',
     '404.html', 'assets/styles.css', 'assets/site.js', 'assets/favicon.svg', 'assets/og-card.png', 'assets/og-card-quiet-compute.png', 'assets/og-card-quiet-compute-v2.png',
     'data/candidate.json', 'data/result.json', 'data/candidate-000002.json', 'data/result-000002.json', 'data/benchmark-000002-passport.json', 'data/review-000002.json',
     'data/candidate-000003.json', 'data/result-000003.json', 'data/benchmark-000003-passport.json', 'data/crosscheck-000003.json',
@@ -51,7 +51,7 @@ async function verifyRequiredFiles() {
 }
 
 async function verifyHtml(basePath = '') {
-  const htmlFiles = ['index.html', 'challenge/index.html', 'lab/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html', '404.html'];
+  const htmlFiles = ['index.html', 'challenge/index.html', 'lab/index.html', 'calibrations/index.html', 'graph/index.html', 'agents/index.html', 'method/index.html', 'learn/index.html', 'roadmap/index.html', 'contribute/index.html', '404.html'];
   const prohibited = [
     /we (?:have )?solved (?:the )?wormhole/i,
     /proves? (?:that )?wormholes? exist/i,
@@ -128,20 +128,24 @@ async function verifyArtifacts() {
   if (quietProgram.security.public_code_execution !== 'DISABLED' || quietProgram.security.worker_status !== 'ADMISSION_AND_PLANNING_IMPLEMENTED_EXECUTION_DISABLED') fail('Quiet Compute public-compute security boundary changed unexpectedly');
   if (quietProgram.implementation.measurement_sealing !== 'IMPLEMENTED' || quietProgram.implementation.signed_result_verification !== 'IMPLEMENTED' || quietProgram.implementation.tolerance_consensus !== 'IMPLEMENTED_NO_MAJORITY_OVERRIDE' || quietProgram.implementation.public_job_execution !== 'DISABLED') fail('Quiet Compute implementation inventory is incomplete or enables public execution');
   const labHtml = await text('lab/index.html');
-  if (!labHtml.includes('data-evidence-cube') || !labHtml.includes('Turn the cube to see what we know')) fail('Answer cube is missing from the laboratory');
-  if (!labHtml.includes('Each side asks one plain question')) fail('Answer cube does not explain how to read it');
-  if (!labHtml.includes('data-benchmark-ladder') || !labHtml.includes('Same space, different numbers')) fail('Laboratory does not expose the coordinate benchmark ladder');
-  if (!labHtml.includes('full schema validation remains primary-only')) fail('Laboratory overstates the independent arithmetic comparison');
-  if (!labHtml.includes('Implementation approval is not an outside scientific reproduction')) fail('Laboratory does not state the approval boundary');
-  if (!labHtml.includes('/data/review-000002.json')) fail('Laboratory does not link the approval record');
-  if (!labHtml.includes('data-curved-benchmark') || !labHtml.includes('Known curvature, strict boundaries')) fail('Laboratory does not expose the curved benchmark');
-  if (!labHtml.includes('This does not solve Quiet Compute—or the Mars thesis') || !labHtml.includes('Outside signed reproduction</dt><dd>0')) fail('Laboratory overstates the curved benchmark');
+  if (!labHtml.includes('Measure one machine. Change one thing. Prove what got quieter.') || !labHtml.includes('VALIDATION CORE IMPLEMENTED')) fail('Quiet Compute lab does not lead with the current operational challenge');
+  if (!labHtml.includes('Every claimed improvement needs the complete chain') || !labHtml.includes('Tolerance consensus')) fail('Quiet Compute lab does not explain the evidence chain and consensus boundary');
+  if (!labHtml.includes('No arbitrary public jobs run on contributor hardware') || !labHtml.includes('public execution opens until an independent sandbox review passes')) fail('Quiet Compute lab does not preserve the worker-security boundary');
+  if (!labHtml.includes('/calibrations/')) fail('Quiet Compute lab does not preserve a clearly separated archive path');
+  const archiveHtml = await text('calibrations/index.html');
+  if (!archiveHtml.includes('Historical protocol archive') || !archiveHtml.includes('data-evidence-cube') || !archiveHtml.includes('Turn the cube to see what we know')) fail('Historical calibration archive is missing or not clearly labeled');
+  if (!archiveHtml.includes('data-benchmark-ladder') || !archiveHtml.includes('Same space, different numbers')) fail('Historical archive does not expose the coordinate benchmark ladder');
+  if (!archiveHtml.includes('full schema validation remains primary-only')) fail('Historical archive overstates the independent arithmetic comparison');
+  if (!archiveHtml.includes('Implementation approval is not an outside scientific reproduction') || !archiveHtml.includes('/data/review-000002.json')) fail('Historical archive does not state or link the approval boundary');
+  if (!archiveHtml.includes('data-curved-benchmark') || !archiveHtml.includes('Known curvature, strict boundaries')) fail('Historical archive does not expose the curved benchmark');
+  if (!archiveHtml.includes('This does not solve Quiet Compute—or the Mars thesis') || !archiveHtml.includes('Outside signed reproduction</dt><dd>0')) fail('Historical archive overstates the curved benchmark');
   const homeHtml = await text('index.html');
   if (!homeHtml.includes('Data centers are too freaking loud.')) fail('Homepage does not state the first public challenge');
   if (!homeHtml.includes("Let's make them quiet.") || !homeHtml.includes('Join with your server')) fail('Homepage does not state the response or server-participation path');
   if (!homeHtml.includes('/assets/og-card-quiet-compute-v2.png')) fail('Homepage does not publish the current Quiet Compute social card');
   if (!homeHtml.includes('No public acoustic baseline, quieter design, or new superconductor has been verified')) fail('Homepage does not state the current Quiet Compute boundary');
   if (!homeHtml.includes('How people and computers work together')) fail('Homepage does not explain the public research workflow');
+  if (!homeHtml.includes('>Quiet Lab</a>') || homeHtml.includes('>Lab</a>') || homeHtml.includes('>First challenge</a>')) fail('Primary navigation does not clearly name the Quiet Compute journey');
   const challengeHtml = await text('challenge/index.html');
   if (!challengeHtml.includes('Data centers are too freaking loud.') || !challengeHtml.includes("Let's make them quiet.") || !challengeHtml.includes('First we listen. Then we test everything.') || !challengeHtml.includes('Superconductors are one branch—not the assumed answer')) fail('Quiet Compute challenge does not distinguish its campaign, participation path, exact test, and long-horizon hypothesis');
   if (!challengeHtml.includes('id="install-linux-command"') || !challengeHtml.includes('data-copy-target="#install-linux-command"') || !challengeHtml.includes('python3.12 scripts/bootstrap.py')) fail('Quiet Compute challenge does not expose a copyable local installer');
@@ -150,9 +154,9 @@ async function verifyArtifacts() {
   if (!challengeHtml.includes('Evidence gates—not public deadlines.') || !challengeHtml.includes('Measure the whole system—not just the loudest fan.')) fail('Quiet Compute challenge does not expose the evidence-gate and system-boundary context');
   if (challengeHtml.includes('NVIDIA Inception')) fail('Quiet Compute participant journey contains an unrelated startup-program promotion');
   const contributeHtml = await text('contribute/index.html');
-  if (!contributeHtml.includes('data-program-gates') || !contributeHtml.includes('Quiet Compute build program') || !contributeHtml.includes('id="server-participant"') || !contributeHtml.includes('NO REMOTE ACCESS') || !contributeHtml.includes('/docs/QUIET_COMPUTE_NETWORK_LOGIC.md') || !contributeHtml.includes('/docs/QUIET_COMPUTE_BACKEND.md') || !contributeHtml.includes('/docs/QUIET_COMPUTE_CONTRIBUTION_TERMS_DRAFT.md') || !contributeHtml.includes('ADMISSION + PLANNING IMPLEMENTED · EXECUTION DISABLED')) fail('Contribution page does not expose server participation, contributor terms, security boundaries, backend state, network logic, research contract, and Quiet Compute prompt program');
-  const allHtml = (await Promise.all(['index.html','lab/index.html','graph/index.html'].map(text))).join('\n');
-  if (!allHtml.includes(result.scientific_payload_digest)) fail('Scientific digest is not visible on public release pages');
+  if (!contributeHtml.includes('Quiet Compute readiness') || !contributeHtml.includes('Quiet Compute build program') || !contributeHtml.includes('id="server-participant"') || !contributeHtml.includes('NO REMOTE ACCESS') || !contributeHtml.includes('/docs/QUIET_COMPUTE_NETWORK_LOGIC.md') || !contributeHtml.includes('/docs/QUIET_COMPUTE_BACKEND.md') || !contributeHtml.includes('/docs/QUIET_COMPUTE_CONTRIBUTION_TERMS_DRAFT.md') || !contributeHtml.includes('ADMISSION + PLANNING IMPLEMENTED · EXECUTION DISABLED')) fail('Contribution page does not expose server participation, contributor terms, security boundaries, backend state, network logic, readiness gates, and Quiet Compute prompt program');
+  const primaryJourney = (await Promise.all(['index.html','challenge/index.html','lab/index.html','method/index.html','learn/index.html','roadmap/index.html','contribute/index.html'].map(text))).join('\n');
+  if (/spacetime|mars thesis|wormhole|transportation device/i.test(primaryJourney)) fail('Primary Quiet Compute journey still exposes the historical spacetime program');
   note(`${result.checks.length + coordinateResult.checks.length + curvedResult.checks.length} scientific result checks reconciled with public status`);
 }
 
