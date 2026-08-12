@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/quiet-compute-job-manifest.schema.json",
+  "title": "Declarative Quiet Compute job manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "job_id", "task_id", "challenge_id", "operation", "issued_at", "expires_at", "nonce", "runtime", "inputs", "resources", "isolation"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "job_id": {"type": "string", "pattern": "^QC-JOB-[0-9]{6}$"},
+    "task_id": {"type": "string", "pattern": "^TASK-[0-9]{6}$"},
+    "challenge_id": {"const": "CHALLENGE-QUIET-000001"},
+    "operation": {"enum": ["VALIDATE_MEASUREMENT", "COMPARE_MEASUREMENTS", "REPRODUCE_FROZEN_BENCHMARK"]},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "nonce": {"type": "string", "pattern": "^[A-Za-z0-9_-]{22,128}$"},
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["image_digest", "entrypoint_id"],
+      "properties": {
+        "image_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+        "entrypoint_id": {"enum": ["QC_VALIDATE_V1", "QC_COMPARE_V1", "FROZEN_BENCHMARK_V1"]}
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "sha256", "bytes", "expanded_bytes", "media_type"],
+        "properties": {
+          "name": {"type": "string", "pattern": "^[A-Za-z0-9._-]{1,120}$"},
+          "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "bytes": {"type": "integer", "minimum": 1, "maximum": 107374182400},
+          "expanded_bytes": {"type": "integer", "minimum": 1, "maximum": 107374182400},
+          "media_type": {"enum": ["application/json", "application/jsonl", "text/csv"]}
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cpu_cores", "memory_mb", "disk_mb", "wall_seconds", "output_mb", "processes", "gpu_count"],
+      "properties": {
+        "cpu_cores": {"type": "number", "exclusiveMinimum": 0, "maximum": 256},
+        "memory_mb": {"type": "integer", "minimum": 64, "maximum": 1048576},
+        "disk_mb": {"type": "integer", "minimum": 1, "maximum": 1048576},
+        "wall_seconds": {"type": "integer", "minimum": 1, "maximum": 86400},
+        "output_mb": {"type": "integer", "minimum": 1, "maximum": 1024},
+        "processes": {"type": "integer", "minimum": 1, "maximum": 1024},
+        "gpu_count": {"type": "integer", "minimum": 0, "maximum": 64}
+      }
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["network", "rootless", "read_only_root", "read_only_inputs", "ephemeral_scratch", "privileged", "host_mounts", "capabilities"],
+      "properties": {
+        "network": {"const": "DENY"},
+        "rootless": {"const": true},
+        "read_only_root": {"const": true},
+        "read_only_inputs": {"const": true},
+        "ephemeral_scratch": {"const": true},
+        "privileged": {"const": false},
+        "host_mounts": {"const": []},
+        "capabilities": {"const": []}
+      }
+    }
+  }
+}

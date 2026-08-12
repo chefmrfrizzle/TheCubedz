@@ -5,11 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "thecubedz-research-core"
 version = "0.2.1"
-description = "Deterministic, scope-limited research artifacts for TheCubedz."
+description = "Deterministic evidence and Quiet Compute validation tools for TheCubedz."
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "Apache-2.0" }
 dependencies = [
+  "cryptography>=45,<47",
   "jsonschema>=4.23,<5",
 ]
 

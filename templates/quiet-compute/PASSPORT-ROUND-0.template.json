@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "passport_id": "QC-PASSPORT-000001",
+  "version": "1.0.0",
+  "challenge_id": "CHALLENGE-QUIET-000001",
+  "status": "DRAFT",
+  "boundary": "SERVER",
+  "matched_workload": {
+    "exact_fields": ["workload_id", "version", "input_digest", "command_digest", "throughput.unit", "service_target.metric", "service_target.target", "service_target.unit"],
+    "max_relative_throughput_difference": 0.02,
+    "max_relative_latency_difference": 0.05,
+    "max_relative_duration_difference": 0.05
+  },
+  "matched_environment": {
+    "require_same_microphone_position": true,
+    "require_same_microphone_orientation": true,
+    "max_microphone_distance_difference_m": 0.02,
+    "max_background_difference_db": 3.0,
+    "max_absolute_sensor_clock_offset_ms": 100.0
+  },
+  "acoustic": {
+    "minimum_improvement_db": 3.0,
+    "confidence_multiplier": 2.0,
+    "minimum_background_separation_db": 6.0
+  },
+  "guardrails": {
+    "maximum_component_temperature_c": 85.0,
+    "maximum_relative_energy_increase": 0.05,
+    "maximum_relative_water_increase": 0.05,
+    "allow_unknown_water": false,
+    "maximum_errors": 0,
+    "maximum_throttling_seconds": 0,
+    "maximum_relative_cost_increase": 0.1,
+    "allow_unknown_cost": false
+  },
+  "replication": {
+    "minimum_results": 3,
+    "minimum_independent_operators": 3,
+    "minimum_independence_groups": 3,
+    "minimum_os_families": 2,
+    "minimum_hardware_families": 2
+  },
+  "consensus": {
+    "require_every_guardrail_pass": true,
+    "metric_tolerances": {
+      "acoustic_improvement_db": 0.8,
+      "energy_relative_change": 0.03,
+      "component_max_c": 2.0
+    }
+  },
+  "review": {
+    "created_by": "TEMPLATE-NOT-REVIEWED",
+    "created_at": "2026-08-12T00:00:00Z",
+    "human_promotion_required": true
+  }
+}

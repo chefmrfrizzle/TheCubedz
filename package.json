@@ -2,7 +2,7 @@
   "name": "thecubedz",
   "version": "0.2.0-alpha.1",
   "private": true,
-  "description": "Build and validate the public static surface for an open computational spacetime research experiment.",
+  "description": "Build and validate the public Quiet Compute challenge and open evidence engine.",
   "type": "module",
   "engines": {
     "node": ">=20.9"

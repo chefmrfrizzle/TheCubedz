@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "measurement_id": "QC-MEAS-000001",
+  "challenge_id": "CHALLENGE-QUIET-000001",
+  "kind": "BASELINE",
+  "passport_id": "QC-PASSPORT-000001",
+  "baseline_measurement_id": null,
+  "operator": {
+    "operator_id": "TEMPLATE-OPERATOR",
+    "independence_group": "TEMPLATE-NOT-INDEPENDENT-EVIDENCE",
+    "conflict_of_interest": "Replace this template statement with a complete conflict-of-interest disclosure."
+  },
+  "system": {
+    "system_id": "TEMPLATE-SYSTEM",
+    "hardware_family": "TEMPLATE-HARDWARE",
+    "cpu": "TEMPLATE-CPU",
+    "accelerators": [],
+    "memory_gb": 64,
+    "os": {"family": "LINUX", "version": "TEMPLATE", "architecture": "x86_64"},
+    "cooling": {"primary_path": "AIR", "fan_control": "TEMPLATE-CONTROL", "facility_boundary": "Replace with every included and excluded server and facility cooling source."}
+  },
+  "workload": {
+    "workload_id": "TEMPLATE-WORKLOAD",
+    "version": "1.0.0",
+    "input_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "command_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "duration_seconds": 600,
+    "throughput": {"value": 100, "unit": "jobs/s"},
+    "latency_ms": 10,
+    "service_target": {"metric": "minimum-throughput", "target": 95, "unit": "jobs/s"}
+  },
+  "environment": {
+    "boundary": "SERVER",
+    "description": "TEMPLATE ONLY: replace with the complete room, rack, cooling, and ambient measurement boundary.",
+    "microphone": {"distance_m": 1.0, "position": "TEMPLATE-POSITION", "orientation": "TEMPLATE-ORIENTATION"},
+    "background_dba": 40
+  },
+  "sensors": [
+    {"sensor_id": "TEMPLATE-SOUND", "type": "ACOUSTIC", "model": "TEMPLATE-MODEL", "calibration_id": "TEMPLATE-CALIBRATION", "calibrated_at": "2026-08-12T00:00:00Z", "sampling_hz": 48000, "clock_offset_ms": 0},
+    {"sensor_id": "TEMPLATE-TEMPERATURE", "type": "TEMPERATURE", "model": "TEMPLATE-MODEL", "calibration_id": "TEMPLATE-CALIBRATION", "calibrated_at": "2026-08-12T00:00:00Z", "sampling_hz": 1, "clock_offset_ms": 0},
+    {"sensor_id": "TEMPLATE-POWER", "type": "POWER", "model": "TEMPLATE-MODEL", "calibration_id": "TEMPLATE-CALIBRATION", "calibrated_at": "2026-08-12T00:00:00Z", "sampling_hz": 1, "clock_offset_ms": 0}
+  ],
+  "observations": {
+    "acoustic": {"dba_leq": 70, "uncertainty_db": 0.5, "spectrum_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "clipping_detected": false},
+    "thermal": {"inlet_c": 22, "outlet_c": 30, "component_max_c": 75, "uncertainty_c": 0.5},
+    "energy": {"joules": 100000, "uncertainty_percent": 1.0},
+    "water": {"status": "NOT_APPLICABLE", "liters": null},
+    "reliability": {"completed": true, "errors": 0, "throttling_seconds": 0},
+    "cost": {"status": "UNKNOWN", "usd": null}
+  },
+  "raw_artifacts": [
+    {"path": "raw/TEMPLATE-sound.csv", "media_type": "text/csv", "sha256": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "bytes": 1},
+    {"path": "raw/TEMPLATE-thermal.csv", "media_type": "text/csv", "sha256": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "bytes": 1},
+    {"path": "raw/TEMPLATE-power.csv", "media_type": "text/csv", "sha256": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "bytes": 1}
+  ],
+  "provenance": {"source_commit": "UNAVAILABLE", "software_version": "TEMPLATE", "commands": ["TEMPLATE-NOT-RUN"], "recorded_at": "2026-08-12T00:00:00Z"},
+  "publication": {"scope": "PRIVATE_REVIEW_ONLY", "contains_personal_data": false, "contains_secrets": false, "commercial_use": "SEPARATE_AGREEMENT_REQUIRED"}
+}

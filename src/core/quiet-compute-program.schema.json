@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/quiet-compute-program.schema.json",
+  "title": "TheCubedz Quiet Compute program",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "challenge_id",
+    "title",
+    "campaign_line",
+    "response_line",
+    "research_question",
+    "status",
+    "authority",
+    "scope",
+    "outcomes",
+    "implementation",
+    "hypothesis_tracks",
+    "milestones",
+    "current_evidence",
+    "security",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "challenge_id": {"const": "CHALLENGE-QUIET-000001"},
+    "title": {"const": "Quiet Compute"},
+    "campaign_line": {"const": "Data centers are too freaking loud."},
+    "response_line": {"const": "Let's make them quiet."},
+    "research_question": {"type": "string", "minLength": 80, "maxLength": 500},
+    "status": {"const": "VALIDATION_CORE_IMPLEMENTED"},
+    "authority": {"const": "DRAFT_NOT_PREREGISTERED"},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version_0_1_boundary", "future_boundaries", "excluded_claims"],
+      "properties": {
+        "version_0_1_boundary": {"type": "string", "minLength": 40, "maxLength": 500},
+        "future_boundaries": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["ROOM", "COOLING_PLANT", "PROPERTY_LINE", "COMMUNITY_EXPOSURE"]}
+        },
+        "excluded_claims": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {"enum": [
+            "ALL_DATA_CENTERS_HAVE_THE_SAME_NOISE_PROFILE",
+            "SUPERCONDUCTORS_ARE_THE_PREDETERMINED_SOLUTION",
+            "SIMULATION_IS_PHYSICAL_VALIDATION",
+            "QUIETER_WITH_REDUCED_USEFUL_COMPUTE_COUNTS_AS_SUCCESS",
+            "NVIDIA_PARTNERSHIP_OR_ENDORSEMENT_EXISTS"
+          ]}
+        }
+      }
+    },
+    "outcomes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "matched_condition", "guardrails", "evidence_requirements"],
+      "properties": {
+        "primary": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"enum": ["A_WEIGHTED_ACOUSTIC_LEVEL", "FREQUENCY_SPECTRUM"]}
+        },
+        "matched_condition": {"const": "USEFUL_COMPUTE_WORKLOAD_AND_SERVICE_TARGET"},
+        "guardrails": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {"enum": ["THERMAL", "ENERGY", "WATER", "RELIABILITY", "COST"]}
+        },
+        "evidence_requirements": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": {"enum": [
+            "DECLARED_SYSTEM_BOUNDARY",
+            "CALIBRATED_MEASUREMENT",
+            "RAW_TRACE_PRESERVATION",
+            "UNCERTAINTY",
+            "PREREGISTERED_COMPARISON",
+            "INDEPENDENT_REPRODUCTION"
+          ]}
+        }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measurement_sealing", "deliberate_submission", "matched_comparison", "signed_job_admission", "persistent_replay_claim", "worker_eligibility", "isolation_planning", "replication_allocation", "signed_result_verification", "tolerance_consensus", "evidence_reputation", "public_job_execution"],
+      "properties": {
+        "measurement_sealing": {"const": "IMPLEMENTED"},
+        "deliberate_submission": {"const": "IMPLEMENTED"},
+        "matched_comparison": {"const": "IMPLEMENTED"},
+        "signed_job_admission": {"const": "IMPLEMENTED"},
+        "persistent_replay_claim": {"const": "IMPLEMENTED_LOCAL_ATOMIC"},
+        "worker_eligibility": {"const": "IMPLEMENTED"},
+        "isolation_planning": {"const": "IMPLEMENTED_PLAN_ONLY"},
+        "replication_allocation": {"const": "IMPLEMENTED"},
+        "signed_result_verification": {"const": "IMPLEMENTED"},
+        "tolerance_consensus": {"const": "IMPLEMENTED_NO_MAJORITY_OVERRIDE"},
+        "evidence_reputation": {"const": "IMPLEMENTED_NON_PURCHASABLE"},
+        "public_job_execution": {"const": "DISABLED"}
+      }
+    },
+    "hypothesis_tracks": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "status"],
+        "properties": {
+          "id": {"pattern": "^H[1-5]-[A-Z-]+$"},
+          "title": {"type": "string", "minLength": 3, "maxLength": 100},
+          "status": {"enum": ["PROPOSED", "LONG_HORIZON_PARTNER_GATED"]}
+        }
+      }
+    },
+    "milestones": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "status", "exit_evidence"],
+        "properties": {
+          "id": {"pattern": "^QC-G[0-5]$"},
+          "title": {"type": "string", "minLength": 3, "maxLength": 120},
+          "status": {"enum": ["IMPLEMENTED_DRAFT", "NOT_STARTED", "POLICY_CORE_IMPLEMENTED_EXECUTION_DISABLED", "GATED"]},
+          "exit_evidence": {"type": "string", "minLength": 20, "maxLength": 500}
+        }
+      }
+    },
+    "current_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "published_acoustic_baselines",
+        "verified_quieter_systems",
+        "verified_superconductors",
+        "hardware_or_laboratory_partners",
+        "external_quiet_compute_reproductions",
+        "public_volunteer_worker_enabled"
+      ],
+      "properties": {
+        "published_acoustic_baselines": {"const": 0},
+        "verified_quieter_systems": {"const": 0},
+        "verified_superconductors": {"const": 0},
+        "hardware_or_laboratory_partners": {"const": 0},
+        "external_quiet_compute_reproductions": {"const": 0},
+        "public_volunteer_worker_enabled": {"const": false}
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_code_execution", "worker_status", "minimum_controls"],
+      "properties": {
+        "public_code_execution": {"const": "DISABLED"},
+        "worker_status": {"const": "ADMISSION_AND_PLANNING_IMPLEMENTED_EXECUTION_DISABLED"},
+        "minimum_controls": {
+          "type": "array",
+          "minItems": 10,
+          "uniqueItems": true,
+          "items": {"enum": [
+            "PROJECT_SIGNED_JOB_MANIFEST",
+            "DECLARATIVE_OPERATIONS_ONLY",
+            "ROOTLESS_ISOLATION",
+            "READ_ONLY_INPUTS",
+            "NETWORK_DENY_DURING_COMPUTE",
+            "CPU_GPU_MEMORY_DISK_TIME_LIMITS",
+            "CONTRIBUTOR_PAUSE_AND_REMOVE",
+            "SIGNED_RESULT_PROVENANCE",
+            "UNRELATED_HOST_REPLICATION",
+            "HUMAN_PROMOTION_ONLY"
+          ]}
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_by", "created_at", "license", "human_review_required"],
+      "properties": {
+        "created_by": {"type": "string", "minLength": 1, "maxLength": 120},
+        "created_at": {"type": "string", "format": "date"},
+        "license": {"const": "Apache-2.0"},
+        "human_review_required": {"const": true}
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/quiet-compute-submission.schema.json",
+  "title": "Deliberate Quiet Compute submission bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "submission_id", "measurement", "selected_artifacts", "authorization", "created_at", "submission_digest"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "submission_id": {"type": "string", "pattern": "^QC-SUB-[0-9]{6}$"},
+    "measurement": {"type": "object"},
+    "selected_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+    },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operator_confirmed", "automatic_upload", "credentials_included", "remote_access_granted", "terms_version"],
+      "properties": {
+        "operator_confirmed": {"const": true},
+        "automatic_upload": {"const": false},
+        "credentials_included": {"const": false},
+        "remote_access_granted": {"const": false},
+        "terms_version": {"type": "string", "minLength": 1, "maxLength": 80}
+      }
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "submission_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  }
+}

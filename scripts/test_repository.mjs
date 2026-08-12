@@ -31,11 +31,26 @@ async function checkRequiredFiles() {
     'docs/SCIENTIFIC_CLAIMS_POLICY.md', 'docs/THREAT_MODEL.md', 'docs/LAUNCH.md', 'docs/SECOND_BRAIN.md', 'docs/AGENT_OPERATING_SYSTEM.md', 'docs/SCALE_ARCHITECTURE.md',
     'candidates/CANDIDATE-000001.json', 'artifacts/results/CANDIDATE-000001.result.json', 'candidates/CANDIDATE-000002.json', 'artifacts/results/CANDIDATE-000002.result.json', 'candidates/CANDIDATE-000003.json', 'artifacts/results/CANDIDATE-000003.result.json',
     'benchmarks/BENCHMARK-000002.passport.json', 'benchmarks/BENCHMARK-000003.passport.json', 'artifacts/reproductions/CANDIDATE-000002.crosscheck.json', 'artifacts/reproductions/CANDIDATE-000003.einsteinpy-crosscheck.json', 'artifacts/reproductions/INTERNAL-CLEAN-CLONE-000001.json', 'artifacts/reviews/REVIEW-000002.json', 'src/core/benchmark-passport.schema.json', 'src/core/candidate-v2.schema.json', 'src/core/curved-benchmark-passport.schema.json', 'src/core/reproduction-record.schema.json', 'src/core/review-record.schema.json', 'data/ledger/events.jsonl', 'data/knowledge-graph.json',
-    'data/research-program.json', 'src/core/research-program.schema.json', 'prompts/MARS_RESEARCH_PROGRAM.md', '.github/ISSUE_TEMPLATE/research-question.yml',
+    'data/research-program.json', 'data/quiet-compute-program.json', 'src/core/research-program.schema.json', 'src/core/quiet-compute-program.schema.json', 'src/core/quiet-compute-measurement.schema.json', 'src/core/quiet-compute-passport.schema.json', 'src/core/quiet-compute-submission.schema.json', 'src/core/quiet-compute-job-manifest.schema.json', 'src/core/quiet-compute-signed-job.schema.json', 'src/core/quiet-compute-trust-store.schema.json', 'src/core/quiet-compute-worker.schema.json', 'src/core/quiet-compute-reproduction.schema.json', 'src/core/quiet-compute-signed-reproduction.schema.json', 'src/core/quiet-compute-reputation-event.schema.json', 'src/research_core/quiet_compute.py', 'templates/quiet-compute/README.md', 'templates/quiet-compute/MEASUREMENT.template.json', 'templates/quiet-compute/PASSPORT-ROUND-0.template.json', 'prompts/MARS_RESEARCH_PROGRAM.md', 'prompts/QUIET_COMPUTE_BUILD_PROGRAM.md', 'scripts/bootstrap.py', 'docs/QUIET_COMPUTE_NETWORK_LOGIC.md', 'docs/QUIET_COMPUTE_BACKEND.md', 'docs/QUIET_COMPUTE_CONTRIBUTION_TERMS_DRAFT.md', '.github/ISSUE_TEMPLATE/research-question.yml',
     '.github/workflows/ci.yml', '.github/workflows/pages.yml', '.github/workflows/codeql.yml', '.github/dependabot.yml',
   ];
   for (const item of required) if (!(await exists(path.join(root, item)))) fail(`Missing repository contract file: ${item}`);
   note(`${required.length} repository contract files checked`);
+}
+
+async function checkBootstrapDryRun() {
+  const localPython = path.join(root, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
+  const python = await exists(localPython) ? localPython : (process.platform === 'win32' ? 'python' : 'python3');
+  const completed = spawnSync(python, ['scripts/bootstrap.py', '--dry-run'], { cwd: root, encoding: 'utf8' });
+  if (completed.status !== 0) {
+    fail(`Local bootstrap dry run failed: ${(completed.stderr || completed.stdout).trim()}`);
+    return;
+  }
+  if (!completed.stdout.includes('Dry run complete') || !completed.stdout.includes('research_core.cli benchmark')) {
+    fail('Local bootstrap dry run does not expose its no-change boundary and smoke test');
+    return;
+  }
+  note('Local bootstrap command dry-run checked');
 }
 
 async function checkJsonAndJsonl(files) {
@@ -88,6 +103,7 @@ async function checkScientificConsistency() {
   const graph = JSON.parse(await readFile(path.join(root, 'data/knowledge-graph.json'), 'utf8'));
   const benchmark = JSON.parse(await readFile(path.join(root, 'artifacts/benchmarks/synthetic-suite-v1.result.json'), 'utf8'));
   const program = JSON.parse(await readFile(path.join(root, 'data/research-program.json'), 'utf8'));
+  const quietProgram = JSON.parse(await readFile(path.join(root, 'data/quiet-compute-program.json'), 'utf8'));
   const readme = await readFile(path.join(root, 'README.md'), 'utf8');
   if (candidate.candidate_id !== result.candidate.candidate_id) fail('Candidate and result IDs differ');
   if (coordinateCandidate.candidate_id !== coordinateResult.candidate.candidate_id || passport.candidate_id !== coordinateCandidate.candidate_id) fail('Coordinate benchmark candidate, result, and passport IDs differ');
@@ -96,6 +112,10 @@ async function checkScientificConsistency() {
   if (!readme.includes('Novel physics claims | 0')) fail('README does not explicitly report zero novel physics claims');
   if (result.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Transportation boundary changed');
   if (program.status !== 'OPEN_RESEARCH_QUESTION') fail('Research program is no longer an open question');
+  if (quietProgram.campaign_line !== 'Data centers are too freaking loud.' || quietProgram.response_line !== "Let's make them quiet." || quietProgram.status !== 'VALIDATION_CORE_IMPLEMENTED' || quietProgram.authority !== 'DRAFT_NOT_PREREGISTERED') fail('Quiet Compute public status or campaign contract changed unexpectedly');
+  if (quietProgram.current_evidence.published_acoustic_baselines !== 0 || quietProgram.current_evidence.verified_quieter_systems !== 0 || quietProgram.current_evidence.verified_superconductors !== 0 || quietProgram.current_evidence.public_volunteer_worker_enabled !== false) fail('Quiet Compute program overstates current evidence or worker availability');
+  if (quietProgram.security.public_code_execution !== 'DISABLED' || quietProgram.security.worker_status !== 'ADMISSION_AND_PLANNING_IMPLEMENTED_EXECUTION_DISABLED') fail('Quiet Compute public-compute security boundary changed unexpectedly');
+  if (quietProgram.implementation.measurement_sealing !== 'IMPLEMENTED' || quietProgram.implementation.signed_result_verification !== 'IMPLEMENTED' || quietProgram.implementation.tolerance_consensus !== 'IMPLEMENTED_NO_MAJORITY_OVERRIDE' || quietProgram.implementation.public_job_execution !== 'DISABLED') fail('Quiet Compute implementation inventory is incomplete or enables public execution');
   const implementedChecks = result.checks.length + coordinateResult.checks.length + curvedResult.checks.length;
   if (program.current_evidence.known_answer_examples !== 3 || program.current_evidence.implemented_checks !== implementedChecks) fail('Research program benchmark counts do not match canonical artifacts');
   if (coordinateResult.assessment.overall_status !== 'BENCHMARK_VERIFIED' || coordinateResult.assessment.transportation_status !== 'NOT_A_TRANSPORTATION_PROPOSAL') fail('Coordinate benchmark status or transportation boundary changed');
@@ -214,6 +234,7 @@ async function checkLicenseAndLockfile() {
 async function main() {
   const files = await walk(root);
   await checkRequiredFiles();
+  await checkBootstrapDryRun();
   await checkJsonAndJsonl(files);
   await checkMarkdownLinks(files);
   await checkScientificConsistency();

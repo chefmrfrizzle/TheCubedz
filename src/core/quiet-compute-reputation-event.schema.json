@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://thecubedz.vercel.app/schemas/quiet-compute-reputation-event.schema.json",
+  "title": "Quiet Compute evidence-quality reputation event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "contributor_id", "type", "evidence_digest", "verified", "occurred_at"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "event_id": {"type": "string", "pattern": "^QC-REP-[0-9]{6}$"},
+    "contributor_id": {"type": "string", "minLength": 3, "maxLength": 120},
+    "type": {"enum": ["VERIFIED_REPRODUCTION", "USEFUL_NEGATIVE_RESULT", "DISCLOSED_MISMATCH", "COMPLETE_PROVENANCE", "CONFIRMED_ADVERSARIAL_FINDING", "RETRACTION", "MISREPRESENTED_INDEPENDENCE", "INVALID_PROVENANCE", "DONATED_COMPUTE", "FUNDING"]},
+    "evidence_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "verified": {"type": "boolean"},
+    "occurred_at": {"type": "string", "format": "date-time"}
+  }
+}
