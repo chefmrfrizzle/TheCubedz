@@ -10,6 +10,11 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def _portable_text_digest(path: Path) -> str:
+    normalized = path.read_text(encoding="utf-8").replace("\r\n", "\n").replace("\r", "\n")
+    return f"sha256:{sha256(normalized.encode('utf-8')).hexdigest()}"
+
+
 def _fraction(value: Any) -> Fraction:
     if isinstance(value, bool):
         raise TypeError("booleans are not exact numeric components")
@@ -58,8 +63,7 @@ def _plain_matrix(matrix: list[list[Fraction]]) -> list[list[int | str]]:
 def run_crosscheck() -> dict[str, Any]:
     candidate_path = ROOT / "candidates" / "CANDIDATE-000001.json"
     result_path = ROOT / "artifacts" / "results" / "CANDIDATE-000001.result.json"
-    candidate_bytes = candidate_path.read_bytes()
-    candidate = json.loads(candidate_bytes)
+    candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
     reference = json.loads(result_path.read_text(encoding="utf-8"))
     components = candidate["metric"]["components"]
     matrix = [[_fraction(value) for value in row] for row in components]
@@ -102,13 +106,13 @@ def run_crosscheck() -> dict[str, Any]:
         "candidate_id": candidate["candidate_id"],
         "source_result_id": reference["result_id"],
         "source_scientific_payload_digest": reference["scientific_payload_digest"],
-        "candidate_file_sha256": f"sha256:{sha256(candidate_bytes).hexdigest()}",
+        "candidate_file_sha256": _portable_text_digest(candidate_path),
         "source_candidate_payload_sha256": f"sha256:{reference['candidate']['sha256']}",
         "implementation": {
             "name": "standard-library-leibniz-adjugate-crosscheck",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "shared_research_core_code": False,
-            "method": "Leibniz determinant and cofactor-adjugate inverse using fractions.Fraction",
+            "method": "Leibniz determinant and cofactor-adjugate inverse using fractions.Fraction; input file hashes normalize UTF-8 line endings to LF",
         },
         "comparison_scope": {
             "reference_check_count": len(reference_status),

@@ -8,9 +8,9 @@
   "source_candidate_payload_sha256": "sha256:0e9c36562cb650f3d9eb96efb6c9e1daceb8d284a4a8c5b457722d8f9c25e4c8",
   "implementation": {
     "name": "standard-library-leibniz-adjugate-crosscheck",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "shared_research_core_code": false,
-    "method": "Leibniz determinant and cofactor-adjugate inverse using fractions.Fraction"
+    "method": "Leibniz determinant and cofactor-adjugate inverse using fractions.Fraction; input file hashes normalize UTF-8 line endings to LF"
   },
   "comparison_scope": {
     "reference_check_count": 12,
@@ -92,5 +92,5 @@
     "It is not an outside reproduction and does not increase the public independent-reproduction count.",
     "It checks only the exact submitted Minkowski Cartesian benchmark."
   ],
-  "record_digest": "sha256:6a8fe56626b3212ae7461320d5062880931c6aa45568bf8af63d33f71d43192a"
+  "record_digest": "sha256:1a66fd8beac5ae274d115ddf028d59daa448cfc36fcbbb7fd7a39ee05c06025e"
 }

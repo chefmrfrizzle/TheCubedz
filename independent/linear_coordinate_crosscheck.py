@@ -10,6 +10,11 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def _portable_text_digest(path: Path) -> str:
+    normalized = path.read_text(encoding="utf-8").replace("\r\n", "\n").replace("\r", "\n")
+    return f"sha256:{sha256(normalized.encode('utf-8')).hexdigest()}"
+
+
 def _fraction(value: Any) -> Fraction:
     if isinstance(value, bool):
         raise TypeError("booleans are not exact numeric components")
@@ -158,10 +163,8 @@ def run_crosscheck() -> dict[str, Any]:
     candidate_path = ROOT / "candidates" / "CANDIDATE-000002.json"
     result_path = ROOT / "artifacts" / "results" / "CANDIDATE-000002.result.json"
     passport_path = ROOT / "benchmarks" / "BENCHMARK-000002.passport.json"
-    candidate_bytes = candidate_path.read_bytes()
-    passport_bytes = passport_path.read_bytes()
-    candidate = json.loads(candidate_bytes)
-    passport = json.loads(passport_bytes)
+    candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+    passport = json.loads(passport_path.read_text(encoding="utf-8"))
     reference = json.loads(result_path.read_text(encoding="utf-8"))
     evaluation = evaluate_checks(candidate, passport)
     independent = evaluation["checks"]
@@ -185,15 +188,15 @@ def run_crosscheck() -> dict[str, Any]:
         "candidate_id": candidate["candidate_id"],
         "source_result_id": reference["result_id"],
         "source_scientific_payload_digest": reference["scientific_payload_digest"],
-        "candidate_file_sha256": f"sha256:{sha256(candidate_bytes).hexdigest()}",
+        "candidate_file_sha256": _portable_text_digest(candidate_path),
         "source_candidate_payload_sha256": f"sha256:{reference['candidate']['sha256']}",
-        "passport_file_sha256": f"sha256:{sha256(passport_bytes).hexdigest()}",
+        "passport_file_sha256": _portable_text_digest(passport_path),
         "validation_contract_sha256": evaluation["validation_contract_sha256"],
         "implementation": {
             "name": "standard-library-leibniz-coordinate-pullback-crosscheck",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "shared_research_core_code": False,
-            "method": "Independent Leibniz determinant, cofactor inverse, transpose, exact passport comparison, and matrix multiplication using fractions.Fraction",
+            "method": "Independent Leibniz determinant, cofactor inverse, transpose, exact passport comparison, and matrix multiplication using fractions.Fraction; input file hashes normalize UTF-8 line endings to LF",
         },
         "independence": {
             "separate_environment": False,

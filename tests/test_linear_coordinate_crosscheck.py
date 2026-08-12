@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from independent.linear_coordinate_crosscheck import evaluate_checks, run_crosscheck
+from independent.linear_coordinate_crosscheck import _portable_text_digest, evaluate_checks, run_crosscheck
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -50,3 +50,11 @@ def test_linear_coordinate_crosscheck_rejects_reviewer_jacobian_counterexample()
     ]
     checks = evaluate_checks(candidate, passport)["checks"]
     assert checks["coordinate_map.jacobian"] is False
+
+
+def test_coordinate_input_digest_is_stable_across_checkout_line_endings(tmp_path):
+    lf = tmp_path / "lf.json"
+    crlf = tmp_path / "crlf.json"
+    lf.write_bytes(b'{\n  "value": 1\n}\n')
+    crlf.write_bytes(b'{\r\n  "value": 1\r\n}\r\n')
+    assert _portable_text_digest(lf) == _portable_text_digest(crlf)

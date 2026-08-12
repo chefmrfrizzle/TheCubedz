@@ -20,7 +20,8 @@ def _json(path: Path) -> dict[str, Any]:
 
 
 def _file_digest(path: Path) -> str:
-    return f"sha256:{hashlib.sha256(path.read_bytes()).hexdigest()}"
+    normalized = path.read_text(encoding="utf-8").replace("\r\n", "\n").replace("\r", "\n")
+    return f"sha256:{hashlib.sha256(normalized.encode('utf-8')).hexdigest()}"
 
 
 def _record_digest(value: dict[str, Any]) -> str:
@@ -151,7 +152,7 @@ def run(root: Path = ROOT) -> dict[str, Any]:
             "library": "SymPy",
             "library_version": sympy.__version__,
             "imports_research_core": False,
-            "method": "SymPy Matrix determinant, inverse, transpose, and multiplication directly from raw JSON inputs.",
+            "method": "SymPy Matrix determinant, inverse, transpose, and multiplication directly from JSON inputs; input file hashes normalize UTF-8 line endings to LF.",
         },
         "candidates": [baseline, coordinate],
         "comparison": "MATCH" if all(status == "PASS" for status in all_checks) else "MISMATCH",

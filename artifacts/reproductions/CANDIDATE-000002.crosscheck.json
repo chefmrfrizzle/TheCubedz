@@ -10,9 +10,9 @@
   "validation_contract_sha256": "sha256:e79125b196019405e244106ecb5000087f37b18910a36c1fcd389bd45958ae76",
   "implementation": {
     "name": "standard-library-leibniz-coordinate-pullback-crosscheck",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "shared_research_core_code": false,
-    "method": "Independent Leibniz determinant, cofactor inverse, transpose, exact passport comparison, and matrix multiplication using fractions.Fraction"
+    "method": "Independent Leibniz determinant, cofactor inverse, transpose, exact passport comparison, and matrix multiplication using fractions.Fraction; input file hashes normalize UTF-8 line endings to LF"
   },
   "independence": {
     "separate_environment": false,
@@ -151,5 +151,5 @@
     "It is not an outside reproduction and does not increase the public independent-reproduction count.",
     "It checks only the preregistered constant linear coordinate map for an established flat-spacetime benchmark."
   ],
-  "record_digest": "sha256:d02ec79f6fdc2ba50245f59a4b45cfd05ff891344a3eda0a02b14f89a7ca073b"
+  "record_digest": "sha256:859e891bb826054e4748b6168cbbbe824152eef29051eac3bda2169883036b74"
 }

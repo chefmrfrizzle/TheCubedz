@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from independent.minkowski_crosscheck import determinant, inverse, run_crosscheck
+from independent.minkowski_crosscheck import _portable_text_digest, determinant, inverse, run_crosscheck
 
 
 def test_separate_crosscheck_matches_all_comparable_reference_checks():
@@ -38,3 +38,11 @@ def test_leibniz_and_adjugate_math_handles_a_nontrivial_matrix():
     matrix = [[1, 2], [3, 5]]
     assert determinant(matrix) == -1
     assert inverse(matrix) == [[-5, 2], [3, -1]]
+
+
+def test_input_digest_is_stable_across_checkout_line_endings(tmp_path):
+    lf = tmp_path / "lf.json"
+    crlf = tmp_path / "crlf.json"
+    lf.write_bytes(b'{\n  "value": 1\n}\n')
+    crlf.write_bytes(b'{\r\n  "value": 1\r\n}\r\n')
+    assert _portable_text_digest(lf) == _portable_text_digest(crlf)
